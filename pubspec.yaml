@@ -9,24 +9,67 @@ module:
   androidX: true
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: ">=3.5.3 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  enum_to_string: any
+  package_info_plus: any
+  version: any
+  logging: any
+  firebase_analytics: any
+  intl: any
+  firebase_in_app_messaging: any
+  uuid: any
+  url_strategy: any
+  path: any
+  async: any
+  badges: any
+  clock: any
+  collection: any
+  sentry: any
+  sentry_flutter: any
+  aptabase_flutter: 
+    git:
+      url: https://github.com/GabrielRozendo/aptabase_flutter
+      ref: main
+  firebase_remote_config: any
+  firebase_crashlytics: any
+  jiffy: any
+  url_launcher: any
+  firebase_messaging: any
+  flutter_secure_storage: any
+  shared_preferences: any
+  device_info_plus: any
+  share_plus: any
+  overlay_notification: any
+  remove_emoji: any
+  diacritic: any
+  html: any
+  timezone: any
+  flutter_timezone: any
+  firebase_core: ^3.6.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  version: any
-  uuid: any
-  url_strategy: any
-  path: any
-  logging: any
-  async: any
-  badges: any
-  clock: any
-  collection: any
+  flutter_lints: any
+  custom_lint: any
 
 flutter:
+  generate: true
+  uses-material-design: true
+
+  assets:
+    - assets/fonts/
+
+  fonts:
+    - family: InterVariable
+      fonts:
+        - asset: assets/fonts/Inter-Variable.ttf
+
+    - family: MontserratVariable
+      fonts:
+        - asset: assets/fonts/Montserrat-Variable.ttf
