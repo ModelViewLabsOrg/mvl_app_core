@@ -17,8 +17,8 @@ import 'package:version/version.dart';
 
 class AppVersionArgs {
   AppVersionArgs({required String min, required String ideal})
-      : min = Version.parse(min),
-        ideal = Version.parse(ideal);
+    : min = Version.parse(min),
+      ideal = Version.parse(ideal);
 
   final Version min;
   final Version ideal;

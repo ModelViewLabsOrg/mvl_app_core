@@ -67,8 +67,7 @@ class DeviceInfo {
       TargetPlatform.fuchsia ||
       TargetPlatform.linux ||
       TargetPlatform.macOS ||
-      TargetPlatform.windows =>
-        true,
+      TargetPlatform.windows => true,
     };
   }
 }

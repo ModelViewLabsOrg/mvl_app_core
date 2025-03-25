@@ -46,13 +46,12 @@ class AppText extends Text {
     Color? color,
     TextAlign textAlign = TextAlign.left,
     int maxLines = 999,
-  }) =>
-      AppText._(
-        text,
-        style: context.textTheme.headlineLarge?.copyWith(color: color),
-        textAlign: textAlign,
-        maxLines: maxLines,
-      );
+  }) => AppText._(
+    text,
+    style: context.textTheme.headlineLarge?.copyWith(color: color),
+    textAlign: textAlign,
+    maxLines: maxLines,
+  );
 
   factory AppText.headlineMedium(
     BuildContext context,
@@ -112,13 +111,12 @@ class AppText extends Text {
     Color? color,
     TextAlign textAlign = TextAlign.left,
     int maxLines = 999,
-  }) =>
-      AppText._(
-        text,
-        style: context.textTheme.titleMedium?.copyWith(color: color),
-        textAlign: textAlign,
-        maxLines: maxLines,
-      );
+  }) => AppText._(
+    text,
+    style: context.textTheme.titleMedium?.copyWith(color: color),
+    textAlign: textAlign,
+    maxLines: maxLines,
+  );
 
   factory AppText.titleSmall(
     BuildContext context,
@@ -126,13 +124,12 @@ class AppText extends Text {
     Color? color,
     TextAlign textAlign = TextAlign.left,
     int maxLines = 999,
-  }) =>
-      AppText._(
-        text,
-        style: context.textTheme.titleSmall?.copyWith(color: color),
-        textAlign: textAlign,
-        maxLines: maxLines,
-      );
+  }) => AppText._(
+    text,
+    style: context.textTheme.titleSmall?.copyWith(color: color),
+    textAlign: textAlign,
+    maxLines: maxLines,
+  );
 
   factory AppText.labelLarge(
     BuildContext context,
@@ -240,16 +237,8 @@ class AppText extends Text {
     );
   }
 
-  factory AppText.bodySmall(
-    BuildContext context,
-    String text, {
-    Color? color,
-  }) {
-    return AppText._internal(
-      text,
-      context.textTheme.bodySmall,
-      color: color,
-    );
+  factory AppText.bodySmall(BuildContext context, String text, {Color? color}) {
+    return AppText._internal(text, context.textTheme.bodySmall, color: color);
   }
 
   /// Alias for Body Small

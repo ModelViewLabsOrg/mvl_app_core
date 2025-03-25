@@ -15,14 +15,10 @@ class AppSentryConfig {
   final double rateDefaultValue;
   final String rateRemoteKey;
 
-  AppRemoteConfigKeys get dsnRemote => AppRemoteConfigKeys(
-        key: dsnRemoteKey,
-        defaultValue: dsnDefaultValue,
-      );
-  AppRemoteConfigKeys get rateRemote => AppRemoteConfigKeys(
-        key: rateRemoteKey,
-        defaultValue: rateDefaultValue,
-      );
+  AppRemoteConfigKeys get dsnRemote =>
+      AppRemoteConfigKeys(key: dsnRemoteKey, defaultValue: dsnDefaultValue);
+  AppRemoteConfigKeys get rateRemote =>
+      AppRemoteConfigKeys(key: rateRemoteKey, defaultValue: rateDefaultValue);
 }
 
 class AppConfigValues {

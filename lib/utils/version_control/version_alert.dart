@@ -52,18 +52,10 @@ class VersionAlertDialog extends StatelessWidget {
               // ),
             ),
             Center(
-              child: AppText.headlineMedium(
-                context,
-                versionControl.title,
-              ),
+              child: AppText.headlineMedium(context, versionControl.title),
             ),
             gapM,
-            Center(
-              child: AppText.bodyMedium(
-                context,
-                versionControl.message,
-              ),
-            ),
+            Center(child: AppText.bodyMedium(context, versionControl.message)),
             gap,
             OutlinedButton(
               onPressed: () {

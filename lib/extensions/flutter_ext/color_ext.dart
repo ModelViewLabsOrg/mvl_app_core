@@ -94,34 +94,22 @@ extension ColorExt on Color {
   /// Converts this color to grayscale.
   Color grayscale() {
     final grayValue = ((0.299 * r) + (0.587 * g) + (0.114 * b)).toInt();
-    return Color.fromRGBO(
-      grayValue,
-      grayValue,
-      grayValue,
-      a,
-    );
+    return Color.fromRGBO(grayValue, grayValue, grayValue, a);
   }
 
   /// Inverts this color.
   Color invert() {
-    return Color.fromRGBO(
-      255 - r.toInt(),
-      255 - g.toInt(),
-      255 - b.toInt(),
-      a,
-    );
+    return Color.fromRGBO(255 - r.toInt(), 255 - g.toInt(), 255 - b.toInt(), a);
   }
 }
 
 extension FHUColorExt on String {
   /// checks if current string is in hex format or not.
-  bool get isHexColor => RegExp(
-        r'^#?(?:[0-9a-fA-F]{3,4}){1,2}$',
-      ).hasMatch(this);
+  bool get isHexColor =>
+      RegExp(r'^#?(?:[0-9a-fA-F]{3,4}){1,2}$').hasMatch(this);
 
-  Color hexToColor(String code) => Color(
-        int.parse(code.substring(1, 7), radix: 16) + 0xFF000000,
-      );
+  Color hexToColor(String code) =>
+      Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
 
   /// it tries to convert the current string to Color returns null if failed.
   Color? get toColor {

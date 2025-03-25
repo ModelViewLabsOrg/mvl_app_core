@@ -12,10 +12,8 @@ class AppStorageSecure {
 
   Future<String?> read() => _secureStorage.read(key: key);
   Future<void> delete() => _secureStorage.delete(key: key);
-  Future<void> write(String? value) => _secureStorage.write(
-        key: key,
-        value: value,
-      );
+  Future<void> write(String? value) =>
+      _secureStorage.write(key: key, value: value);
 }
 
 class AppStorage {
