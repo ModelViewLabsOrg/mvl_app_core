@@ -5,3 +5,7 @@ extension EnvEnumExt on EnvEnum {
   bool get isUat => this == EnvEnum.uat;
   bool get isPrd => this == EnvEnum.prd;
 }
+
+class Flavor {
+  static EnvEnum appEnv = EnvEnum.prd;
+}

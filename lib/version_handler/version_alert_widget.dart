@@ -57,7 +57,7 @@ class VersionAlertWidget extends StatelessWidget {
   Widget _title(BuildContext context) {
     return Text(
       allowCancel ? recommendedLocalization.title : mandatoryLocalization.title,
-      style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Theme.of(context).primaryColor),
+      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).primaryColor),
     );
   }
 
@@ -65,6 +65,7 @@ class VersionAlertWidget extends StatelessWidget {
     final text = Text(
       allowCancel ? recommendedLocalization.message : mandatoryLocalization.message,
       style: Theme.of(context).textTheme.bodyMedium,
+      maxLines: 9,
     );
 
     final image = mandatoryLocalization.image;
