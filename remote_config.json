@@ -1,0 +1,28 @@
+{
+  "parameters": {
+    "sentry_rate": {
+      "defaultValue": {
+        "useInAppDefault": true
+      },
+      "valueType": "NUMBER"
+    },
+    "sentry_dsn": {
+      "defaultValue": {
+        "useInAppDefault": true
+      },
+      "valueType": "STRING"
+    },
+    "version_min": {
+      "defaultValue": {
+        "useInAppDefault": true
+      },
+      "valueType": "STRING"
+    },
+    "version_recommended": {
+      "defaultValue": {
+        "useInAppDefault": true
+      },
+      "valueType": "STRING"
+    }
+  }
+}

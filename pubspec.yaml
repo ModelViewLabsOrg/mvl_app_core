@@ -1,0 +1,79 @@
+name: mvl_app_core
+description: "An App Core features for every app"
+version: 1.0.0
+homepage: https://github.com/ModelViewLabs/app_core.git
+
+publish_to: none
+
+module:
+  androidX: true
+
+environment:
+  sdk: ^3.7.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  intl: any
+  package_info_plus: any
+  path: any
+  async: any
+  badges: any
+  clock: any
+  collection: any
+  device_info_plus: any
+  timezone: any
+  flutter_timezone: any
+  equatable: any
+  share_plus: any
+  talker_flutter: ^4.4.7
+  enum_to_string: any
+  version: any
+
+  firebase_analytics: any
+  firebase_remote_config: any
+  firebase_crashlytics: any
+  firebase_core: any
+  firebase_in_app_messaging: any
+  firebase_messaging: any
+
+  uuid: ^4.5.1
+  url_strategy: ^0.3.0
+  sentry_flutter: ^8.13.0
+  aptabase_flutter: ^0.4.1
+    # git:
+    #   url: https://github.com/GabrielRozendo/aptabase_flutter
+    #   ref: proposal
+  jiffy: ^6.3.2
+  url_launcher: ^6.3.1
+  flutter_secure_storage: ^9.2.2
+  shared_preferences: ^2.5.2
+  overlay_notification: ^23.5.12
+  remove_emoji: ^0.0.10
+  diacritic: ^0.1.6
+  html: ^0.15.5
+  # mixpanel_flutter: any
+  in_app_review: ^2.0.10
+  font_awesome_flutter: ^10.8.0
+  date_field: ^5.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+flutter:
+  generate: true
+  uses-material-design: true
+
+  assets:
+    - assets/fonts/
+
+  fonts:
+    - family: InterVariable
+      fonts:
+        - asset: assets/fonts/Inter-Variable.ttf
+
+    - family: MontserratVariable
+      fonts:
+        - asset: assets/fonts/Montserrat-Variable.ttf
