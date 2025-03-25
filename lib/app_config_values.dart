@@ -15,10 +15,8 @@ class AppSentryConfig {
   final double rateDefaultValue;
   final String rateRemoteKey;
 
-  AppRemoteConfigKeys get dsnRemote =>
-      AppRemoteConfigKeys(key: dsnRemoteKey, defaultValue: dsnDefaultValue);
-  AppRemoteConfigKeys get rateRemote =>
-      AppRemoteConfigKeys(key: rateRemoteKey, defaultValue: rateDefaultValue);
+  AppRemoteConfigKeys get dsnRemote => AppRemoteConfigKeys(key: dsnRemoteKey, defaultValue: dsnDefaultValue);
+  AppRemoteConfigKeys get rateRemote => AppRemoteConfigKeys(key: rateRemoteKey, defaultValue: rateDefaultValue);
 }
 
 class AppConfigValues {
@@ -29,7 +27,6 @@ class AppConfigValues {
     required this.appStoreId,
     required this.playStoreId,
     this.aptabaseHost = 'https://aptabase.modelviewlabs.com',
-    this.mixpanelKey,
     this.trackingEnabled = !kDebugMode,
     this.currency = 'BRL',
   });
@@ -39,8 +36,6 @@ class AppConfigValues {
   final AppSentryConfig sentryConfig;
   final String aptabaseKey;
   final String aptabaseHost;
-
-  final String? mixpanelKey;
 
   final String playStoreId;
   final String appStoreId;

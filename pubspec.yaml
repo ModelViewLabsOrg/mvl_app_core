@@ -26,7 +26,7 @@ dependencies:
   flutter_timezone: any
   equatable: any
   share_plus: any
-  talker_flutter: ^4.4.7
+  talker_flutter: any
   enum_to_string: any
   version: any
 
@@ -37,27 +37,26 @@ dependencies:
   firebase_in_app_messaging: any
   firebase_messaging: any
 
-  uuid: ^4.5.1
-  url_strategy: ^0.3.0
-  sentry_flutter: ^8.13.0
-  aptabase_flutter: ^0.4.1
+  uuid: any
+  url_strategy: any
+  sentry_flutter: any
+  aptabase_flutter: any
     # git:
     #   url: https://github.com/GabrielRozendo/aptabase_flutter
     #   ref: proposal
-  jiffy: ^6.3.2
-  url_launcher: ^6.3.1
-  flutter_secure_storage: ^9.2.2
-  shared_preferences: ^2.5.2
-  overlay_notification: ^23.5.12
-  remove_emoji: ^0.0.10
-  diacritic: ^0.1.6
-  html: ^0.15.5
-  # mixpanel_flutter: any
-  in_app_review: ^2.0.10
-  font_awesome_flutter: ^10.8.0
-  date_field: ^5.3.0
-  logging: ^1.3.0
-  supabase_flutter: ^2.8.4
+  jiffy: any
+  url_launcher: any
+  flutter_secure_storage: any
+  shared_preferences: any
+  overlay_notification: any
+  remove_emoji: any
+  diacritic: any
+  html: any
+  in_app_review: any
+  font_awesome_flutter: any
+  logging: any
+  supabase_flutter: any
+  date_field: any
 
 dev_dependencies:
   flutter_test:
@@ -65,7 +64,7 @@ dev_dependencies:
 
 
 flutter:
-  generate: true
+  # generate: true
   uses-material-design: true
 
   assets:

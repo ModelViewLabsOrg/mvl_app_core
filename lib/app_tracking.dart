@@ -7,7 +7,6 @@ import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:in_app_review/in_app_review.dart';
-// import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:mvl_app_core/app_config_values.dart';
 import 'package:mvl_app_core/app_logger.dart';
 import 'package:mvl_app_core/app_remote_config.dart';
@@ -55,7 +54,7 @@ class AppTracking {
     await Future.wait([
       _analytics.setAnalyticsCollectionEnabled(config.trackingEnabled),
       _initSentry(),
-      Aptabase.init(_config.aptabaseKey, InitOptions(host: _config.aptabaseHost, printDebugMessages: kDebugMode)),
+      Aptabase.init(_config.aptabaseKey, InitOptions(host: _config.aptabaseHost)),
     ]);
 
     if (!kIsWeb) {
