@@ -18,17 +18,13 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
+AppTracking get tracking => AppTracking._instance;
+
 typedef AnalyticsParameters = JsonString;
 
 @immutable
 class AppAnalyticsUser extends SentryUser {
-  AppAnalyticsUser({
-    required super.id,
-    super.email,
-    super.name,
-    super.segment,
-    super.data,
-  });
+  AppAnalyticsUser({required super.id, super.email, super.name, super.segment, super.data});
 }
 
 class TrackingItem {
@@ -46,15 +42,10 @@ class TrackingItem {
     price: value?.amountToDouble(),
   );
 
-  Map<String, String> get properties => {
-    'id': id.toString(),
-    'name': name,
-    'value': (value ?? 0).toString(),
-  };
+  Map<String, String> get properties => {'id': id.toString(), 'name': name, 'value': (value ?? 0).toString()};
 }
 
 class AppTracking {
-  factory AppTracking.I() => _instance;
   AppTracking._internal();
   static final AppTracking _instance = AppTracking._internal();
 
@@ -64,32 +55,14 @@ class AppTracking {
     await Future.wait([
       _analytics.setAnalyticsCollectionEnabled(config.trackingEnabled),
       _initSentry(),
-      _initMixpanel(),
-      Aptabase.init(
-        _config.aptabaseKey,
-        InitOptions(host: _config.aptabaseHost, printDebugMessages: kDebugMode),
-      ),
+      Aptabase.init(_config.aptabaseKey, InitOptions(host: _config.aptabaseHost, printDebugMessages: kDebugMode)),
     ]);
 
     if (!kIsWeb) {
-      await FirebaseInAppMessaging.instance.setAutomaticDataCollectionEnabled(
-        config.trackingEnabled,
-      );
+      await FirebaseInAppMessaging.instance.setAutomaticDataCollectionEnabled(config.trackingEnabled);
     }
 
     _resetDefaultEventParams();
-  }
-
-  Future<void> _initMixpanel() async {
-    final key = _config.mixpanelKey;
-    if (key == null) {
-      // _mixpanel = null;
-      return;
-    }
-
-    // final mixpanel = await Mixpanel.init(key, trackAutomaticEvents: true);
-
-    // _mixpanel = mixpanel..setLoggingEnabled(true);
   }
 
   Future<void> _initSentry() async {
@@ -140,20 +113,19 @@ class AppTracking {
   var _eventsParameters = <String, String>{};
 
   void _resetDefaultEventParams() {
-    _eventsParameters = {
-      'app': AppVersion.I().appName,
-      'app_details': AppVersion.I().toString().replaceAll('\n', ' '),
-    };
+    _eventsParameters = {'app': AppVersion.I().appName, 'app_details': AppVersion.I().toString().replaceAll('\n', ' ')};
   }
 
   void appOpen() {
     unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'open')));
 
+    _aptabaseTrackEvent('app_open');
     unawaited(_analytics.logAppOpen());
-    unawaited(_aptabase.trackEvent('app_open'));
-    // unawaited(_mixpanel?.track('app_open'));
-
     _triggerEvent('appOpen');
+  }
+
+  void _aptabaseTrackEvent(String eventName, [Json? props]) {
+    unawaited(_aptabase.trackEvent(eventName, props));
   }
 
   Future<void> clearUser() async {
@@ -161,7 +133,6 @@ class AppTracking {
 
     await _analytics.setUserId();
     if (!kIsWeb) await _analytics.resetAnalyticsData();
-    // await _mixpanel?.reset();
 
     _resetDefaultEventParams();
   }
@@ -173,14 +144,6 @@ class AppTracking {
 
     await _analytics.setUserId(id: userId);
     await _analytics.logLogin();
-    // if (userId != null) await _mixpanel?.identify(userId);
-    // _mixpanel?.getPeople()
-    // ?..set('id', user.id)
-    // ..set('name', user.name)
-    // ..set('email', user.email)
-    // ..set('username', user.username)
-    // ..set('data', user.data);
-
     _triggerEvent('login');
 
     if (!kIsWeb && userId != null) {
@@ -189,34 +152,22 @@ class AppTracking {
   }
 
   void signUp(String signUpMethod) {
-    unawaited(
-      Sentry.addBreadcrumb(Breadcrumb(message: 'SignUp $signUpMethod')),
-    );
+    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'SignUp $signUpMethod')));
 
     unawaited(_analytics.logSignUp(signUpMethod: signUpMethod));
 
-    final properties = {'metodo': signUpMethod};
+    final properties = {'method': signUpMethod};
 
-    unawaited(_aptabase.trackEvent('registro', properties));
-    // unawaited(_mixpanel?.track('registro', properties: properties));
+    _aptabaseTrackEvent('register', properties);
 
     _triggerEvent('signUp');
   }
 
   void info(String message) {
-    unawaited(
-      Sentry.addBreadcrumb(
-        Breadcrumb(message: message, level: SentryLevel.info),
-      ),
-    );
+    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: message, level: SentryLevel.info)));
   }
 
-  void recordError(
-    String method,
-    Object error,
-    StackTrace? stackTrace, {
-    bool fatal = false,
-  }) {
+  void recordError(String method, Object error, StackTrace? stackTrace, {bool fatal = false}) {
     unawaited(
       Sentry.captureException(
         error,
@@ -228,44 +179,24 @@ class AppTracking {
     );
 
     if (!kIsWeb) {
-      unawaited(
-        FirebaseCrashlytics.instance.recordError(
-          error,
-          stackTrace,
-          fatal: fatal,
-          printDetails: kDebugMode,
-        ),
-      );
+      unawaited(FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: fatal, printDetails: kDebugMode));
     }
   }
 
-  void event(
-    String eventName, {
-    AnalyticsParameters? customParams,
-    bool triggerInApp = false,
-  }) {
+  void event(String eventName, {AnalyticsParameters? customParams, bool triggerInApp = false}) {
+    assert(eventName.length >= 3, 'Event name must be at least 3 characters long');
+
     final parameters = (customParams ?? {})..addAll(_eventsParameters);
 
-    unawaited(
-      Sentry.addBreadcrumb(
-        Breadcrumb(
-          message: eventName,
-          data: parameters,
-          level: SentryLevel.info,
-        ),
-      ),
-    );
+    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: eventName, data: parameters, level: SentryLevel.info)));
 
     final safeEventName = eventName; //.cleanLimit(kEventNameMaxLength);
 
     unawaited(_analytics.logEvent(name: safeEventName, parameters: parameters));
 
-    if (triggerInApp) {
-      _triggerEvent(safeEventName);
-    }
+    if (triggerInApp) _triggerEvent(safeEventName);
 
-    unawaited(_aptabase.trackEvent(eventName, parameters));
-    // unawaited(_mixpanel?.track(eventName, properties: parameters));
+    _aptabaseTrackEvent(safeEventName, parameters);
   }
 
   void beginCheckout(int value, List<TrackingItem>? items) {
@@ -282,14 +213,9 @@ class AppTracking {
                 {},
           );
 
-    unawaited(
-      Sentry.addBreadcrumb(
-        Breadcrumb(message: 'BeginCheckout', data: parameters),
-      ),
-    );
+    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'BeginCheckout', data: parameters)));
 
-    unawaited(_aptabase.trackEvent('checkout', parameters));
-    // unawaited(_mixpanel?.track('checkout', properties: parameters));
+    _aptabaseTrackEvent('checkout', parameters);
 
     unawaited(
       _analytics.logBeginCheckout(
@@ -314,12 +240,9 @@ class AppTracking {
                 {},
           );
 
-    unawaited(
-      Sentry.addBreadcrumb(Breadcrumb(message: 'purchase', data: parameters)),
-    );
+    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'purchase', data: parameters)));
 
-    unawaited(_aptabase.trackEvent('compra', parameters));
-    // unawaited(_mixpanel?.track('compra', properties: parameters));
+    _aptabaseTrackEvent('compra', parameters);
 
     unawaited(
       _analytics.logPurchase(
@@ -332,39 +255,25 @@ class AppTracking {
   }
 
   void selectItem(String listName, TrackingItem item) {
-    unawaited(
-      Sentry.addBreadcrumb(
-        Breadcrumb(message: 'Select $listName -> ${item.name}'),
-      ),
-    );
+    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'Select $listName -> ${item.name}')));
 
     const eventName = 'item_selecionado';
-    final props = {'lista': listName, 'item': item.name}
-      ..addAll(_eventsParameters);
+    final props = {'lista': listName, 'item': item.name}..addAll(_eventsParameters);
 
-    unawaited(_aptabase.trackEvent(eventName, props));
-    // unawaited(_mixpanel?.track(eventName, properties: props));
+    _aptabaseTrackEvent(eventName, props);
 
-    unawaited(
-      _analytics.logSelectItem(items: [item.analytics], itemListName: listName),
-    );
+    unawaited(_analytics.logSelectItem(items: [item.analytics], itemListName: listName));
   }
 
   void share(String contentType, String id, String method) {
-    unawaited(
-      Sentry.addBreadcrumb(Breadcrumb(message: 'share $method $contentType')),
-    );
+    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'share $method $contentType')));
 
     const eventName = 'share';
-    final props = {'metodo': method, 'id': id, 'tipo conteudo': contentType}
-      ..addAll(_eventsParameters);
+    final props = {'metodo': method, 'id': id, 'tipo conteudo': contentType}..addAll(_eventsParameters);
 
-    unawaited(_aptabase.trackEvent(eventName, props));
-    // unawaited(_mixpanel?.track(eventName, properties: props));
+    _aptabaseTrackEvent(eventName, props);
 
-    unawaited(
-      _analytics.logShare(contentType: contentType, itemId: id, method: method),
-    );
+    unawaited(_analytics.logShare(contentType: contentType, itemId: id, method: method));
   }
 
   Future<void> requestReview() async {

@@ -2,8 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/intl_standalone.dart'
-    if (dart.library.html) 'package:intl/intl_browser.dart';
+import 'package:intl/intl_standalone.dart' if (dart.library.html) 'package:intl/intl_browser.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:mvl_app_core/app_config.dart';
 import 'package:mvl_app_core/app_config_values.dart';
@@ -93,6 +92,6 @@ abstract class AppSetupBase {
     await Firebase.initializeApp(options: firebase);
     await AppRemoteConfig.setup(configKeys);
 
-    await AppTracking.I().init(configValues);
+    await tracking.init(configValues);
   }
 }

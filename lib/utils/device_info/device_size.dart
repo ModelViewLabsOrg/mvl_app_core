@@ -10,13 +10,7 @@ enum DeviceSizeType {
   desktop,
 }
 
-enum DeviceScreenType {
-  extraSmall,
-  small,
-  medium,
-  large,
-  extraLarge,
-}
+enum DeviceScreenType { extraSmall, small, medium, large, extraLarge }
 
 extension DeviceSizeExt on DeviceInfo {
   static DeviceSizeType deviceSizeType(double diagonalInches) {
@@ -27,8 +21,8 @@ extension DeviceSizeExt on DeviceInfo {
     // if (width < 1300) return DeviceSizeType.TabletLarge;
     // return DeviceSizeType.Desktop;
 
-// 768
-// 1024
+    // 768
+    // 1024
 
     // Mobile: 360 x 640
     // Mobile: 375 x 667
@@ -39,9 +33,9 @@ extension DeviceSizeExt on DeviceInfo {
     // Laptop: 1366 x 768
     // High-res laptop or desktop: 1920 x 1080
 
-// Design for desktop displays from 1024×768 through 1920×1080
-// Design for mobile displays from 360×640 through 414×896
-// Design for tablet displays from 601×962 through 1280×800
+    // Design for desktop displays from 1024×768 through 1920×1080
+    // Design for mobile displays from 360×640 through 414×896
+    // Design for tablet displays from 601×962 through 1280×800
 
     if (diagonalInches <= 2.25) {
       return DeviceSizeType.mobileExtraSmall; // 325 SE1

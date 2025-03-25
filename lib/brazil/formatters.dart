@@ -61,7 +61,8 @@ class Formatters {
     if (result.contains("'")) {
       final index = result.indexOf("'");
       if (index > -1) {
-        result = result.substring(0, index + 1) +
+        result =
+            result.substring(0, index + 1) +
             result.substring(index + 1, index + 2).toUpperCase() +
             result.substring(index + 2);
       }

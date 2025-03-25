@@ -1,22 +1,26 @@
 # https://github.com/flutter/flutter/blob/stable/analysis_options.yaml
 
+formatter:
+  page_width: 120
+
 analyzer:
   language:
     strict-casts: true
     strict-inference: true
     strict-raw-types: true
-  enable-experiment:
-    - macros
   errors:
     always_use_package_imports: error
+    avoid_futureor_void: ignore
     close_sinks: ignore
     deprecated_member_use_from_same_package: ignore
-    invalid_annotation_target: ignore
     library_private_types_in_public_api: ignore
     missing_required_param: error
     missing_return: error
     public_member_api_docs: ignore
     record_literal_one_positional_no_trailing_comma: error
+
+  plugins:
+    - custom_lint
 
   exclude:
     - "**.mocks.dart"
@@ -31,17 +35,30 @@ analyzer:
     - test/.test_coverage.dart
     - test/full_coverage_test.dart
 
+#   plugins:
+#     - flutterando_metrics
+
+# flutterando_metrics:
+#   metrics:
+#     cyclomatic-complexity: 20
+#     number-of-parameters: 4
+#     maximum-nesting-level: 5
+#   metrics-exclude:
+#     - test/**
+
 # https://dart.dev/tools/linter-rules/all
+# https://github.com/dart-lang/linter/blob/main/example/all.yaml
+
 linter:
   rules:
-    # https://github.com/dart-lang/linter/blob/main/example/all.yaml
     - always_declare_return_types
     # - always_put_control_body_on_new_line
     - always_put_required_named_parameters_first
     # - always_specify_types
     - always_use_package_imports
     - annotate_overrides
-    # - avoid_annotating_with_dynamic 
+    - annotate_redeclares
+    # - avoid_annotating_with_dynamic
     - avoid_bool_literals_in_conditional_expressions
     # - avoid_catches_without_on_clauses
     - avoid_catching_errors
@@ -54,6 +71,7 @@ linter:
     - avoid_field_initializers_in_const_classes
     # - avoid_final_parameters
     - avoid_function_literals_in_foreach_calls
+    - avoid_futureor_void
     - avoid_implementing_value_types
     - avoid_init_to_null
     - avoid_js_rounded_ints
@@ -67,7 +85,7 @@ linter:
     - avoid_renaming_method_parameters
     - avoid_return_types_on_setters
     - avoid_returning_null_for_void
-    # - avoid_returning_this
+    - avoid_returning_this
     - avoid_setters_without_getters
     - avoid_shadowing_type_parameters
     - avoid_single_cascade_in_expression_statements
@@ -85,10 +103,10 @@ linter:
     - cancel_subscriptions
     - cascade_invocations
     - cast_nullable_to_non_nullable
-    # - close_sinks
+    - close_sinks
     - collection_methods_unrelated_type
     - combinators_ordering
-    # - comment_references
+    - comment_references
     - conditional_uri_does_not_exist
     - constant_identifier_names
     - control_flow_in_finally
@@ -96,11 +114,12 @@ linter:
     - dangling_library_doc_comments
     - depend_on_referenced_packages
     - deprecated_consistency
-    # - deprecated_member_use_from_same_package
+    - deprecated_member_use_from_same_package
     # - diagnostic_describe_all_properties
     - directives_ordering
     - discarded_futures
     - do_not_use_environment
+    # - document_ignores
     - empty_catches
     - empty_constructor_bodies
     - empty_statements
@@ -113,15 +132,17 @@ linter:
     - implicit_call_tearoffs
     - implicit_reopen
     - invalid_case_patterns
+    - invalid_runtime_check_with_js_interop_types
     - join_return_with_assignment
     - leading_newlines_in_multiline_strings
     - library_annotations
     - library_names
     - library_prefixes
     - library_private_types_in_public_api
-    - lines_longer_than_80_chars
+    # - lines_longer_than_80_chars
     - literal_only_boolean_expressions
     - matching_super_parameters
+    - missing_code_block_language_in_doc_comment
     - missing_whitespace_between_adjacent_strings
     - no_adjacent_strings_in_list
     - no_default_cases
@@ -138,6 +159,8 @@ linter:
     - null_check_on_nullable_type_parameter
     - null_closures
     - omit_local_variable_types
+    # - omit_obvious_local_variable_types
+    # - omit_obvious_property_types
     - one_member_abstracts
     - only_throw_errors
     - overridden_fields
@@ -160,7 +183,7 @@ linter:
     - prefer_final_fields
     - prefer_final_in_for_each
     - prefer_final_locals
-    # - prefer_final_parameters # adds too much verbosity
+    # - prefer_final_parameters
     - prefer_for_elements_to_map_fromIterable
     - prefer_foreach
     - prefer_function_declarations_over_variables
@@ -186,7 +209,7 @@ linter:
     - provide_deprecation_message
     # - public_member_api_docs
     - recursive_getters
-    - require_trailing_commas
+    # - require_trailing_commas
     - secure_pubspec_urls
     - sized_box_for_whitespace
     - sized_box_shrink_expand
@@ -195,6 +218,9 @@ linter:
     - sort_constructors_first
     # - sort_pub_dependencies
     - sort_unnamed_constructors_first
+    # - specify_nonobvious_local_variable_types
+    # - specify_nonobvious_property_types
+    - strict_top_level_inference
     - test_types_in_equals
     - throw_in_finally
     - tighten_type_of_initializing_formals
@@ -202,6 +228,8 @@ linter:
     - type_init_formals
     - type_literal_in_constant_pattern
     - unawaited_futures
+    - unintended_html_in_doc_comment
+    # - unnecessary_async
     - unnecessary_await_in_return
     - unnecessary_brace_in_string_interps
     - unnecessary_breaks
@@ -209,9 +237,11 @@ linter:
     - unnecessary_constructor_name
     # - unnecessary_final
     - unnecessary_getters_setters
+    # - unnecessary_ignore
     - unnecessary_lambdas
     - unnecessary_late
     - unnecessary_library_directive
+    - unnecessary_library_name
     - unnecessary_new
     - unnecessary_null_aware_assignments
     - unnecessary_null_aware_operator_on_extension_on_nullable
@@ -226,8 +256,10 @@ linter:
     - unnecessary_string_interpolations
     - unnecessary_this
     - unnecessary_to_list_in_spreads
+    - unnecessary_underscores
     - unreachable_from_main
     - unrelated_type_equality_checks
+    # - unsafe_variance
     - use_build_context_synchronously
     - use_colored_box
     - use_decorated_box
@@ -239,7 +271,8 @@ linter:
     - use_key_in_widget_constructors
     - use_late_for_private_fields_and_variables
     - use_named_constants
-    # - use_raw_strings
+    # - use_null_aware_elements
+    - use_raw_strings
     - use_rethrow_when_possible
     - use_setters_to_change_properties
     - use_string_buffers
@@ -247,5 +280,6 @@ linter:
     - use_super_parameters
     - use_test_throws_matchers
     - use_to_and_as_if_applicable
+    - use_truncating_division
     - valid_regexps
     - void_checks

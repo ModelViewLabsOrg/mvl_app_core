@@ -3,21 +3,16 @@ import 'package:mvl_app_core/widgets/app_dimens.dart';
 
 extension WidgetExtensions on Widget {
   Widget withMouse() {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: this,
-    );
+    return MouseRegion(cursor: SystemMouseCursors.click, child: this);
   }
 
   Widget withRoundCorners() => DecoratedBox(
-        decoration: const BoxDecoration(
-          color: Colors.grey,
-          borderRadius: BorderRadius.all(
-            Radius.circular(25),
-          ),
-        ),
-        child: this,
-      );
+    decoration: const BoxDecoration(
+      color: Colors.grey,
+      borderRadius: BorderRadius.all(Radius.circular(25)),
+    ),
+    child: this,
+  );
 
   /// A shadow cast by a box
   ///
@@ -27,20 +22,19 @@ extension WidgetExtensions on Widget {
     double blurRadius = 20.0,
     double spreadRadius = 1.0,
     Offset offset = const Offset(10, 10),
-  }) =>
-      DecoratedBox(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: shadowColor,
-              blurRadius: blurRadius,
-              spreadRadius: spreadRadius,
-              offset: offset,
-            ),
-          ],
+  }) => DecoratedBox(
+    decoration: BoxDecoration(
+      boxShadow: [
+        BoxShadow(
+          color: shadowColor,
+          blurRadius: blurRadius,
+          spreadRadius: spreadRadius,
+          offset: offset,
         ),
-        child: this,
-      );
+      ],
+    ),
+    child: this,
+  );
 
   Widget addNeumorphism({
     double borderRadius = AppDimens.defaultRadius,
@@ -78,16 +72,15 @@ extension WidgetExtensions on Widget {
     TextStyle? textStyle,
     Duration? waitDuration,
     EdgeInsetsGeometry? margin,
-  }) =>
-      Tooltip(
-        message: message,
-        decoration: decoration,
-        height: height,
-        padding: padding,
-        preferBelow: preferBelow,
-        textStyle: textStyle,
-        waitDuration: waitDuration,
-        margin: margin,
-        child: this,
-      );
+  }) => Tooltip(
+    message: message,
+    decoration: decoration,
+    height: height,
+    padding: padding,
+    preferBelow: preferBelow,
+    textStyle: textStyle,
+    waitDuration: waitDuration,
+    margin: margin,
+    child: this,
+  );
 }

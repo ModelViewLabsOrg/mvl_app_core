@@ -3,12 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mvl_app_core/widgets/app_loading.dart';
 
-enum AppButtonType {
-  filled,
-  elevated,
-  outlined,
-  text,
-}
+enum AppButtonType { filled, elevated, outlined, text }
 
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -20,10 +15,10 @@ class AppButton extends StatelessWidget {
     this.icon,
     super.key,
   }) : assert(
-          (child == null && labelText != null) ||
-              (child != null && labelText == null),
-          'Must have either a label text for Text or a child, not both',
-        );
+         (child == null && labelText != null) ||
+             (child != null && labelText == null),
+         'Must have either a label text for Text or a child, not both',
+       );
 
   final bool isLoading;
   final FutureOr<void> Function()? onPressed;
@@ -48,25 +43,25 @@ class AppButton extends StatelessWidget {
     final label = _label();
     return switch (buttonType) {
       AppButtonType.filled => FilledButton.icon(
-          onPressed: action,
-          label: label,
-          icon: icon,
-        ),
+        onPressed: action,
+        label: label,
+        icon: icon,
+      ),
       AppButtonType.elevated => ElevatedButton.icon(
-          onPressed: action,
-          label: label,
-          icon: icon,
-        ),
+        onPressed: action,
+        label: label,
+        icon: icon,
+      ),
       AppButtonType.outlined => OutlinedButton.icon(
-          onPressed: action,
-          label: label,
-          icon: icon,
-        ),
+        onPressed: action,
+        label: label,
+        icon: icon,
+      ),
       AppButtonType.text => TextButton.icon(
-          onPressed: action,
-          label: label,
-          icon: icon,
-        ),
+        onPressed: action,
+        label: label,
+        icon: icon,
+      ),
     };
   }
 

@@ -14,9 +14,8 @@ String? freezedDateTimeNullable(DateTime? value) => value?.toServerFormat();
 
 DateTime tomorrow() => clock.now().add(const Duration(days: 1)).onlyDate();
 
-DateTime todayEndDay() => today().add(
-      const Duration(hours: 23, minutes: 59, seconds: 59),
-    );
+DateTime todayEndDay() =>
+    today().add(const Duration(hours: 23, minutes: 59, seconds: 59));
 
 DateTime dtNow() => clock.now();
 
@@ -47,12 +46,7 @@ DateTime durationAgo({
   int weeks = 0,
 }) {
   return jiffyNow
-      .subtract(
-        years: years,
-        months: months,
-        days: days,
-        weeks: weeks,
-      )
+      .subtract(years: years, months: months, days: days, weeks: weeks)
       .dateTime;
 }
 

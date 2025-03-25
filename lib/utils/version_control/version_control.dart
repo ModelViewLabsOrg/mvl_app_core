@@ -32,7 +32,8 @@ abstract class VersionControl {
 
       if (DeviceInfo.isApple) {
         final suffix = writeReview ? '?action=write-review' : '';
-        final appStoreLink = 'https://apps.apple.com/app/id'
+        final appStoreLink =
+            'https://apps.apple.com/app/id'
             '${config.appStoreId}$suffix';
 
         AppLogger.I().info('LaunchUrl: $appStoreLink');
@@ -74,8 +75,9 @@ class VersionControlAdvised extends VersionControl {
   VersionControlAdvised({
     required super.newVersion,
     super.title = 'Existe uma nova atualização disponível!',
-    super.message = 'Tem uma versão nova disponível. '
-        'Atualize seu app para ter acesso às últimas novidades, '
-        'novos recursos e correções de erros!',
+    super.message =
+        'Tem uma versão nova disponível. '
+            'Atualize seu app para ter acesso às últimas novidades, '
+            'novos recursos e correções de erros!',
   });
 }

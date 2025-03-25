@@ -8,18 +8,16 @@ mixin HasStoreLink {
 
 @immutable
 class _AppStoreApp with HasStoreLink {
-  const _AppStoreApp({
-    required this.country,
-    required this.appId,
-  });
+  const _AppStoreApp({required this.country, required this.appId});
 
   final String country;
   final String appId;
 
   @override
-  Uri get storeLink => DeviceInfo.isApple
-      ? Uri.parse('itms-apps://itunes.apple.com/app/apple-store/id$appId')
-      : Uri.parse('https://apps.apple.com/$country/app/id$appId');
+  Uri get storeLink =>
+      DeviceInfo.isApple
+          ? Uri.parse('itms-apps://itunes.apple.com/app/apple-store/id$appId')
+          : Uri.parse('https://apps.apple.com/$country/app/id$appId');
 }
 
 @immutable
@@ -28,9 +26,12 @@ class _PlayStoreApp with HasStoreLink {
   final String packageName;
 
   @override
-  Uri get storeLink => DeviceInfo.isAndroid
-      ? Uri.parse('market://details?id=$packageName')
-      : Uri.parse('https://play.google.com/store/apps/details?id=$packageName');
+  Uri get storeLink =>
+      DeviceInfo.isAndroid
+          ? Uri.parse('market://details?id=$packageName')
+          : Uri.parse(
+            'https://play.google.com/store/apps/details?id=$packageName',
+          );
 }
 
 @immutable
@@ -47,12 +48,7 @@ class UniversalApp {
 
   Future<void> open() {
     if (DeviceInfo.isApple) {
-      return launchUrl(
-        _AppStoreApp(
-          appId: appId,
-          country: country,
-        ).storeLink,
-      );
+      return launchUrl(_AppStoreApp(appId: appId, country: country).storeLink);
     }
     if (DeviceInfo.isAndroid) {
       return launchUrl(_PlayStoreApp(packageName).storeLink);

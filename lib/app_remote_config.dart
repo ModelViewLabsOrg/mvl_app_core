@@ -3,10 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:mvl_app_core/app_logger.dart';
 
 class AppRemoteConfigKeys {
-  const AppRemoteConfigKeys({
-    required this.key,
-    required this.defaultValue,
-  });
+  const AppRemoteConfigKeys({required this.key, required this.defaultValue});
 
   final String key;
   final dynamic defaultValue;
@@ -57,8 +54,8 @@ class AppRemoteConfig {
             StackTrace.current,
           );
         },
-        onDone: () =>
-            AppLogger.I().info('AppRemoteConfig onConfigUpdated done'),
+        onDone:
+            () => AppLogger.I().info('AppRemoteConfig onConfigUpdated done'),
       );
 
       final result = await _remoteConfig.fetchAndActivate();

@@ -26,18 +26,17 @@ class VersionForceUpdateWidget extends StatefulWidget {
   final GlobalKey<NavigatorState> navigatorKey;
   final ForceUpdateClient forceUpdateClient;
 
-  String get versionLaterKey => 'update_version_'
+  String get versionLaterKey =>
+      'update_version_'
       '${forceUpdateClient.recommendedVersion}';
   final int repeatRecommendedAlertDays;
   final int cacheMinutes;
 
   @override
-  State<VersionForceUpdateWidget> createState() =>
-      _VersionForceUpdateWidgetState();
+  State<VersionForceUpdateWidget> createState() => _VersionForceUpdateWidgetState();
 }
 
-class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
-    with WidgetsBindingObserver {
+class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget> with WidgetsBindingObserver {
   var _isAlertVisible = false;
   DateTime? _lastCheck;
 
@@ -61,7 +60,7 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
 
   Future<void> _checkIfAppUpdateIsNeeded() async {
     if (_isAlertVisible) {
-      AppTracking.I().event('atualizar_alerta_visivel');
+      tracking.event('atualizar_alerta_visivel');
       AppLogger.I().info('Update alert still visible');
       return;
     }
@@ -78,10 +77,8 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
         'Check Update result: '
         '${updateResult.name.toUpperCase()}',
       );
-      AppTracking.I().event(
-        'atualizar_alerta_verificação',
-        customParams: {'status': updateResult.name},
-      );
+
+      tracking.event('atualizar_alerta_verificação', customParams: {'status': updateResult.name});
 
       switch (updateResult) {
         case ForceUpdateStatus.must:
@@ -108,10 +105,7 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
     final isValid = diff.inMinutes < widget.cacheMinutes;
 
     if (isValid) {
-      AppTracking.I().event(
-        'atualizar_alerta_cache',
-        customParams: {'diferença minutos': diff.inMinutes.toString()},
-      );
+      tracking.event('atualizar_alerta_cache', customParams: {'diferença minutos': diff.inMinutes.toString()});
     }
 
     return isValid;
@@ -130,10 +124,7 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
           'Last alert showed in $diff days, '
           'ignoring this alert.',
         );
-        AppTracking.I().event(
-          'atualizar_alerta_depois',
-          customParams: {'diferença dias': diff.toString()},
-        );
+        tracking.event('atualizar_alerta_depois', customParams: {'diferença dias': diff.toString()});
 
         return;
       }
@@ -169,10 +160,7 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
   Future<void> _saveForLater() async {
     final sharedPrefs = await SharedPreferences.getInstance();
 
-    await sharedPrefs.setInt(
-      widget.versionLaterKey,
-      DateTime.now().millisecondsSinceEpoch,
-    );
+    await sharedPrefs.setInt(widget.versionLaterKey, DateTime.now().millisecondsSinceEpoch);
   }
 
   @override

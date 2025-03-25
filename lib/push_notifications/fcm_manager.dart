@@ -40,10 +40,7 @@ class AppFcmManager {
     return settings.authorizationStatus == AuthorizationStatus.authorized;
   }
 
-  Future<void> init(
-    String? fcmWebToken, {
-    void Function(RemoteMessage message)? onMessage,
-  }) async {
+  Future<void> init(String? fcmWebToken, {void Function(RemoteMessage message)? onMessage}) async {
     _fcmWebToken = fcmWebToken;
     this.onMessage = onMessage;
 
@@ -61,9 +58,7 @@ class AppFcmManager {
     }
     settings = await _messaging.requestPermission();
 
-    if (DeviceInfo.isApple) {
-      AppTracking.I().event('notifications_${settings.authorizationStatus}');
-    }
+    if (DeviceInfo.isApple) tracking.event('notifications_${settings.authorizationStatus}');
 
     await _setup();
   }
@@ -77,9 +72,7 @@ class AppFcmManager {
     }
 
     try {
-      _token = await _messaging.getToken(
-        vapidKey: kIsWeb ? _fcmWebToken : null,
-      );
+      _token = await _messaging.getToken(vapidKey: kIsWeb ? _fcmWebToken : null);
     } catch (e) {
       AppLogger.I().info('Could not get token: $e');
     }
@@ -90,18 +83,21 @@ class AppFcmManager {
       FirebaseMessaging.onMessage.listen(_onMessage);
 
       _messaging.onTokenRefresh.listen(_onTokenRefresh);
-    } catch (e) {/* Dont do anything */}
+    } catch (e) {
+      /* Dont do anything */
+    }
 
     try {
-      FirebaseMessaging.onMessageOpenedApp.listen(
-        _onMessageOpenedApp,
-        onError: _onError,
-      );
-    } catch (e) {/* Dont do anything */}
+      FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenedApp, onError: _onError);
+    } catch (e) {
+      /* Dont do anything */
+    }
 
     try {
       FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
-    } catch (e) {/* Dont do anything */}
+    } catch (e) {
+      /* Dont do anything */
+    }
   }
 
   void _onTokenRefresh(String token) {
@@ -120,14 +116,8 @@ class AppFcmManager {
     if (title == null || body == null) return;
 
     showSimpleNotification(
-      Text(
-        title,
-        style: const TextStyle(color: Colors.white),
-      ),
-      subtitle: Text(
-        body,
-        style: const TextStyle(color: Colors.white),
-      ),
+      Text(title, style: const TextStyle(color: Colors.white)),
+      subtitle: Text(body, style: const TextStyle(color: Colors.white)),
       background: Colors.black87,
       duration: const Duration(seconds: 6),
     );

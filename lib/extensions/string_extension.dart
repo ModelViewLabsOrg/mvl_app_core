@@ -29,10 +29,9 @@ extension StringExt on String {
   }
 
   String onlyAlphanumerics([String replaceFor = '']) {
-    return removeDiacritics(this).replaceAll(
-      RegExp('[^A-Za-z0-9]'),
-      replaceFor,
-    );
+    return removeDiacritics(
+      this,
+    ).replaceAll(RegExp('[^A-Za-z0-9]'), replaceFor);
   }
 
   String removeAccentsAndEmojiWithTrim() =>

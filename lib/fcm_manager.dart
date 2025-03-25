@@ -52,9 +52,7 @@ class FCMManager {
     }
     settings = await _messaging.requestPermission();
 
-    if (DeviceInfo.isApple) {
-      AppTracking.I().event('notifications_${settings.authorizationStatus}');
-    }
+    if (DeviceInfo.isApple) tracking.event('notifications_${settings.authorizationStatus}');
 
     await _setup();
   }
@@ -68,9 +66,7 @@ class FCMManager {
     }
 
     try {
-      _token = await _messaging.getToken(
-        vapidKey: kIsWeb ? _fcmWebToken : null,
-      );
+      _token = await _messaging.getToken(vapidKey: kIsWeb ? _fcmWebToken : null);
     } catch (e) {
       AppLogger.I().info('Could not get token: $e');
     }
@@ -86,10 +82,7 @@ class FCMManager {
     }
 
     try {
-      FirebaseMessaging.onMessageOpenedApp.listen(
-        _onMessageOpenedApp,
-        onError: _onError,
-      );
+      FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenedApp, onError: _onError);
     } catch (e) {
       /* Dont do anything */
     }

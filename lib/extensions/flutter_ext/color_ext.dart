@@ -6,11 +6,15 @@ extension ColorExt on Color {
   String toHex({bool leadingHashSign = true, bool includeAlpha = false}) {
     final hex = StringBuffer();
     if (leadingHashSign) hex.write('#');
+    // ignore: deprecated_member_use
     if (includeAlpha) hex.write(alpha.toRadixString(16).padLeft(2, '0'));
 
     hex.writeAll([
+      // ignore: deprecated_member_use
       red.toRadixString(16).padLeft(2, '0'),
+      // ignore: deprecated_member_use
       green.toRadixString(16).padLeft(2, '0'),
+      // ignore: deprecated_member_use
       blue.toRadixString(16).padLeft(2, '0'),
     ]);
 

@@ -21,10 +21,7 @@ extension on ForceUpdateStatus {
 
 /// Client used to check if a force upgrade is needed
 class ForceUpdateClient {
-  ForceUpdateClient({
-    required this.fetchRequiredVersion,
-    required this.fetchRecommendedVersion,
-  });
+  ForceUpdateClient({required this.fetchRequiredVersion, required this.fetchRecommendedVersion});
 
   final Future<String> Function() fetchRequiredVersion;
   final Future<String> Function() fetchRecommendedVersion;
@@ -63,9 +60,8 @@ class ForceUpdateClient {
     // * But semver can only parse this if it's formatted as `X.Y.Z-flavor`
     // * and we only care about X.Y.Z, so we can remove the flavor
     const flavorStr = appFlavor ?? '';
-    final currentVersionStr = flavorStr.isEmpty
-        ? packageInfo.version
-        : packageInfo.version.replaceAll('.$flavorStr', '');
+    final currentVersionStr =
+        flavorStr.isEmpty ? packageInfo.version : packageInfo.version.replaceAll('.$flavorStr', '');
 
     // * Parse versions in semver format
     final currentVersion = Version.parse(currentVersionStr);
@@ -86,7 +82,7 @@ class ForceUpdateClient {
       status = ForceUpdateStatus.latest;
     }
 
-    AppTracking.I().event(
+    tracking.event(
       'atualizar_alerta',
       customParams: {
         'versão instalada': currentVersionStr,

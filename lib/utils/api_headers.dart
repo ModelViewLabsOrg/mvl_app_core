@@ -10,12 +10,12 @@ class ApiHeaders {
   });
 
   JsonString toJson() => {
-        'appVersion': version,
-        'appOs': os,
-        'appOsVersion': osVersion,
-        'appDevice': device,
-        'appFcmToken': fcmToken ?? '',
-      };
+    'appVersion': version,
+    'appOs': os,
+    'appOsVersion': osVersion,
+    'appDevice': device,
+    'appFcmToken': fcmToken ?? '',
+  };
 
   final String version;
   final String os;

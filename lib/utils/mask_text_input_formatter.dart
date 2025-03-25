@@ -27,14 +27,13 @@ class MaskTextInputFormatter implements TextInputFormatter {
     updateMask(
       mask: mask,
       filter: filter ?? {'#': RegExp('[0-9]'), 'A': RegExp('[^0-9]')},
-      newValue: initialText == null
-          ? null
-          : TextEditingValue(
-              text: initialText,
-              selection: TextSelection.collapsed(
-                offset: initialText.length,
+      newValue:
+          initialText == null
+              ? null
+              : TextEditingValue(
+                text: initialText,
+                selection: TextSelection.collapsed(offset: initialText.length),
               ),
-            ),
     );
   }
 
@@ -44,11 +43,11 @@ class MaskTextInputFormatter implements TextInputFormatter {
     Map<String, RegExp>? filter,
     String? initialText,
   }) : this(
-          mask: mask,
-          filter: filter,
-          initialText: initialText,
-          type: MaskAutoCompletionType.eager,
-        );
+         mask: mask,
+         filter: filter,
+         initialText: initialText,
+         type: MaskAutoCompletionType.eager,
+       );
 
   MaskAutoCompletionType _type;
   MaskAutoCompletionType get type => _type;
@@ -157,28 +156,30 @@ class MaskTextInputFormatter implements TextInputFormatter {
     final beforeSelection = oldValue.selection;
     final afterSelection = newValue.selection;
 
-    var beforeSelectionStart = afterSelection.isValid
-        ? beforeSelection.isValid
-            ? beforeSelection.start
-            : 0
-        : 0;
+    var beforeSelectionStart =
+        afterSelection.isValid
+            ? beforeSelection.isValid
+                ? beforeSelection.start
+                : 0
+            : 0;
 
-    for (var i = 0;
-        i < beforeSelectionStart &&
-            i < beforeText.length &&
-            i < afterText.length;
-        i++) {
+    for (
+      var i = 0;
+      i < beforeSelectionStart && i < beforeText.length && i < afterText.length;
+      i++
+    ) {
       if (beforeText[i] != afterText[i]) {
         beforeSelectionStart = i;
         break;
       }
     }
 
-    final beforeSelectionLength = afterSelection.isValid
-        ? beforeSelection.isValid
-            ? beforeSelection.end - beforeSelectionStart
-            : 0
-        : oldValue.text.length;
+    final beforeSelectionLength =
+        afterSelection.isValid
+            ? beforeSelection.isValid
+                ? beforeSelection.end - beforeSelectionStart
+                : 0
+            : oldValue.text.length;
 
     final lengthDifference =
         afterText.length - (beforeText.length - beforeSelectionLength);
@@ -197,9 +198,11 @@ class MaskTextInputFormatter implements TextInputFormatter {
     var currentResultSelectionStart = 0;
     var currentResultSelectionLength = 0;
 
-    for (var i = 0;
-        i < min(beforeReplaceStart + beforeReplaceLength, mask.length);
-        i++) {
+    for (
+      var i = 0;
+      i < min(beforeReplaceStart + beforeReplaceLength, mask.length);
+      i++
+    ) {
       if (_maskChars.contains(mask[i]) && currentResultTextLength > 0) {
         currentResultTextLength -= 1;
         if (i < beforeReplaceStart) {
@@ -211,8 +214,10 @@ class MaskTextInputFormatter implements TextInputFormatter {
       }
     }
 
-    final replacementText =
-        afterText.substring(afterChangeStart, afterChangeEnd);
+    final replacementText = afterText.substring(
+      afterChangeStart,
+      afterChangeEnd,
+    );
     var targetCursorPosition = currentResultSelectionStart;
     if (replacementText.isEmpty) {
       _resultTextArray.removeRange(
@@ -242,8 +247,10 @@ class MaskTextInputFormatter implements TextInputFormatter {
       if (prefixLength > 0) {
         final resultPrefix =
             _resultTextArray._symbolArray.take(prefixLength).toList();
-        final effectivePrefixLength =
-            min(_resultTextArray.length, resultPrefix.length);
+        final effectivePrefixLength = min(
+          _resultTextArray.length,
+          resultPrefix.length,
+        );
         for (var j = 0; j < effectivePrefixLength; j++) {
           if (mask[j] != resultPrefix[j]) {
             _resultTextArray.removeRange(0, j);

@@ -7,9 +7,7 @@ class AppLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SizedBox.square(
       dimension: 16,
-      child: CircularProgressIndicator(
-        strokeWidth: 1.5,
-      ),
+      child: CircularProgressIndicator(strokeWidth: 1.5),
     );
   }
 }

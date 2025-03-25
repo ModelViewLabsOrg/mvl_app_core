@@ -89,10 +89,7 @@ extension DateTimeExt on DateTime {
   String dateBrFormat() => DateFormat('dd/MM/yyyy').format(this);
 
   /// 2022-10-31T14:58:09.123 or 2022-10-31T14:58:00
-  String toServerFormat({
-    bool removeSeconds = false,
-    bool convertUtc = true,
-  }) {
+  String toServerFormat({bool removeSeconds = false, bool convertUtc = true}) {
     var date = removeSeconds ? this.removeSeconds() : this;
     if (convertUtc) date = date.toUtc();
 
@@ -108,12 +105,12 @@ extension DateTimeExt on DateTime {
 
   /// 2022-10-31 14:58:09.123 -> 2022-10-31 14:58:00
   DateTime removeSeconds() => subtract(
-        Duration(
-          seconds: second,
-          milliseconds: millisecond,
-          microseconds: microsecond,
-        ),
-      );
+    Duration(
+      seconds: second,
+      milliseconds: millisecond,
+      microseconds: microsecond,
+    ),
+  );
 
   /// 2022-10-01 -> 2022-09-01
   DateTime previousMonth() =>
@@ -129,11 +126,9 @@ extension DateTimeExt on DateTime {
   int differenceInYearsFromToday() => today().differenceInYears(this);
 
   int differenceInYears(DateTime date) {
-    final subtract = Jiffy.parseFromDateTime(this).subtract(
-      years: date.year,
-      months: date.month,
-      days: date.day,
-    );
+    final subtract = Jiffy.parseFromDateTime(
+      this,
+    ).subtract(years: date.year, months: date.month, days: date.day);
 
     return subtract.year;
   }
@@ -163,12 +158,5 @@ extension DateTimeExt on DateTime {
 
   String toDate() => DateFormat('yyyy-MM-dd').format(this);
 
-  DateTime toUtc() => DateTime.utc(
-        year,
-        month,
-        day,
-        hour,
-        minute,
-        second,
-      );
+  DateTime toUtc() => DateTime.utc(year, month, day, hour, minute, second);
 }

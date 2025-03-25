@@ -1,6 +1,3 @@
-/// MVL App Core
-library mvl_app_core;
-
 export 'package:async/async.dart';
 export 'package:collection/collection.dart';
 export 'package:equatable/equatable.dart';

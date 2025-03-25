@@ -57,11 +57,7 @@ mixin UtilBrasilFields {
   /// Ajusta-se automaticamente para celular e fixo.
   ///
   /// Para retornar apenas os números, informe `mascara=false`.
-  static String getPhone(
-    String phone, {
-    bool ddd = true,
-    bool mask = true,
-  }) {
+  static String getPhone(String phone, {bool ddd = true, bool mask = true}) {
     assert(
       phone.length <= 15,
       'phone com tamanho inválido. Deve conter 10 ou 11 caracteres',

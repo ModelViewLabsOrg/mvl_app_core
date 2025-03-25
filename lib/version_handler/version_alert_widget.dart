@@ -22,9 +22,7 @@ class VersionAlertWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: allowCancel,
-      child: DeviceInfo.shouldUseCupertino
-          ? _cupertinoAlert(context)
-          : _materialAlert(context),
+      child: DeviceInfo.shouldUseCupertino ? _cupertinoAlert(context) : _materialAlert(context),
     );
   }
 
@@ -34,14 +32,8 @@ class VersionAlertWidget extends StatelessWidget {
       content: _content(context),
       actions: <Widget>[
         if (allowCancel)
-          TextButton(
-            onPressed: () => _notNow(context),
-            child: Text(recommendedLocalization.buttonLater),
-          ),
-        FilledButton(
-          onPressed: () async => _mainAction(context),
-          child: Text(mandatoryLocalization.buttonNow),
-        ),
+          TextButton(onPressed: () => _notNow(context), child: Text(recommendedLocalization.buttonLater)),
+        FilledButton(onPressed: () async => _mainAction(context), child: Text(mandatoryLocalization.buttonNow)),
       ],
     );
   }
@@ -52,10 +44,7 @@ class VersionAlertWidget extends StatelessWidget {
       content: _content(context),
       actions: <Widget>[
         if (allowCancel)
-          CupertinoDialogAction(
-            onPressed: () => _notNow(context),
-            child: Text(recommendedLocalization.buttonLater),
-          ),
+          CupertinoDialogAction(onPressed: () => _notNow(context), child: Text(recommendedLocalization.buttonLater)),
         CupertinoDialogAction(
           onPressed: () async => _mainAction(context),
           isDefaultAction: true,
@@ -68,17 +57,13 @@ class VersionAlertWidget extends StatelessWidget {
   Widget _title(BuildContext context) {
     return Text(
       allowCancel ? recommendedLocalization.title : mandatoryLocalization.title,
-      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            color: Theme.of(context).primaryColor,
-          ),
+      style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Theme.of(context).primaryColor),
     );
   }
 
   Widget _content(BuildContext context) {
     final text = Text(
-      allowCancel
-          ? recommendedLocalization.message
-          : mandatoryLocalization.message,
+      allowCancel ? recommendedLocalization.message : mandatoryLocalization.message,
       style: Theme.of(context).textTheme.bodyMedium,
     );
 
@@ -93,18 +78,15 @@ class VersionAlertWidget extends StatelessWidget {
   }
 
   Future<void> _mainAction(BuildContext context) async {
-    AppTracking.I().event(
-      'atualizar_alerta_agora',
-      customParams: {'opcional': allowCancel.toPtBr()},
-    );
+    tracking.event('atualizar_alerta_agora', customParams: {'opcional': allowCancel.toPtBr()});
 
-    await AppTracking.I().openStore();
+    await tracking.openStore();
 
     if (context.mounted && allowCancel) Navigator.of(context).pop();
   }
 
   void _notNow(BuildContext context) {
-    AppTracking.I().event('atualizar_alerta_depois');
+    tracking.event('atualizar_alerta_depois');
 
     Navigator.of(context).pop(false);
   }

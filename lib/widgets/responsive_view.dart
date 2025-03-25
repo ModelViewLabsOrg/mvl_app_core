@@ -20,7 +20,7 @@ class ResponsiveView extends StatelessWidget {
         return switch (constraints.maxWidth) {
               > AppDimens.kBreakpointDesktop => desktopChild,
               > AppDimens.kBreakpointTablet => tabletChild,
-              _ => mobileChild
+              _ => mobileChild,
             } ??
             desktopChild;
       },
