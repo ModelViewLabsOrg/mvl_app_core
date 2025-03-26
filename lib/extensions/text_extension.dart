@@ -58,86 +58,40 @@ extension StyledText<T extends Text> on T {
   // T textScale(double scaleFactor) =>
   //     copyWith(textScaleFactor: scaleFactor) as T;
 
-  T bold() =>
-      copyWith(
-            style: (style ?? const TextStyle()).copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          )
-          as T;
+  T bold() => copyWith(style: (style ?? const TextStyle()).copyWith(fontWeight: FontWeight.bold)) as T;
 
-  T italic() =>
-      copyWith(
-            style: (style ?? const TextStyle()).copyWith(
-              fontStyle: FontStyle.italic,
-            ),
-          )
-          as T;
+  T italic() => copyWith(style: (style ?? const TextStyle()).copyWith(fontStyle: FontStyle.italic)) as T;
 
   T fontWeight(FontWeight fontWeight) =>
+      copyWith(style: (style ?? const TextStyle()).copyWith(fontWeight: fontWeight)) as T;
+
+  T fontSize(double size) => copyWith(style: (style ?? const TextStyle()).copyWith(fontSize: size)) as T;
+
+  T fontFamily(String font) => copyWith(style: (style ?? const TextStyle()).copyWith(fontFamily: font)) as T;
+
+  T letterSpacing(double space) => copyWith(style: (style ?? const TextStyle()).copyWith(letterSpacing: space)) as T;
+
+  T wordSpacing(double space) => copyWith(style: (style ?? const TextStyle()).copyWith(wordSpacing: space)) as T;
+
+  T textShadow({Color color = const Color(0x34000000), double blurRadius = 0.0, Offset offset = Offset.zero}) =>
       copyWith(
             style: (style ?? const TextStyle()).copyWith(
-              fontWeight: fontWeight,
+              shadows: [Shadow(color: color, blurRadius: blurRadius, offset: offset)],
             ),
           )
           as T;
 
-  T fontSize(double size) =>
-      copyWith(style: (style ?? const TextStyle()).copyWith(fontSize: size))
-          as T;
-
-  T fontFamily(String font) =>
-      copyWith(style: (style ?? const TextStyle()).copyWith(fontFamily: font))
-          as T;
-
-  T letterSpacing(double space) =>
-      copyWith(
-            style: (style ?? const TextStyle()).copyWith(letterSpacing: space),
-          )
-          as T;
-
-  T wordSpacing(double space) =>
-      copyWith(style: (style ?? const TextStyle()).copyWith(wordSpacing: space))
-          as T;
-
-  T textShadow({
-    Color color = const Color(0x34000000),
-    double blurRadius = 0.0,
-    Offset offset = Offset.zero,
-  }) =>
-      copyWith(
-            style: (style ?? const TextStyle()).copyWith(
-              shadows: [
-                Shadow(color: color, blurRadius: blurRadius, offset: offset),
-              ],
-            ),
-          )
-          as T;
-
-  T textColor(Color color) =>
-      copyWith(style: (style ?? const TextStyle()).copyWith(color: color)) as T;
+  T textColor(Color color) => copyWith(style: (style ?? const TextStyle()).copyWith(color: color)) as T;
 
   T textAlignment(TextAlign align) => copyWith(textAlign: align) as T;
 
-  T textDirection(TextDirection direction) =>
-      copyWith(textDirection: direction) as T;
+  T textDirection(TextDirection direction) => copyWith(textDirection: direction) as T;
 
   T textBaseline(TextBaseline textBaseline) =>
-      copyWith(
-            style: (style ?? const TextStyle()).copyWith(
-              textBaseline: textBaseline,
-            ),
-          )
-          as T;
+      copyWith(style: (style ?? const TextStyle()).copyWith(textBaseline: textBaseline)) as T;
 
-  T textWidthBasis(TextWidthBasis textWidthBasis) =>
-      copyWith(textWidthBasis: textWidthBasis) as T;
+  T textWidthBasis(TextWidthBasis textWidthBasis) => copyWith(textWidthBasis: textWidthBasis) as T;
 
   T withUnderLine() =>
-      copyWith(
-            style: (style ?? const TextStyle()).copyWith(
-              decoration: TextDecoration.underline,
-            ),
-          )
-          as T;
+      copyWith(style: (style ?? const TextStyle()).copyWith(decoration: TextDecoration.underline)) as T;
 }

@@ -4,8 +4,7 @@ import 'package:mvl_app_core/utils/env_enum.dart';
 
 class AppConfig {
   factory AppConfig.I() {
-    return _instance ??
-        (throw UnimplementedError('Must call setup() before use it'));
+    return _instance ?? (throw UnimplementedError('Must call setup() before use it'));
   }
 
   AppConfig._internal();

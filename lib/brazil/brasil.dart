@@ -30,8 +30,7 @@ enum BrasilState {
   to,
 }
 
-BrasilState stateFromJson(String value) =>
-    EnumToString.fromString(BrasilState.values, value.toLowerCase())!;
+BrasilState stateFromJson(String value) => EnumToString.fromString(BrasilState.values, value.toLowerCase())!;
 
 extension BrasilStateExt on BrasilState {
   String get state => Brasil.listStates[this] ?? '';
@@ -72,11 +71,5 @@ mixin Brasil {
 
   static List<String> get statesFullNames => listStates.values.toList();
 
-  static const List<String> listaRegioes = [
-    'Centro-Oeste',
-    'Nordeste',
-    'Norte',
-    'Sudeste',
-    'Sul',
-  ];
+  static const List<String> listaRegioes = ['Centro-Oeste', 'Nordeste', 'Norte', 'Sudeste', 'Sul'];
 }

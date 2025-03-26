@@ -14,8 +14,7 @@ String? freezedDateTimeNullable(DateTime? value) => value?.toServerFormat();
 
 DateTime tomorrow() => clock.now().add(const Duration(days: 1)).onlyDate();
 
-DateTime todayEndDay() =>
-    today().add(const Duration(hours: 23, minutes: 59, seconds: 59));
+DateTime todayEndDay() => today().add(const Duration(hours: 23, minutes: 59, seconds: 59));
 
 DateTime dtNow() => clock.now();
 
@@ -39,19 +38,11 @@ DateTime? cvvToDate(String cvv) {
   }
 }
 
-DateTime durationAgo({
-  int years = 0,
-  int months = 0,
-  int days = 0,
-  int weeks = 0,
-}) {
-  return jiffyNow
-      .subtract(years: years, months: months, days: days, weeks: weeks)
-      .dateTime;
+DateTime durationAgo({int years = 0, int months = 0, int days = 0, int weeks = 0}) {
+  return jiffyNow.subtract(years: years, months: months, days: days, weeks: weeks).dateTime;
 }
 
-int get secondsEpochNow =>
-    clock.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond;
+int get secondsEpochNow => clock.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond;
 
 int get dayOfYear => int.parse(DateFormat('D').format(clock.now()));
 

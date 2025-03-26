@@ -4,9 +4,7 @@ import 'package:mvl_app_core/utils/device_info/device_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 extension LaunchExt on String {
-  Future<bool> launchURL({
-    LaunchMode launchMode = LaunchMode.platformDefault,
-  }) async {
+  Future<bool> launchURL({LaunchMode launchMode = LaunchMode.platformDefault}) async {
     try {
       final result = await launchUrl(Uri.parse(this), mode: launchMode);
       return result;
@@ -23,16 +21,13 @@ extension LaunchExt on String {
 }
 
 extension LaunchNullExt on String? {
-  Future<bool> launchURL({
-    LaunchMode launchMode = LaunchMode.platformDefault,
-  }) async {
+  Future<bool> launchURL({LaunchMode launchMode = LaunchMode.platformDefault}) async {
     final url = this;
     if (url == null) return false;
     return url.launchURL(launchMode: launchMode);
   }
 
-  Future<bool> downloadFile() =>
-      launchURL(launchMode: LaunchMode.externalApplication);
+  Future<bool> downloadFile() => launchURL(launchMode: LaunchMode.externalApplication);
 
   Future<void> launchWhatsapp({String? msg}) async {
     var number = onlyNumbers();
@@ -62,11 +57,7 @@ extension LaunchNullExt on String? {
   }
 
   Future<void> mailTo({String? subject, String? body}) async {
-    final params = Uri(
-      scheme: 'mailto',
-      path: this,
-      query: 'subject=${subject ?? ''}&body=${body ?? ''}',
-    );
+    final params = Uri(scheme: 'mailto', path: this, query: 'subject=${subject ?? ''}&body=${body ?? ''}');
 
     await params.toString().launchURL();
   }

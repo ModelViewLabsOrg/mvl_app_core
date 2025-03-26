@@ -8,9 +8,7 @@ const gapXL = SizedBox.square(dimension: AppDimens.kPaddingXL);
 const padS = EdgeInsets.all(AppDimens.kPaddingS);
 const padM = EdgeInsets.all(AppDimens.kPaddingM);
 const padDefault = EdgeInsets.all(AppDimens.kDefaultPadding);
-const padHorizontal = EdgeInsets.symmetric(
-  horizontal: AppDimens.kDefaultPadding,
-);
+const padHorizontal = EdgeInsets.symmetric(horizontal: AppDimens.kDefaultPadding);
 const padVertical = EdgeInsets.symmetric(vertical: AppDimens.kDefaultPadding);
 
 class AppDimens {
@@ -32,8 +30,7 @@ class AppDimens {
 
   // Radius and Border
   static const double defaultRadius = 16;
-  static BorderRadius defaultBorder({double radius = defaultRadius}) =>
-      BorderRadius.circular(radius);
+  static BorderRadius defaultBorder({double radius = defaultRadius}) => BorderRadius.circular(radius);
   static const Offset defaultOffset = Offset(5, 5);
   static const double defaultBlurRadius = 10;
 

@@ -10,8 +10,8 @@ class EmailValidator {
   );
 
   bool isValid() {
-    final value = email;
-    if (value == null) return false;
+    final value = normalize(email ?? '');
+    if (value.isEmpty) return false;
     if (value.contains('..')) return false;
     if (value.contains('--')) return false;
     if (value.contains('-.')) return false;
@@ -24,8 +24,6 @@ class EmailValidator {
 
     return _emailRegex.hasMatch(value);
   }
-
-  String? validate() => isValid() ? null : 'E-mail inválido';
 }
 
 extension EmailValidatorExt on EmailValidator {

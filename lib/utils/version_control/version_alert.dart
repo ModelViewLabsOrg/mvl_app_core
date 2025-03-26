@@ -51,9 +51,7 @@ class VersionAlertDialog extends StatelessWidget {
               //   fit: BoxFit.fill,
               // ),
             ),
-            Center(
-              child: AppText.headlineMedium(context, versionControl.title),
-            ),
+            Center(child: AppText.headlineMedium(context, versionControl.title)),
             gapM,
             Center(child: AppText.bodyMedium(context, versionControl.message)),
             gap,
@@ -67,10 +65,7 @@ class VersionAlertDialog extends StatelessWidget {
             if (versionControl.isOptional)
               Padding(
                 padding: const EdgeInsets.only(top: AppDimens.kDefaultPadding),
-                child: TextButton(
-                  onPressed: Navigator.of(context).pop,
-                  child: const Text('Agora não'),
-                ),
+                child: TextButton(onPressed: Navigator.of(context).pop, child: const Text('Agora não')),
               ),
           ],
         ),

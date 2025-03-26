@@ -2,40 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:mvl_app_core/themes/app_text_theme.dart';
 
 class AppTheme {
-  AppTheme({
-    Color? lightColor,
-    ColorScheme? lightScheme,
-    Color? darkColor,
-    ColorScheme? darkScheme,
-  }) : assert(
-         (lightColor == null && lightScheme != null) ||
-             (lightColor != null && lightScheme == null),
-         'Either light color or light scheme must be provided',
-       ),
-       _lightScheme =
-           lightScheme ?? ColorScheme.fromSeed(seedColor: lightColor!),
-       assert(
-         (darkColor == null && darkScheme != null) ||
-             (darkColor != null && darkScheme == null),
-         'Either dark color or dark scheme must be provided',
-       ),
-       _darkScheme =
-           darkScheme ??
-           ColorScheme.fromSeed(
-             seedColor: darkColor!,
-             brightness: Brightness.dark,
-           );
+  AppTheme({Color? lightColor, ColorScheme? lightScheme, Color? darkColor, ColorScheme? darkScheme})
+    : assert(
+        (lightColor == null && lightScheme != null) || (lightColor != null && lightScheme == null),
+        'Either light color or light scheme must be provided',
+      ),
+      _lightScheme = lightScheme ?? ColorScheme.fromSeed(seedColor: lightColor!),
+      assert(
+        (darkColor == null && darkScheme != null) || (darkColor != null && darkScheme == null),
+        'Either dark color or dark scheme must be provided',
+      ),
+      _darkScheme = darkScheme ?? ColorScheme.fromSeed(seedColor: darkColor!, brightness: Brightness.dark);
 
   final ColorScheme _lightScheme;
   final ColorScheme _darkScheme;
 
   static final _baseButtonStyle = ButtonStyle(
-    padding: const WidgetStatePropertyAll(
-      EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-    ),
-    shape: WidgetStatePropertyAll(
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    ),
+    padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 10, vertical: 12)),
+    shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
     textStyle: WidgetStatePropertyAll(AppTextTheme.theme.labelLarge),
   );
 
@@ -55,10 +39,7 @@ class AppTheme {
         borderSide: BorderSide(color: colorScheme.surfaceContainerHigh),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          width: 2,
-          color: colorScheme.surfaceContainerHighest,
-        ),
+        borderSide: BorderSide(width: 2, color: colorScheme.surfaceContainerHighest),
         borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
     ),

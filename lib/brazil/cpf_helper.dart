@@ -28,8 +28,7 @@ class CPFHelper {
   // Compute the Verifier Digit (or 'Dígito Verificador (DV)' in PT-BR).
   // You can learn more about the algorithm on [wikipedia (pt-br)](https://pt.wikipedia.org/wiki/D%C3%ADgito_verificador)
   int _verifierDigit(String cpf) {
-    final numbers =
-        cpf.split('').map((number) => int.parse(number, radix: 10)).toList();
+    final numbers = cpf.split('').map((number) => int.parse(number, radix: 10)).toList();
 
     final modulus = numbers.length + 1;
 
@@ -48,9 +47,7 @@ class CPFHelper {
     if (!isValid()) return '';
     final regExp = RegExp(r'^(\d{3})(\d{3})(\d{3})(\d{2})$');
 
-    return _strip(
-      value,
-    ).replaceAllMapped(regExp, (m) => '${m[1]}.${m[2]}.${m[3]}-${m[4]}');
+    return _strip(value).replaceAllMapped(regExp, (m) => '${m[1]}.${m[2]}.${m[3]}-${m[4]}');
   }
 
   static String _strip(String? value) {
@@ -75,8 +72,7 @@ class CPFHelper {
     numbers += _verifierDigit(numbers).toString();
     numbers += _verifierDigit(numbers).toString();
 
-    return numbers.substring(numbers.length - 2) ==
-        cpf.substring(cpf.length - 2);
+    return numbers.substring(numbers.length - 2) == cpf.substring(cpf.length - 2);
   }
 
   static String generateRandom({bool useFormat = false}) {

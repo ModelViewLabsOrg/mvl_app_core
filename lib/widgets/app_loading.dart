@@ -5,9 +5,13 @@ class AppLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox.square(
+    return SizedBox.square(
       dimension: 16,
-      child: CircularProgressIndicator(strokeWidth: 1.5),
+      child: CircularProgressIndicator(
+        strokeWidth: 1.5,
+        color: Colors.white,
+        valueColor: AlwaysStoppedAnimation(Theme.of(context).colorScheme.secondary),
+      ),
     );
   }
 }

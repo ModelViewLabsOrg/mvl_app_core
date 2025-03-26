@@ -12,9 +12,7 @@ class Formatters {
 
   String toPhoneFormatted() {
     final phone = phoneWithoutDdi();
-    return (phone.length < 10 || phone.length > 12)
-        ? value
-        : UtilBrasilFields.getPhone(phone);
+    return (phone.length < 10 || phone.length > 12) ? value : UtilBrasilFields.getPhone(phone);
   }
 
   String toReaisFormatted() => CurrencyHelper.toCurrency(value.toAmount());
@@ -54,9 +52,7 @@ class Formatters {
     const exceptions = ['da', 'de', 'di', 'do', 'du', 'das', 'dos', 'e'];
 
     final split = value.toLowerCase().split(' ');
-    var result = split
-        .map((e) => exceptions.contains(e) ? e : e.capitalizeFirstLetter())
-        .join(' ');
+    var result = split.map((e) => exceptions.contains(e) ? e : e.capitalizeFirstLetter()).join(' ');
 
     if (result.contains("'")) {
       final index = result.indexOf("'");
@@ -71,9 +67,7 @@ class Formatters {
     return result;
   }
 
-  String normalizeRg() =>
-      value.onlyAlphanumerics().toUpperCase().replaceAll(' ', '');
+  String normalizeRg() => value.onlyAlphanumerics().toUpperCase().replaceAll(' ', '');
 
-  String normalizePassport() =>
-      value.onlyAlphanumerics().toUpperCase().replaceAll(' ', '');
+  String normalizePassport() => value.onlyAlphanumerics().toUpperCase().replaceAll(' ', '');
 }

@@ -7,11 +7,8 @@ import 'package:mvl_app_core/utils/version_control/version_flag.dart';
 import 'package:version/version.dart';
 
 abstract class VersionControl {
-  VersionControl({
-    required this.newVersion,
-    required this.title,
-    required this.message,
-  }) : _versionAvailableFlag = VersionAvailableFlag(newVersion.toString());
+  VersionControl({required this.newVersion, required this.title, required this.message})
+    : _versionAvailableFlag = VersionAvailableFlag(newVersion.toString());
 
   final VersionAvailableFlag _versionAvailableFlag;
   final Version newVersion;

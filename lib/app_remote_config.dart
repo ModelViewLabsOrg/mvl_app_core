@@ -19,33 +19,25 @@ extension AppRemoteConfigKeysExt on AppRemoteConfigKeys {
 class AppRemoteConfig {
   AppRemoteConfig._();
 
-  static FirebaseRemoteConfig get _remoteConfig =>
-      FirebaseRemoteConfig.instance;
+  static FirebaseRemoteConfig get _remoteConfig => FirebaseRemoteConfig.instance;
 
   static Future<void> setup(List<AppRemoteConfigKeys> keys) async {
     AppLogger.I().info('RemoteConfig init');
 
     await _remoteConfig.setConfigSettings(
-      RemoteConfigSettings(
-        minimumFetchInterval: const Duration(hours: 1),
-        fetchTimeout: const Duration(minutes: 2),
-      ),
+      RemoteConfigSettings(minimumFetchInterval: const Duration(hours: 1), fetchTimeout: const Duration(minutes: 2)),
     );
 
     await _remoteConfig.ensureInitialized();
 
     try {
-      final defaultValues = Map.fromEntries(
-        keys.map((e) => MapEntry(e.key, e.defaultValue)),
-      );
+      final defaultValues = Map.fromEntries(keys.map((e) => MapEntry(e.key, e.defaultValue)));
 
       await _remoteConfig.setDefaults(defaultValues);
 
       _remoteConfig.onConfigUpdated.listen(
         (data) {
-          AppLogger.I().info(
-            'AppRemoteConfig onConfigUpdated: ${data.updatedKeys}',
-          );
+          AppLogger.I().info('AppRemoteConfig onConfigUpdated: ${data.updatedKeys}');
         },
         onError: (dynamic e) {
           AppLogger.I().error(
@@ -54,8 +46,7 @@ class AppRemoteConfig {
             StackTrace.current,
           );
         },
-        onDone:
-            () => AppLogger.I().info('AppRemoteConfig onConfigUpdated done'),
+        onDone: () => AppLogger.I().info('AppRemoteConfig onConfigUpdated done'),
       );
 
       final result = await _remoteConfig.fetchAndActivate();
@@ -65,13 +56,9 @@ class AppRemoteConfig {
     }
   }
 
-  static String getString(AppRemoteConfigKeys item) =>
-      _remoteConfig.getString(item.key);
-  static bool getBool(AppRemoteConfigKeys item) =>
-      _remoteConfig.getBool(item.key);
-  static double getDouble(AppRemoteConfigKeys item) =>
-      _remoteConfig.getDouble(item.key);
+  static String getString(AppRemoteConfigKeys item) => _remoteConfig.getString(item.key);
+  static bool getBool(AppRemoteConfigKeys item) => _remoteConfig.getBool(item.key);
+  static double getDouble(AppRemoteConfigKeys item) => _remoteConfig.getDouble(item.key);
   static int getInt(AppRemoteConfigKeys item) => _remoteConfig.getInt(item.key);
-  static bool featureFlag(AppRemoteConfigKeys item) =>
-      kDebugMode || _remoteConfig.getBool(item.key);
+  static bool featureFlag(AppRemoteConfigKeys item) => kDebugMode || _remoteConfig.getBool(item.key);
 }

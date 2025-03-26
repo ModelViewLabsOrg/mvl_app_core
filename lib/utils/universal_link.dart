@@ -29,18 +29,12 @@ class _PlayStoreApp with HasStoreLink {
   Uri get storeLink =>
       DeviceInfo.isAndroid
           ? Uri.parse('market://details?id=$packageName')
-          : Uri.parse(
-            'https://play.google.com/store/apps/details?id=$packageName',
-          );
+          : Uri.parse('https://play.google.com/store/apps/details?id=$packageName');
 }
 
 @immutable
 class UniversalApp {
-  const UniversalApp({
-    required this.appId,
-    required this.country,
-    required this.packageName,
-  });
+  const UniversalApp({required this.appId, required this.country, required this.packageName});
 
   final String appId;
   final String country;

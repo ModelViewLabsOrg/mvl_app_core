@@ -8,11 +8,7 @@ import 'package:mvl_app_core/app_logger.dart';
 class AppErrorHandler {
   static void registerErrorHandler() {
     FlutterError.onError = (details) {
-      AppLogger.I().error(
-        details.summary.name ?? 'onError',
-        details.exception,
-        details.stack ?? StackTrace.current,
-      );
+      AppLogger.I().error(details.summary.name ?? 'onError', details.exception, details.stack ?? StackTrace.current);
 
       if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
         unawaited(FirebaseCrashlytics.instance.recordFlutterError(details));
@@ -31,10 +27,7 @@ class AppErrorHandler {
     // * Show some error UI when any widget in the app fails to build
     ErrorWidget.builder = (details) {
       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.red,
-          title: const Text('An error occurred'),
-        ),
+        appBar: AppBar(backgroundColor: Colors.red, title: const Text('An error occurred')),
         body: Center(child: Text(details.toString())),
       );
     };

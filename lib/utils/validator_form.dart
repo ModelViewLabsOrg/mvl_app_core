@@ -16,7 +16,7 @@ class FormValidator {
   static const nameChargeMaxChars = 30;
   static const nicknameMaxChars = 20;
 
-  String? email() => EmailValidator(value).validate();
+  String? email() => EmailValidator(value).isValid() ? null : 'E-mail inválido';
 
   String? password() {
     const error = 'Senha inválida. Pelo menos 8 caracteres';
@@ -29,9 +29,7 @@ class FormValidator {
   }
 
   String? confirmPassword(String? confirmation) {
-    return value == confirmation
-        ? null
-        : 'Senha e confirmação não estão iguais';
+    return value == confirmation ? null : 'Senha e confirmação não estão iguais';
   }
 
   String? phone() {
@@ -62,10 +60,7 @@ class FormValidator {
       final month = int.parse(split.first);
       if (month < 1 || month > 12) return error;
 
-      final date =
-          Jiffy.parseFromDateTime(
-            DateTime(year, month),
-          ).endOf(Unit.month).toLocal().dateTime;
+      final date = Jiffy.parseFromDateTime(DateTime(year, month)).endOf(Unit.month).toLocal().dateTime;
 
       if (!date.isFuture()) return 'A data não pode ser no passado';
 
@@ -116,18 +111,10 @@ class FormValidator {
   }
 
   String? name([int minChars = nameMinChars, int maxChars = nameMaxChars]) {
-    return validateChars(
-      fieldName: 'Nome',
-      minChars: minChars,
-      maxChars: maxChars,
-    );
+    return validateChars(fieldName: 'Nome', minChars: minChars, maxChars: maxChars);
   }
 
-  String? validateChars({
-    String? fieldName,
-    int minChars = nameMinChars,
-    int maxChars = nameMaxChars,
-  }) {
+  String? validateChars({String? fieldName, int minChars = nameMinChars, int maxChars = nameMaxChars}) {
     final value = this.value?.trim();
     if (value == null) return '${fieldName ?? 'Campo'} inválido';
 

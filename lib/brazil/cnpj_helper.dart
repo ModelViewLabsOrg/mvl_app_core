@@ -45,10 +45,7 @@ class CNPJHelper {
 
     final regExp = RegExp(r'^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$');
 
-    return _strip(value).replaceAllMapped(
-      regExp,
-      (m) => '${m[1]}.${m[2]}.${m[3]}/${m[4]}-${m[5]}',
-    );
+    return _strip(value).replaceAllMapped(regExp, (m) => '${m[1]}.${m[2]}.${m[3]}/${m[4]}-${m[5]}');
   }
 
   static String _strip(String? value) {
@@ -75,8 +72,7 @@ class CNPJHelper {
     numbers += _verifierDigit(numbers).toString();
     numbers += _verifierDigit(numbers).toString();
 
-    return numbers.substring(numbers.length - 2) ==
-        cnpj.substring(cnpj.length - 2);
+    return numbers.substring(numbers.length - 2) == cnpj.substring(cnpj.length - 2);
   }
 
   static String generateRandom({bool useFormat = false}) {

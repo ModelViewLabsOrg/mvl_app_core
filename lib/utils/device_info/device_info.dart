@@ -30,10 +30,8 @@ class DeviceInfo {
   late double diagonalInches;
   late Size inches;
 
-  static bool isLandscape(BuildContext c) =>
-      MediaQuery.of(c).orientation == Orientation.landscape;
-  static double devicePixelRatio(BuildContext c) =>
-      MediaQuery.of(c).devicePixelRatio;
+  static bool isLandscape(BuildContext c) => MediaQuery.of(c).orientation == Orientation.landscape;
+  static double devicePixelRatio(BuildContext c) => MediaQuery.of(c).devicePixelRatio;
 
   @override
   String toString() {
@@ -64,10 +62,7 @@ class DeviceInfo {
 
     return switch (defaultTargetPlatform) {
       TargetPlatform.android || TargetPlatform.iOS => false,
-      TargetPlatform.fuchsia ||
-      TargetPlatform.linux ||
-      TargetPlatform.macOS ||
-      TargetPlatform.windows => true,
+      TargetPlatform.fuchsia || TargetPlatform.linux || TargetPlatform.macOS || TargetPlatform.windows => true,
     };
   }
 }

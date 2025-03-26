@@ -15,8 +15,7 @@ class AppButton extends StatelessWidget {
     this.icon,
     super.key,
   }) : assert(
-         (child == null && labelText != null) ||
-             (child != null && labelText == null),
+         (child == null && labelText != null) || (child != null && labelText == null),
          'Must have either a label text for Text or a child, not both',
        );
 
@@ -42,26 +41,10 @@ class AppButton extends StatelessWidget {
 
     final label = _label();
     return switch (buttonType) {
-      AppButtonType.filled => FilledButton.icon(
-        onPressed: action,
-        label: label,
-        icon: icon,
-      ),
-      AppButtonType.elevated => ElevatedButton.icon(
-        onPressed: action,
-        label: label,
-        icon: icon,
-      ),
-      AppButtonType.outlined => OutlinedButton.icon(
-        onPressed: action,
-        label: label,
-        icon: icon,
-      ),
-      AppButtonType.text => TextButton.icon(
-        onPressed: action,
-        label: label,
-        icon: icon,
-      ),
+      AppButtonType.filled => FilledButton.icon(onPressed: action, label: label, icon: icon),
+      AppButtonType.elevated => ElevatedButton.icon(onPressed: action, label: label, icon: icon),
+      AppButtonType.outlined => OutlinedButton.icon(onPressed: action, label: label, icon: icon),
+      AppButtonType.text => TextButton.icon(onPressed: action, label: label, icon: icon),
     };
   }
 

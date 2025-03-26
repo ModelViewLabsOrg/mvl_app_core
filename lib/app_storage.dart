@@ -4,16 +4,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AppStorageSecure {
   AppStorageSecure(this.key);
 
-  static const _secureStorage = FlutterSecureStorage(
-    aOptions: AndroidOptions(encryptedSharedPreferences: true),
-  );
+  static const _secureStorage = FlutterSecureStorage(aOptions: AndroidOptions(encryptedSharedPreferences: true));
 
   final String key;
 
   Future<String?> read() => _secureStorage.read(key: key);
   Future<void> delete() => _secureStorage.delete(key: key);
-  Future<void> write(String? value) =>
-      _secureStorage.write(key: key, value: value);
+  Future<void> write(String? value) => _secureStorage.write(key: key, value: value);
 }
 
 class AppStorage {
@@ -42,8 +39,6 @@ class AppStorage {
     if (value is String) return prefs.setString(key, value);
     if (value is List<String>) return prefs.setStringList(key, value);
 
-    throw ArgumentError(
-      'Type of value ${value.runtimeType} is not supported! ',
-    );
+    throw ArgumentError('Type of value ${value.runtimeType} is not supported! ');
   }
 }

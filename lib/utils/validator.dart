@@ -24,8 +24,7 @@ class Validator {
 
   bool isNameValid({bool fullName = true}) {
     final name = value;
-    if (name.length < FormValidator.nameMinChars ||
-        name.length > FormValidator.nameMaxChars) {
+    if (name.length < FormValidator.nameMinChars || name.length > FormValidator.nameMaxChars) {
       return false;
     }
 

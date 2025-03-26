@@ -28,9 +28,7 @@ extension ColorExt on Color {
   Color darken([double amount = 0.1]) {
     assert(amount >= 0 && amount <= 1, 'amount must be between 0 and 1');
     final hsl = HSLColor.fromColor(this);
-    return hsl
-        .withLightness((hsl.lightness - amount).clamp(0.0, 1.0))
-        .toColor();
+    return hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0)).toColor();
   }
 
   /// Lightens the color by the given [amount].
@@ -40,9 +38,7 @@ extension ColorExt on Color {
   Color lighten([double amount = 0.1]) {
     assert(amount >= 0 && amount <= 1, 'amount must be between 0 and 1');
     final hsl = HSLColor.fromColor(this);
-    return hsl
-        .withLightness((hsl.lightness + amount).clamp(0.0, 1.0))
-        .toColor();
+    return hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0)).toColor();
   }
 
   /// Creates a shade of the color by mixing it with black.
@@ -74,8 +70,7 @@ extension ColorExt on Color {
     final luminance1 = computeLuminance();
     final luminance2 = otherColor.computeLuminance();
 
-    return (math.max(luminance1, luminance2) + 0.05) /
-        (math.min(luminance1, luminance2) + 0.05);
+    return (math.max(luminance1, luminance2) + 0.05) / (math.min(luminance1, luminance2) + 0.05);
   }
 
   /// Returns the complementary color of this color.
@@ -109,11 +104,9 @@ extension ColorExt on Color {
 
 extension FHUColorExt on String {
   /// checks if current string is in hex format or not.
-  bool get isHexColor =>
-      RegExp(r'^#?(?:[0-9a-fA-F]{3,4}){1,2}$').hasMatch(this);
+  bool get isHexColor => RegExp(r'^#?(?:[0-9a-fA-F]{3,4}){1,2}$').hasMatch(this);
 
-  Color hexToColor(String code) =>
-      Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
+  Color hexToColor(String code) => Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
 
   /// it tries to convert the current string to Color returns null if failed.
   Color? get toColor {

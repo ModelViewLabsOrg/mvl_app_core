@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mvl_app_core/widgets/app_dimens.dart';
 
 class ResponsiveView extends StatelessWidget {
-  const ResponsiveView(
-    this.desktopChild, {
-    this.mobileChild,
-    this.tabletChild,
-    super.key,
-  });
+  const ResponsiveView(this.desktopChild, {this.mobileChild, this.tabletChild, super.key});
 
   final Widget desktopChild;
   final Widget? mobileChild;

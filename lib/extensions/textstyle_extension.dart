@@ -15,10 +15,8 @@ extension TextStyleHelpers on TextStyle {
   TextStyle get italic => copyWith(fontStyle: FontStyle.italic);
   // TextStyle c(Color value) => copyWith(color: value);
   // TextStyle letterSpacing(double value) => copyWith(letterSpacing: value);
-  TextStyle error(BuildContext context) => copyWith(
-    decoration: TextDecoration.lineThrough,
-    color: Theme.of(context).colorScheme.error,
-  );
+  TextStyle error(BuildContext context) =>
+      copyWith(decoration: TextDecoration.lineThrough, color: Theme.of(context).colorScheme.error);
 
   TextStyle letterMoreSpacing({double add = 0.1}) {
     final value = (letterSpacing ?? 1) + add;

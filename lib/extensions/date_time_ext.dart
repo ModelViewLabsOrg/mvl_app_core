@@ -67,20 +67,16 @@ extension DateTimeExt on DateTime {
   DateTime onlyDate() => DateTime(year, month, day);
   DateTime onlyMonth() => DateTime(year, month);
 
-  bool isWeekend() =>
-      weekday == DateTime.saturday || weekday == DateTime.sunday;
+  bool isWeekend() => weekday == DateTime.saturday || weekday == DateTime.sunday;
 
-  bool isSameDay(DateTime other) =>
-      onlyDate().isAtSameMomentAs(other.onlyDate());
+  bool isSameDay(DateTime other) => onlyDate().isAtSameMomentAs(other.onlyDate());
 
   bool isToday() => isSameDay(clock.now());
 
-  bool isSameMonth(DateTime other) =>
-      year == other.year && month == other.month;
+  bool isSameMonth(DateTime other) => year == other.year && month == other.month;
 
   bool isFuture() => clock.now().isBefore(this);
-  bool isTomorrowOrAfter() =>
-      clock.now().add(const Duration(days: 1)).onlyDate().isBefore(this);
+  bool isTomorrowOrAfter() => clock.now().add(const Duration(days: 1)).onlyDate().isBefore(this);
 
   /// 2022-10-31
   String onlyDateToServerFormat() => DateFormat('yyyy-MM-dd').format(this);
@@ -104,17 +100,10 @@ extension DateTimeExt on DateTime {
   // }
 
   /// 2022-10-31 14:58:09.123 -> 2022-10-31 14:58:00
-  DateTime removeSeconds() => subtract(
-    Duration(
-      seconds: second,
-      milliseconds: millisecond,
-      microseconds: microsecond,
-    ),
-  );
+  DateTime removeSeconds() => subtract(Duration(seconds: second, milliseconds: millisecond, microseconds: microsecond));
 
   /// 2022-10-01 -> 2022-09-01
-  DateTime previousMonth() =>
-      Jiffy.parseFromDateTime(this).subtract(months: 1).dateTime;
+  DateTime previousMonth() => Jiffy.parseFromDateTime(this).subtract(months: 1).dateTime;
 
   /// 2022-10-01 -> 2022-11-01
   DateTime nextMonth() => Jiffy.parseFromDateTime(this).add(months: 1).dateTime;
@@ -126,9 +115,7 @@ extension DateTimeExt on DateTime {
   int differenceInYearsFromToday() => today().differenceInYears(this);
 
   int differenceInYears(DateTime date) {
-    final subtract = Jiffy.parseFromDateTime(
-      this,
-    ).subtract(years: date.year, months: date.month, days: date.day);
+    final subtract = Jiffy.parseFromDateTime(this).subtract(years: date.year, months: date.month, days: date.day);
 
     return subtract.year;
   }

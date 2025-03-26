@@ -2,13 +2,7 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class PushNotification {
-  const PushNotification(
-    this.id,
-    this.title,
-    this.body,
-    this.imageUrl,
-    this.payload,
-  );
+  const PushNotification(this.id, this.title, this.body, this.imageUrl, this.payload);
 
   final int id;
   final String? title;
@@ -41,10 +35,6 @@ class PushNotification {
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        title.hashCode ^
-        body.hashCode ^
-        imageUrl.hashCode ^
-        payload.hashCode;
+    return id.hashCode ^ title.hashCode ^ body.hashCode ^ imageUrl.hashCode ^ payload.hashCode;
   }
 }

@@ -7,8 +7,7 @@ class AppToastAction {
   final String label;
   final void Function() onPressed;
 
-  SnackBarAction toToastAction() =>
-      SnackBarAction(label: label, onPressed: onPressed);
+  SnackBarAction toToastAction() => SnackBarAction(label: label, onPressed: onPressed);
 }
 
 class AppToastMessages {
@@ -20,10 +19,7 @@ class AppToastMessages {
     bool showCloseIcon = false,
   }) : assert(message.isNotEmpty, 'Message must not be empty'),
        snackBar = SnackBar(
-         content: _content(
-           message,
-           iconData ?? (isError ? Icons.error_outline : null),
-         ),
+         content: _content(message, iconData ?? (isError ? Icons.error_outline : null)),
          showCloseIcon: !isError && showCloseIcon,
          action: action?.toToastAction(),
        );
@@ -31,18 +27,14 @@ class AppToastMessages {
   static Widget _content(String message, IconData? iconData) {
     if (iconData == null) return Text(message);
 
-    return Row(
-      children: [Icon(iconData), gapS, Expanded(child: Text(message))],
-    );
+    return Row(children: [Icon(iconData), gapS, Expanded(child: Text(message))]);
   }
 
   final SnackBar snackBar;
 
   static const int secondsDuration = 4;
 
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> show(
-    BuildContext context,
-  ) {
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> show(BuildContext context) {
     return ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
