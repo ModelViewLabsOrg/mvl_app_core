@@ -18,8 +18,7 @@ class AppConfig {
     final config = AppConfig._internal()..configValues = values;
     AppLogger.I().debug('Env: ${env.name}');
 
-    _instance = config;
-    return config;
+    return _instance = config;
   }
 
   // static Future<EnvEnum> _env() async {
