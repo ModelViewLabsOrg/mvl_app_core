@@ -16,7 +16,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:version/version.dart';
 
 class AppVersionArgs {
-  AppVersionArgs({required String min, required String ideal}) : min = Version.parse(min), ideal = Version.parse(ideal);
+  AppVersionArgs({required String min, required String ideal})
+    : min = Version.parse(min),
+      ideal = Version.parse(ideal);
 
   final Version min;
   final Version ideal;
@@ -72,7 +74,10 @@ class AppVersion {
         if (token == null) {
           AppToastMessages('Sem token!', isError: true).show(context);
         } else {
-          return CopyAndShowMessage(textToCopy: token, messageFeedback: 'Copiado: $token').show(context);
+          return CopyAndShowMessage(
+            textToCopy: token,
+            messageFeedback: 'Copiado: $token',
+          ).show(context);
         }
       },
       child: _versionChild(context),
@@ -87,7 +92,11 @@ class AppVersion {
     }
 
     return Column(
-      children: [AppText.titleLarge(context, versionFull), gapM, AppText.titleLarge(context, env.name.toUpperCase())],
+      children: [
+        AppText.titleLarge(context, versionFull),
+        gapM,
+        AppText.titleLarge(context, env.name.toUpperCase()),
+      ],
     );
   }
 

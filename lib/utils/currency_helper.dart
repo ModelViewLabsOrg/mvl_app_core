@@ -13,7 +13,9 @@ class CurrencyHelper {
   static String toCurrency(num number, {bool allowNegative = false}) {
     final regex = allowNegative ? r'[^A-Za-z0-9$.,\-]' : r'[^A-Za-z0-9$.,]';
 
-    return NumberFormat.currency(symbol: currencySymbol).format(number).replaceAll(RegExp(regex), ' ');
+    return NumberFormat.currency(
+      symbol: currencySymbol,
+    ).format(number).replaceAll(RegExp(regex), ' ');
   }
   // The character  is invisible. Adjust settings
 

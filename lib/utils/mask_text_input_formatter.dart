@@ -30,13 +30,21 @@ class MaskTextInputFormatter implements TextInputFormatter {
       newValue:
           initialText == null
               ? null
-              : TextEditingValue(text: initialText, selection: TextSelection.collapsed(offset: initialText.length)),
+              : TextEditingValue(
+                text: initialText,
+                selection: TextSelection.collapsed(offset: initialText.length),
+              ),
     );
   }
 
   /// Create the eager [mask] formatter for TextField
   MaskTextInputFormatter.eager({String? mask, Map<String, RegExp>? filter, String? initialText})
-    : this(mask: mask, filter: filter, initialText: initialText, type: MaskAutoCompletionType.eager);
+    : this(
+        mask: mask,
+        filter: filter,
+        initialText: initialText,
+        type: MaskAutoCompletionType.eager,
+      );
 
   MaskAutoCompletionType _type;
   MaskAutoCompletionType get type => _type;
@@ -106,12 +114,20 @@ class MaskTextInputFormatter implements TextInputFormatter {
 
   /// Mask some text
   String maskText(String text) {
-    return MaskTextInputFormatter(mask: _mask, filter: _maskFilter, initialText: text).getMaskedText();
+    return MaskTextInputFormatter(
+      mask: _mask,
+      filter: _maskFilter,
+      initialText: text,
+    ).getMaskedText();
   }
 
   /// Unmask some text
   String unmaskText(String text) {
-    return MaskTextInputFormatter(mask: _mask, filter: _maskFilter, initialText: text).getUnmaskedText();
+    return MaskTextInputFormatter(
+      mask: _mask,
+      filter: _maskFilter,
+      initialText: text,
+    ).getUnmaskedText();
   }
 
   @override
@@ -141,7 +157,11 @@ class MaskTextInputFormatter implements TextInputFormatter {
                 : 0
             : 0;
 
-    for (var i = 0; i < beforeSelectionStart && i < beforeText.length && i < afterText.length; i++) {
+    for (
+      var i = 0;
+      i < beforeSelectionStart && i < beforeText.length && i < afterText.length;
+      i++
+    ) {
       if (beforeText[i] != afterText[i]) {
         beforeSelectionStart = i;
         break;
@@ -281,7 +301,9 @@ class MaskTextInputFormatter implements TextInputFormatter {
           }
         } else {
           _resultTextMasked += mask[maskPos];
-          if (!isMaskChar && curTextPos < _resultTextArray.length && curMaskChar == _resultTextArray[curTextPos]) {
+          if (!isMaskChar &&
+              curTextPos < _resultTextArray.length &&
+              curMaskChar == _resultTextArray[curTextPos]) {
             if (type == MaskAutoCompletionType.lazy && lengthAdded <= 1) {
             } else {
               maskInside++;

@@ -32,8 +32,14 @@ class VersionAlertWidget extends StatelessWidget {
       content: _content(context),
       actions: <Widget>[
         if (allowCancel)
-          TextButton(onPressed: () => _notNow(context), child: Text(recommendedLocalization.buttonLater)),
-        FilledButton(onPressed: () async => _mainAction(context), child: Text(mandatoryLocalization.buttonNow)),
+          TextButton(
+            onPressed: () => _notNow(context),
+            child: Text(recommendedLocalization.buttonLater),
+          ),
+        FilledButton(
+          onPressed: () async => _mainAction(context),
+          child: Text(mandatoryLocalization.buttonNow),
+        ),
       ],
     );
   }
@@ -44,7 +50,10 @@ class VersionAlertWidget extends StatelessWidget {
       content: _content(context),
       actions: <Widget>[
         if (allowCancel)
-          CupertinoDialogAction(onPressed: () => _notNow(context), child: Text(recommendedLocalization.buttonLater)),
+          CupertinoDialogAction(
+            onPressed: () => _notNow(context),
+            child: Text(recommendedLocalization.buttonLater),
+          ),
         CupertinoDialogAction(
           onPressed: () async => _mainAction(context),
           isDefaultAction: true,
@@ -57,7 +66,9 @@ class VersionAlertWidget extends StatelessWidget {
   Widget _title(BuildContext context) {
     return Text(
       allowCancel ? recommendedLocalization.title : mandatoryLocalization.title,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).primaryColor),
+      style: Theme.of(
+        context,
+      ).textTheme.titleLarge?.copyWith(color: Theme.of(context).primaryColor),
     );
   }
 

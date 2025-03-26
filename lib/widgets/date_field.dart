@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 export 'package:date_field/date_field.dart';
 
 class AppBirthdayField extends StatelessWidget {
-  const AppBirthdayField({required this.onChanged, this.label = 'Data de nascimento', this.minAge = 0, super.key});
+  const AppBirthdayField({
+    required this.onChanged,
+    this.label = 'Data de nascimento',
+    this.minAge = 0,
+    super.key,
+  });
 
   final String label;
   final int minAge;

@@ -36,7 +36,8 @@ class VersionForceUpdateWidget extends StatefulWidget {
   State<VersionForceUpdateWidget> createState() => _VersionForceUpdateWidgetState();
 }
 
-class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget> with WidgetsBindingObserver {
+class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
+    with WidgetsBindingObserver {
   var _isAlertVisible = false;
   DateTime? _lastCheck;
 
@@ -105,7 +106,10 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget> wit
     final isValid = diff.inMinutes < widget.cacheMinutes;
 
     if (isValid) {
-      tracking.event('atualizar_alerta_cache', customParams: {'diferença minutos': diff.inMinutes.toString()});
+      tracking.event(
+        'atualizar_alerta_cache',
+        customParams: {'diferença minutos': diff.inMinutes.toString()},
+      );
     }
 
     return isValid;
@@ -124,7 +128,10 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget> wit
           'Last alert showed in $diff days, '
           'ignoring this alert.',
         );
-        tracking.event('atualizar_alerta_depois', customParams: {'diferença dias': diff.toString()});
+        tracking.event(
+          'atualizar_alerta_depois',
+          customParams: {'diferença dias': diff.toString()},
+        );
 
         return;
       }

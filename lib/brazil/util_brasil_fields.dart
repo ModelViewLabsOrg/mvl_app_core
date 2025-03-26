@@ -16,7 +16,9 @@ mixin UtilBrasilFields {
 
   static double currencyToDouble(String value) {
     assert(value.isNotEmpty, '');
-    final doubleValue = double.tryParse(value.replaceAll(r'R$ ', '').replaceAll('.', '').replaceAll(',', '.'));
+    final doubleValue = double.tryParse(
+      value.replaceAll(r'R$ ', '').replaceAll('.', '').replaceAll(',', '.'),
+    );
 
     return doubleValue ?? 0;
   }
@@ -57,7 +59,10 @@ mixin UtilBrasilFields {
     if (!mask) return removeCaracteres(phone);
 
     if (ddd) {
-      assert(phone.length == 10 || phone.length == 11, 'phone com tamanho inválido. Deve conter 10 ou 11 caracteres');
+      assert(
+        phone.length == 10 || phone.length == 11,
+        'phone com tamanho inválido. Deve conter 10 ou 11 caracteres',
+      );
 
       final prefix = '(${phone.substring(0, 2)}) ';
       final pad = phone.length == 10 ? 0 : 1;
@@ -66,7 +71,10 @@ mixin UtilBrasilFields {
           '${phone.substring(2, 6 + pad)}-'
           '${phone.substring(6 + pad, 10 + pad)}';
     } else {
-      assert(phone.length == 8 || phone.length == 9, 'phone com tamanho inválido. Deve conter 8 ou 9 caracteres');
+      assert(
+        phone.length == 8 || phone.length == 9,
+        'phone com tamanho inválido. Deve conter 8 ou 9 caracteres',
+      );
 
       return (phone.length == 8)
           ? '${phone.substring(0, 4)}-${phone.substring(4, 8)}'
@@ -75,7 +83,10 @@ mixin UtilBrasilFields {
   }
 
   static String getDDD(String phone) {
-    assert(phone.length == 14 || phone.length == 15, 'phone com tamanho inválido. Deve conter 14 ou 15 caracteres');
+    assert(
+      phone.length == 14 || phone.length == 15,
+      'phone com tamanho inválido. Deve conter 14 ou 15 caracteres',
+    );
 
     return phone.substring(1, 3);
   }

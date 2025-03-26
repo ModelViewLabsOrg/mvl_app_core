@@ -4,7 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AppStorageSecure {
   AppStorageSecure(this.key);
 
-  static const _secureStorage = FlutterSecureStorage(aOptions: AndroidOptions(encryptedSharedPreferences: true));
+  static const _secureStorage = FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  );
 
   final String key;
 

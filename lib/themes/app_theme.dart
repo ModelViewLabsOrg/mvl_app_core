@@ -12,7 +12,8 @@ class AppTheme {
         (darkColor == null && darkScheme != null) || (darkColor != null && darkScheme == null),
         'Either dark color or dark scheme must be provided',
       ),
-      _darkScheme = darkScheme ?? ColorScheme.fromSeed(seedColor: darkColor!, brightness: Brightness.dark);
+      _darkScheme =
+          darkScheme ?? ColorScheme.fromSeed(seedColor: darkColor!, brightness: Brightness.dark);
 
   final ColorScheme _lightScheme;
   final ColorScheme _darkScheme;

@@ -1,6 +1,14 @@
 import 'package:mvl_app_core/utils/device_info/device_info.dart';
 
-enum DeviceSizeType { mobileExtraSmall, mobileSmall, mobileMedium, mobileLarge, tabletMedium, tabletLarge, desktop }
+enum DeviceSizeType {
+  mobileExtraSmall,
+  mobileSmall,
+  mobileMedium,
+  mobileLarge,
+  tabletMedium,
+  tabletLarge,
+  desktop,
+}
 
 enum DeviceScreenType { extraSmall, small, medium, large, extraLarge }
 
@@ -55,9 +63,11 @@ extension DeviceSizeExt on DeviceInfo {
 
   bool get isExtraSmall => sizeType == DeviceSizeType.mobileExtraSmall;
   bool get isSmall => sizeType == DeviceSizeType.mobileSmall;
-  bool get isMedium => sizeType == DeviceSizeType.mobileMedium || sizeType == DeviceSizeType.mobileLarge;
+  bool get isMedium =>
+      sizeType == DeviceSizeType.mobileMedium || sizeType == DeviceSizeType.mobileLarge;
   bool get isLarge => sizeType == DeviceSizeType.tabletMedium;
-  bool get isExtraLarge => sizeType == DeviceSizeType.tabletLarge || sizeType == DeviceSizeType.desktop;
+  bool get isExtraLarge =>
+      sizeType == DeviceSizeType.tabletLarge || sizeType == DeviceSizeType.desktop;
 
   bool isEqualOrSmaller(DeviceScreenType type) => sizeType.index <= type.index;
   bool isEqualOrBigger(DeviceScreenType type) => sizeType.index >= type.index;

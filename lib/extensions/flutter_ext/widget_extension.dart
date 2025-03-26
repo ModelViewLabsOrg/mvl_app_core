@@ -7,7 +7,10 @@ extension WidgetExtensions on Widget {
   }
 
   Widget withRoundCorners() => DecoratedBox(
-    decoration: const BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.all(Radius.circular(25))),
+    decoration: const BoxDecoration(
+      color: Colors.grey,
+      borderRadius: BorderRadius.all(Radius.circular(25)),
+    ),
     child: this,
   );
 
@@ -21,7 +24,14 @@ extension WidgetExtensions on Widget {
     Offset offset = const Offset(10, 10),
   }) => DecoratedBox(
     decoration: BoxDecoration(
-      boxShadow: [BoxShadow(color: shadowColor, blurRadius: blurRadius, spreadRadius: spreadRadius, offset: offset)],
+      boxShadow: [
+        BoxShadow(
+          color: shadowColor,
+          blurRadius: blurRadius,
+          spreadRadius: spreadRadius,
+          offset: offset,
+        ),
+      ],
     ),
     child: this,
   );
@@ -38,7 +48,11 @@ extension WidgetExtensions on Widget {
         borderRadius: AppDimens.defaultBorder(radius: borderRadius),
         boxShadow: [
           BoxShadow(offset: offset, blurRadius: blurRadius, color: bottomShadowColor),
-          BoxShadow(offset: Offset(-offset.dx, -offset.dx), blurRadius: blurRadius, color: topShadowColor),
+          BoxShadow(
+            offset: Offset(-offset.dx, -offset.dx),
+            blurRadius: blurRadius,
+            color: topShadowColor,
+          ),
         ],
       ),
       child: this,

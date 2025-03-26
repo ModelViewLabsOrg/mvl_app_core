@@ -30,7 +30,8 @@ enum BrasilState {
   to,
 }
 
-BrasilState stateFromJson(String value) => EnumToString.fromString(BrasilState.values, value.toLowerCase())!;
+BrasilState stateFromJson(String value) =>
+    EnumToString.fromString(BrasilState.values, value.toLowerCase())!;
 
 extension BrasilStateExt on BrasilState {
   String get state => Brasil.listStates[this] ?? '';

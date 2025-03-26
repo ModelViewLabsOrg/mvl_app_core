@@ -3,7 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:mvl_app_core/widgets/app_toast_message.dart';
 
 class CopyAndShowMessage extends StatelessWidget {
-  const CopyAndShowMessage({required this.textToCopy, this.messageFeedback, this.buttonLabel = 'Copiar', super.key});
+  const CopyAndShowMessage({
+    required this.textToCopy,
+    this.messageFeedback,
+    this.buttonLabel = 'Copiar',
+    super.key,
+  });
 
   final String textToCopy;
   final String? messageFeedback;

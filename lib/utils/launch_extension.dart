@@ -57,7 +57,11 @@ extension LaunchNullExt on String? {
   }
 
   Future<void> mailTo({String? subject, String? body}) async {
-    final params = Uri(scheme: 'mailto', path: this, query: 'subject=${subject ?? ''}&body=${body ?? ''}');
+    final params = Uri(
+      scheme: 'mailto',
+      path: this,
+      query: 'subject=${subject ?? ''}&body=${body ?? ''}',
+    );
 
     await params.toString().launchURL();
   }

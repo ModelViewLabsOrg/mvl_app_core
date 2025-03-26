@@ -62,7 +62,10 @@ class DeviceInfo {
 
     return switch (defaultTargetPlatform) {
       TargetPlatform.android || TargetPlatform.iOS => false,
-      TargetPlatform.fuchsia || TargetPlatform.linux || TargetPlatform.macOS || TargetPlatform.windows => true,
+      TargetPlatform.fuchsia ||
+      TargetPlatform.linux ||
+      TargetPlatform.macOS ||
+      TargetPlatform.windows => true,
     };
   }
 }

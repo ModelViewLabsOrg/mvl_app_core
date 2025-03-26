@@ -3,7 +3,8 @@ import 'dart:math';
 import 'package:mvl_app_core/utils/currency_helper.dart';
 
 extension IntExt on int {
-  String toReais({bool allowNegative = false}) => CurrencyHelper.toCurrency(this / 100, allowNegative: allowNegative);
+  String toReais({bool allowNegative = false}) =>
+      CurrencyHelper.toCurrency(this / 100, allowNegative: allowNegative);
 
   double amountToDouble() => this / 100;
 }

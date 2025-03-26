@@ -60,7 +60,8 @@ class FormValidator {
       final month = int.parse(split.first);
       if (month < 1 || month > 12) return error;
 
-      final date = Jiffy.parseFromDateTime(DateTime(year, month)).endOf(Unit.month).toLocal().dateTime;
+      final date =
+          Jiffy.parseFromDateTime(DateTime(year, month)).endOf(Unit.month).toLocal().dateTime;
 
       if (!date.isFuture()) return 'A data não pode ser no passado';
 
@@ -114,7 +115,11 @@ class FormValidator {
     return validateChars(fieldName: 'Nome', minChars: minChars, maxChars: maxChars);
   }
 
-  String? validateChars({String? fieldName, int minChars = nameMinChars, int maxChars = nameMaxChars}) {
+  String? validateChars({
+    String? fieldName,
+    int minChars = nameMinChars,
+    int maxChars = nameMaxChars,
+  }) {
     final value = this.value?.trim();
     if (value == null) return '${fieldName ?? 'Campo'} inválido';
 

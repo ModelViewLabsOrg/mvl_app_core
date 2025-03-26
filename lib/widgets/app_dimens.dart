@@ -30,7 +30,8 @@ class AppDimens {
 
   // Radius and Border
   static const double defaultRadius = 16;
-  static BorderRadius defaultBorder({double radius = defaultRadius}) => BorderRadius.circular(radius);
+  static BorderRadius defaultBorder({double radius = defaultRadius}) =>
+      BorderRadius.circular(radius);
   static const Offset defaultOffset = Offset(5, 5);
   static const double defaultBlurRadius = 10;
 

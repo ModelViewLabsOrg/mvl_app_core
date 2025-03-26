@@ -13,7 +13,12 @@ class AppLogger {
 
   static final AppLogger _instance = AppLogger._internal();
 
-  void error(String method, Object error, StackTrace stackTrace, [Map<String, String>? parameters]) {
+  void error(
+    String method,
+    Object error,
+    StackTrace stackTrace, [
+    Map<String, String>? parameters,
+  ]) {
     if (kDebugMode) {
       _instance.talker.handle(error, stackTrace, 'Error $method $parameters. $error');
     }
@@ -21,7 +26,11 @@ class AppLogger {
     if (!shouldLogAsError(error)) return;
 
     parameters ??= {};
-    parameters.addAll({'method': method, 'error': error.toString(), 'stacktrace': stackTrace.toString()});
+    parameters.addAll({
+      'method': method,
+      'error': error.toString(),
+      'stacktrace': stackTrace.toString(),
+    });
 
     tracking.recordError(method, error, stackTrace);
     //  tracking.event('erro', customParams: parameters);

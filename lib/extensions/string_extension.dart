@@ -23,7 +23,9 @@ extension StringExt on String {
   }
 
   String capitalize({bool fullSentence = true}) {
-    return fullSentence ? split(' ').map((e) => e.capitalizeFirstLetter()).join(' ') : capitalizeFirstLetter();
+    return fullSentence
+        ? split(' ').map((e) => e.capitalizeFirstLetter()).join(' ')
+        : capitalizeFirstLetter();
   }
 
   String onlyAlphanumerics([String replaceFor = '']) {
@@ -33,7 +35,8 @@ extension StringExt on String {
   String removeAccentsAndEmojiWithTrim() => removeAccentsDiacritics().removeEmoji();
 
   String removeAccentsDiacritics() => removeDiacritics(this);
-  String removeEmoji({String word = '', bool trimText = true}) => RemoveEmoji().clean(this, word, trimText);
+  String removeEmoji({String word = '', bool trimText = true}) =>
+      RemoveEmoji().clean(this, word, trimText);
 
   String limit(int chars) => substring(0, min(chars, length)).trim();
 

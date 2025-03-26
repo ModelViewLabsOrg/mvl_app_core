@@ -25,7 +25,10 @@ class AppRemoteConfig {
     AppLogger.I().info('RemoteConfig init');
 
     await _remoteConfig.setConfigSettings(
-      RemoteConfigSettings(minimumFetchInterval: const Duration(hours: 1), fetchTimeout: const Duration(minutes: 2)),
+      RemoteConfigSettings(
+        minimumFetchInterval: const Duration(hours: 1),
+        fetchTimeout: const Duration(minutes: 2),
+      ),
     );
 
     await _remoteConfig.ensureInitialized();
@@ -60,5 +63,6 @@ class AppRemoteConfig {
   static bool getBool(AppRemoteConfigKeys item) => _remoteConfig.getBool(item.key);
   static double getDouble(AppRemoteConfigKeys item) => _remoteConfig.getDouble(item.key);
   static int getInt(AppRemoteConfigKeys item) => _remoteConfig.getInt(item.key);
-  static bool featureFlag(AppRemoteConfigKeys item) => kDebugMode || _remoteConfig.getBool(item.key);
+  static bool featureFlag(AppRemoteConfigKeys item) =>
+      kDebugMode || _remoteConfig.getBool(item.key);
 }

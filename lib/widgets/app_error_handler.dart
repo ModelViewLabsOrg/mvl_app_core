@@ -5,7 +5,11 @@ import 'package:mvl_app_core/app_logger.dart';
 class AppErrorHandler {
   static void registerErrorHandler() {
     FlutterError.onError = (details) {
-      AppLogger.I().error(details.summary.name ?? 'onError', details.exception, details.stack ?? StackTrace.current);
+      AppLogger.I().error(
+        details.summary.name ?? 'onError',
+        details.exception,
+        details.stack ?? StackTrace.current,
+      );
 
       FlutterError.presentError(details);
     };

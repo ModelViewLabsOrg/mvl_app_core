@@ -41,7 +41,11 @@ class TrackingItem {
     price: value?.amountToDouble(),
   );
 
-  Map<String, String> get properties => {'id': id.toString(), 'name': name, 'value': (value ?? 0).toString()};
+  Map<String, String> get properties => {
+    'id': id.toString(),
+    'name': name,
+    'value': (value ?? 0).toString(),
+  };
 }
 
 class AppTracking {
@@ -58,7 +62,9 @@ class AppTracking {
     ]);
 
     if (!kIsWeb) {
-      await FirebaseInAppMessaging.instance.setAutomaticDataCollectionEnabled(config.trackingEnabled);
+      await FirebaseInAppMessaging.instance.setAutomaticDataCollectionEnabled(
+        config.trackingEnabled,
+      );
     }
 
     _resetDefaultEventParams();
@@ -112,7 +118,10 @@ class AppTracking {
   var _eventsParameters = <String, String>{};
 
   void _resetDefaultEventParams() {
-    _eventsParameters = {'app': AppVersion.I().appName, 'app_details': AppVersion.I().toString().replaceAll('\n', ' ')};
+    _eventsParameters = {
+      'app': AppVersion.I().appName,
+      'app_details': AppVersion.I().toString().replaceAll('\n', ' '),
+    };
   }
 
   void appOpen() {
@@ -178,7 +187,14 @@ class AppTracking {
     );
 
     if (!kIsWeb) {
-      unawaited(FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: fatal, printDetails: kDebugMode));
+      unawaited(
+        FirebaseCrashlytics.instance.recordError(
+          error,
+          stackTrace,
+          fatal: fatal,
+          printDetails: kDebugMode,
+        ),
+      );
     }
   }
 
@@ -187,7 +203,11 @@ class AppTracking {
 
     final parameters = (customParams ?? {})..addAll(_eventsParameters);
 
-    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: eventName, data: parameters, level: SentryLevel.info)));
+    unawaited(
+      Sentry.addBreadcrumb(
+        Breadcrumb(message: eventName, data: parameters, level: SentryLevel.info),
+      ),
+    );
 
     final safeEventName = eventName; //.cleanLimit(kEventNameMaxLength);
 
@@ -268,7 +288,8 @@ class AppTracking {
     unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'share $method $contentType')));
 
     const eventName = 'share';
-    final props = {'metodo': method, 'id': id, 'tipo conteudo': contentType}..addAll(_eventsParameters);
+    final props = {'metodo': method, 'id': id, 'tipo conteudo': contentType}
+      ..addAll(_eventsParameters);
 
     _aptabaseTrackEvent(eventName, props);
 

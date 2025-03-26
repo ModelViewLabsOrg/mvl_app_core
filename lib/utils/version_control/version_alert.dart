@@ -65,7 +65,10 @@ class VersionAlertDialog extends StatelessWidget {
             if (versionControl.isOptional)
               Padding(
                 padding: const EdgeInsets.only(top: AppDimens.kDefaultPadding),
-                child: TextButton(onPressed: Navigator.of(context).pop, child: const Text('Agora não')),
+                child: TextButton(
+                  onPressed: Navigator.of(context).pop,
+                  child: const Text('Agora não'),
+                ),
               ),
           ],
         ),

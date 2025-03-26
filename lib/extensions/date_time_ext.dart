@@ -100,7 +100,8 @@ extension DateTimeExt on DateTime {
   // }
 
   /// 2022-10-31 14:58:09.123 -> 2022-10-31 14:58:00
-  DateTime removeSeconds() => subtract(Duration(seconds: second, milliseconds: millisecond, microseconds: microsecond));
+  DateTime removeSeconds() =>
+      subtract(Duration(seconds: second, milliseconds: millisecond, microseconds: microsecond));
 
   /// 2022-10-01 -> 2022-09-01
   DateTime previousMonth() => Jiffy.parseFromDateTime(this).subtract(months: 1).dateTime;
@@ -115,7 +116,9 @@ extension DateTimeExt on DateTime {
   int differenceInYearsFromToday() => today().differenceInYears(this);
 
   int differenceInYears(DateTime date) {
-    final subtract = Jiffy.parseFromDateTime(this).subtract(years: date.year, months: date.month, days: date.day);
+    final subtract = Jiffy.parseFromDateTime(
+      this,
+    ).subtract(years: date.year, months: date.month, days: date.day);
 
     return subtract.year;
   }

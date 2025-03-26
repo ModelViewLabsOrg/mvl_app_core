@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mvl_app_core/extensions/flutter_ext/context_extension.dart';
 
 class AppText extends Text {
-  const AppText._(super.data, {super.style, super.maxLines, super.textAlign, super.overflow, super.key});
+  const AppText._(
+    super.data, {
+    super.style,
+    super.maxLines,
+    super.textAlign,
+    super.overflow,
+    super.key,
+  });
 
   factory AppText._internal(
     String data,
@@ -23,7 +30,14 @@ class AppText extends Text {
       style = style.copyWith(decorationStyle: TextDecorationStyle.solid);
     }
 
-    return AppText._(data, style: style, maxLines: maxLines, textAlign: textAlign, overflow: overflow, key: key);
+    return AppText._(
+      data,
+      style: style,
+      maxLines: maxLines,
+      textAlign: textAlign,
+      overflow: overflow,
+      key: key,
+    );
   }
 
   factory AppText.headlineLarge(
@@ -64,7 +78,11 @@ class AppText extends Text {
     Color? color,
     TextAlign textAlign = TextAlign.left,
   }) {
-    return AppText._(text, style: context.textTheme.headlineSmall?.copyWith(color: color), textAlign: textAlign);
+    return AppText._(
+      text,
+      style: context.textTheme.headlineSmall?.copyWith(color: color),
+      textAlign: textAlign,
+    );
   }
 
   factory AppText.titleLarge(
