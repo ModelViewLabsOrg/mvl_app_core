@@ -22,15 +22,23 @@ String currentMonth() => today().mmmm();
 
 DateTime? cvvToDate(String cvv) {
   try {
-    if (!cvv.contains('/')) return null;
+    if (!cvv.contains('/')) {
+      return null;
+    }
 
-    final split = cvv.split('/');
-    if (split.length != 2) return null;
+    final List<String> split = cvv.split('/');
+    if (split.length != 2) {
+      return null;
+    }
 
-    final month = int.parse(split[0]);
-    if (month < 1 || month > 12) return null;
-    final year = 2000 + int.parse(split[1]);
-    if (year < 2000) return null;
+    final int month = int.parse(split[0]);
+    if (month < 1 || month > 12) {
+      return null;
+    }
+    final int year = 2000 + int.parse(split[1]);
+    if (year < 2000) {
+      return null;
+    }
 
     return DateTime(year, month);
   } catch (_) {
@@ -46,7 +54,7 @@ int get secondsEpochNow => clock.now().millisecondsSinceEpoch ~/ Duration.millis
 
 int get dayOfYear => int.parse(DateFormat('D').format(clock.now()));
 
-const Map<int, String> months = {
+const months = <int, String>{
   1: 'Janeiro',
   2: 'Fevereiro',
   3: 'Março',
@@ -61,7 +69,7 @@ const Map<int, String> months = {
   12: 'Dezembro',
 };
 
-const Map<int, String> weekDays = {
+const weekDays = <int, String>{
   DateTime.monday: 'Segunda-feira',
   DateTime.tuesday: 'Terça-feira',
   DateTime.wednesday: 'Quarta-feira',
@@ -71,7 +79,7 @@ const Map<int, String> weekDays = {
   DateTime.sunday: 'Domingo',
 };
 
-const Map<int, String> weekDaysBusiness = {
+const weekDaysBusiness = <int, String>{
   DateTime.monday: 'Segunda-feira',
   DateTime.tuesday: 'Terça-feira',
   DateTime.wednesday: 'Quarta-feira',
@@ -79,7 +87,7 @@ const Map<int, String> weekDaysBusiness = {
   DateTime.friday: 'Sexta-feira',
 };
 
-const Map<int, String> weekDaysAbbr = {
+const weekDaysAbbr = <int, String>{
   DateTime.monday: 'seg',
   DateTime.tuesday: 'ter',
   DateTime.wednesday: 'qua',

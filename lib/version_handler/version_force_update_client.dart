@@ -34,7 +34,9 @@ class ForceUpdateClient {
   Future<ForceUpdateStatus> checkUpdate() async {
     // * Only force app update on iOS & Android
 
-    if (kIsWeb) return ForceUpdateStatus.osIgnored;
+    if (kIsWeb) {
+      return ForceUpdateStatus.osIgnored;
+    }
 
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -48,23 +50,27 @@ class ForceUpdateClient {
         return ForceUpdateStatus.osIgnored;
     }
 
-    final requiredVersion = await _version(fetchRequiredVersion);
-    if (requiredVersion == null) return ForceUpdateStatus.error;
+    final Version? requiredVersion = await _version(fetchRequiredVersion);
+    if (requiredVersion == null) {
+      return ForceUpdateStatus.error;
+    }
     recommendedVersion = await _version(fetchRecommendedVersion);
-    if (recommendedVersion == null) return ForceUpdateStatus.error;
+    if (recommendedVersion == null) {
+      return ForceUpdateStatus.error;
+    }
 
-    final packageInfo = _packageInfo ?? await PackageInfo.fromPlatform();
+    final PackageInfo packageInfo = _packageInfo ?? await PackageInfo.fromPlatform();
     _packageInfo ??= packageInfo;
 
     // * On Android, the current version shows as `X.Y.Z.flavor`
     // * But semver can only parse this if it's formatted as `X.Y.Z-flavor`
     // * and we only care about X.Y.Z, so we can remove the flavor
-    const flavorStr = appFlavor ?? '';
-    final currentVersionStr =
+    const String flavorStr = appFlavor ?? '';
+    final String currentVersionStr =
         flavorStr.isEmpty ? packageInfo.version : packageInfo.version.replaceAll('.$flavorStr', '');
 
     // * Parse versions in semver format
-    final currentVersion = Version.parse(currentVersionStr);
+    final Version currentVersion = Version.parse(currentVersionStr);
 
     AppLogger.I().info(
       'Current version: $currentVersion, '
@@ -84,7 +90,7 @@ class ForceUpdateClient {
 
     tracking.event(
       'atualizar_alerta',
-      customParams: {
+      customParams: <String, String>{
         'versão instalada': currentVersionStr,
         'requirida': requiredVersion.toString(),
         'recomendada': recommendedVersion.toString(),
@@ -97,8 +103,8 @@ class ForceUpdateClient {
 
   Future<Version?> _version(Future<String> Function() fetchVersion) async {
     try {
-      final versionStr = await fetchVersion();
-      final version = Version.parse(versionStr);
+      final String versionStr = await fetchVersion();
+      final Version version = Version.parse(versionStr);
       return version;
     } catch (e, s) {
       AppLogger.I().error('Error on fetch version', e, s);

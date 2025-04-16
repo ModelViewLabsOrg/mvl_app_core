@@ -16,10 +16,14 @@ class CopyAndShowMessage extends StatelessWidget {
 
   Future<void> show(BuildContext context, {bool popBeforeToast = false}) {
     return Clipboard.setData(ClipboardData(text: textToCopy)).then((_) {
-      if (!context.mounted) return;
-      if (popBeforeToast) Navigator.of(context).pop();
+      if (!context.mounted) {
+        return;
+      }
+      if (popBeforeToast) {
+        Navigator.of(context).pop();
+      }
 
-      final messageFeedback = this.messageFeedback;
+      final String? messageFeedback = this.messageFeedback;
       if (messageFeedback != null) {
         AppToastMessages(messageFeedback, iconData: Icons.copy).show(context);
       }
@@ -28,7 +32,7 @@ class CopyAndShowMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final label = buttonLabel;
+    final String? label = buttonLabel;
 
     const icon = Icon(Icons.copy);
     Future<void> onPressed() async => show(context);

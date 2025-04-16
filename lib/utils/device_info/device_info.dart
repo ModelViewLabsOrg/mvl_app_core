@@ -11,8 +11,8 @@ class DeviceInfo {
     size = MediaQuery.of(c).size;
     ppi = kIsWeb ? 96 : 150;
 
-    final width = size.width;
-    final height = size.height;
+    final double width = size.width;
+    final double height = size.height;
     diagonal = sqrt((width * width) + (height + height));
     inches = Size(width / ppi, height / ppi);
     diagonalInches = diagonal / ppi;
@@ -58,7 +58,9 @@ class DeviceInfo {
 
   static bool get isMobile => !isWeb && (isAndroid || isIos);
   static bool get isDesktop {
-    if (isWeb) return false;
+    if (isWeb) {
+      return false;
+    }
 
     return switch (defaultTargetPlatform) {
       TargetPlatform.android || TargetPlatform.iOS => false,

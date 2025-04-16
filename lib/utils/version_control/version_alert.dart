@@ -22,7 +22,7 @@ class VersionAlertDialog extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             if (versionControl.isOptional)
               Container(
                 padding: const EdgeInsets.only(bottom: 20),
@@ -58,7 +58,9 @@ class VersionAlertDialog extends StatelessWidget {
             OutlinedButton(
               onPressed: () {
                 unawaited(VersionControl.launchStore(writeReview: false));
-                if (versionControl.isOptional) Navigator.of(context).pop();
+                if (versionControl.isOptional) {
+                  Navigator.of(context).pop();
+                }
               },
               child: const Text('Ir para a loja'),
             ),

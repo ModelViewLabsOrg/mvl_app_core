@@ -26,19 +26,19 @@ class AppDimens {
 
   static const double kBreakpointTablet = 650;
   static const double kBreakpointDesktop = 900;
-  static const kMaxWidth = kBreakpointDesktop;
+  static const double kMaxWidth = kBreakpointDesktop;
 
   // Radius and Border
   static const double defaultRadius = 16;
   static BorderRadius defaultBorder({double radius = defaultRadius}) =>
       BorderRadius.circular(radius);
-  static const Offset defaultOffset = Offset(5, 5);
+  static const defaultOffset = Offset(5, 5);
   static const double defaultBlurRadius = 10;
 
   // Card
   static const double elevation = 10;
 
-  static List<BoxShadow> defaultBoxShadow(BuildContext context) => [
+  static List<BoxShadow> defaultBoxShadow(BuildContext context) => <BoxShadow>[
     BoxShadow(
       color: Theme.of(context).cardTheme.shadowColor ?? Colors.black54,
       blurRadius: 10,

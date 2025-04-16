@@ -86,8 +86,10 @@ extension DateTimeExt on DateTime {
 
   /// 2022-10-31T14:58:09.123 or 2022-10-31T14:58:00
   String toServerFormat({bool removeSeconds = false, bool convertUtc = true}) {
-    var date = removeSeconds ? this.removeSeconds() : this;
-    if (convertUtc) date = date.toUtc();
+    DateTime date = removeSeconds ? this.removeSeconds() : this;
+    if (convertUtc) {
+      date = date.toUtc();
+    }
 
     return date.toIso8601String().replaceAll('Z', '');
   }
@@ -116,7 +118,7 @@ extension DateTimeExt on DateTime {
   int differenceInYearsFromToday() => today().differenceInYears(this);
 
   int differenceInYears(DateTime date) {
-    final subtract = Jiffy.parseFromDateTime(
+    final Jiffy subtract = Jiffy.parseFromDateTime(
       this,
     ).subtract(years: date.year, months: date.month, days: date.day);
 
@@ -124,14 +126,14 @@ extension DateTimeExt on DateTime {
   }
 
   bool isDateInPast() {
-    final days = onlyDate().difference(today()).inDays;
+    final int days = onlyDate().difference(today()).inDays;
 
     return days.isNegative;
   }
 
   int age() {
-    final dtToday = today();
-    final age = dtToday.year - year;
+    final DateTime dtToday = today();
+    final int age = dtToday.year - year;
 
     if (month > dtToday.month) {
       return age - 1;

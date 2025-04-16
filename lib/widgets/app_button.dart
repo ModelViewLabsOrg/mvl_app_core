@@ -20,7 +20,7 @@ class AppButton extends StatelessWidget {
        );
 
   final bool isLoading;
-  final FutureOr<void> Function()? onPressed;
+  final Future<void> Function()? onPressed;
   final String? labelText;
   final Widget? child;
   final Widget? icon;
@@ -28,7 +28,7 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FutureOr<void> Function()? action;
+    final Future<void> Function()? action;
     final Widget? icon;
 
     if (isLoading) {
@@ -39,7 +39,7 @@ class AppButton extends StatelessWidget {
       icon = this.icon;
     }
 
-    final label = _label();
+    final Widget label = _label();
     return switch (buttonType) {
       AppButtonType.filled => FilledButton.icon(onPressed: action, label: label, icon: icon),
       AppButtonType.elevated => ElevatedButton.icon(onPressed: action, label: label, icon: icon),
@@ -49,9 +49,11 @@ class AppButton extends StatelessWidget {
   }
 
   Widget _label() {
-    final labelText = this.labelText;
+    final String? labelText = this.labelText;
 
-    if (labelText != null) return Text(labelText);
+    if (labelText != null) {
+      return Text(labelText);
+    }
     return child ?? const SizedBox();
   }
 }

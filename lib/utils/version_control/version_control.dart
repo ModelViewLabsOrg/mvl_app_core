@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:mvl_app_core/app_config.dart';
+import 'package:mvl_app_core/app_config_values.dart';
 import 'package:mvl_app_core/app_logger.dart';
 import 'package:mvl_app_core/utils/device_info/device_info.dart';
 import 'package:mvl_app_core/utils/launch_extension.dart';
@@ -23,9 +24,11 @@ abstract class VersionControl {
 
   static Future<void> launchStore({required bool writeReview}) async {
     try {
-      if (kIsWeb) return;
+      if (kIsWeb) {
+        return;
+      }
 
-      final config = AppConfig.I().configValues;
+      final AppConfigValues config = AppConfig.I().configValues;
 
       if (DeviceInfo.isApple) {
         final suffix = writeReview ? '?action=write-review' : '';
@@ -40,7 +43,7 @@ abstract class VersionControl {
       }
 
       if (DeviceInfo.isAndroid) {
-        final id = config.playStoreId;
+        final String id = config.playStoreId;
         final market = 'market://details?id=$id';
         AppLogger.I().info('LaunchUrl: $market');
 

@@ -15,7 +15,7 @@ class Validator {
   bool isCountryValid() => RegExp('[a-z]{2}').hasMatch(value);
 
   bool isPhoneValid() {
-    final length = value.onlyNumbersLength();
+    final int length = value.onlyNumbersLength();
 
     return length == 10 || length == 11;
   }
@@ -23,7 +23,7 @@ class Validator {
   bool isMobileValid() => value.onlyNumbersLength() == 11;
 
   bool isNameValid({bool fullName = true}) {
-    final name = value;
+    final String name = value;
     if (name.length < FormValidator.nameMinChars || name.length > FormValidator.nameMaxChars) {
       return false;
     }

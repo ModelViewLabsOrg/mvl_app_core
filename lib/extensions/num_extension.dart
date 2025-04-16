@@ -11,7 +11,7 @@ extension IntExt on int {
 
 extension NumExt on num {
   String toPercent({int decimal = 1}) {
-    final value = toStringAsFixed(decimal);
+    final String value = toStringAsFixed(decimal);
 
     return '$value%';
   }
@@ -20,8 +20,8 @@ extension NumExt on num {
   Duration get minutes => Duration(milliseconds: (1000 * 60 * this).round());
 
   bool isBetween(num first, num second) {
-    final lower = min(first, second);
-    final upper = max(first, second);
+    final num lower = min(first, second);
+    final num upper = max(first, second);
 
     return this >= lower && this <= upper;
   }

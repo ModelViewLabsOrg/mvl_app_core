@@ -19,8 +19,8 @@ class AppDialog {
   final String? cancelActionText;
 
   Future<bool?> showAlertDialog(BuildContext context) async {
-    final content = this.content;
-    final cancelActionText = this.cancelActionText;
+    final String? content = this.content;
+    final String? cancelActionText = this.cancelActionText;
 
     if (kIsWeb || !Platform.isIOS) {
       return showDialog(

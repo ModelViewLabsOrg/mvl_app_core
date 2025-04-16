@@ -26,7 +26,7 @@ class MaskTextInputFormatter implements TextInputFormatter {
   }) : _type = type {
     updateMask(
       mask: mask,
-      filter: filter ?? {'#': RegExp('[0-9]'), 'A': RegExp('[^0-9]')},
+      filter: filter ?? <String, RegExp>{'#': RegExp('[0-9]'), 'A': RegExp('[^0-9]')},
       newValue:
           initialText == null
               ? null
@@ -50,12 +50,12 @@ class MaskTextInputFormatter implements TextInputFormatter {
   MaskAutoCompletionType get type => _type;
 
   String? _mask;
-  List<String> _maskChars = [];
+  var _maskChars = <String>[];
   Map<String, RegExp>? _maskFilter;
 
-  int _maskLength = 0;
-  final _TextMatcher _resultTextArray = _TextMatcher();
-  String _resultTextMasked = '';
+  var _maskLength = 0;
+  final _resultTextArray = _TextMatcher();
+  var _resultTextMasked = '';
 
   /// Change the mask
   TextEditingValue updateMask({
@@ -72,9 +72,9 @@ class MaskTextInputFormatter implements TextInputFormatter {
       _type = type;
     }
     _calcMaskLength();
-    var targetValue = newValue;
+    TextEditingValue? targetValue = newValue;
     if (targetValue == null) {
-      final unmaskedText = getUnmaskedText();
+      final String unmaskedText = getUnmaskedText();
       targetValue = TextEditingValue(
         text: unmaskedText,
         selection: TextSelection.collapsed(offset: unmaskedText.length),
@@ -132,7 +132,7 @@ class MaskTextInputFormatter implements TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    final mask = _mask;
+    final String? mask = _mask;
 
     if (mask == null || mask.isEmpty) {
       _resultTextMasked = newValue.text;
@@ -144,13 +144,13 @@ class MaskTextInputFormatter implements TextInputFormatter {
       _resultTextArray.clear();
     }
 
-    final beforeText = oldValue.text;
-    final afterText = newValue.text;
+    final String beforeText = oldValue.text;
+    final String afterText = newValue.text;
 
-    final beforeSelection = oldValue.selection;
-    final afterSelection = newValue.selection;
+    final TextSelection beforeSelection = oldValue.selection;
+    final TextSelection afterSelection = newValue.selection;
 
-    var beforeSelectionStart =
+    int beforeSelectionStart =
         afterSelection.isValid
             ? beforeSelection.isValid
                 ? beforeSelection.start
@@ -168,26 +168,26 @@ class MaskTextInputFormatter implements TextInputFormatter {
       }
     }
 
-    final beforeSelectionLength =
+    final int beforeSelectionLength =
         afterSelection.isValid
             ? beforeSelection.isValid
                 ? beforeSelection.end - beforeSelectionStart
                 : 0
             : oldValue.text.length;
 
-    final lengthDifference = afterText.length - (beforeText.length - beforeSelectionLength);
-    final lengthRemoved = lengthDifference < 0 ? lengthDifference.abs() : 0;
+    final int lengthDifference = afterText.length - (beforeText.length - beforeSelectionLength);
+    final int lengthRemoved = lengthDifference < 0 ? lengthDifference.abs() : 0;
     final lengthAdded = lengthDifference > 0 ? lengthDifference : 0;
 
-    final afterChangeStart = max(0, beforeSelectionStart - lengthRemoved);
-    final afterChangeEnd = max(0, afterChangeStart + lengthAdded);
+    final int afterChangeStart = max(0, beforeSelectionStart - lengthRemoved);
+    final int afterChangeEnd = max(0, afterChangeStart + lengthAdded);
 
-    final beforeReplaceStart = max(0, beforeSelectionStart - lengthRemoved);
-    final beforeReplaceLength = beforeSelectionLength + lengthRemoved;
+    final int beforeReplaceStart = max(0, beforeSelectionStart - lengthRemoved);
+    final int beforeReplaceLength = beforeSelectionLength + lengthRemoved;
 
-    final beforeResultTextLength = _resultTextArray.length;
+    final int beforeResultTextLength = _resultTextArray.length;
 
-    var currentResultTextLength = _resultTextArray.length;
+    int currentResultTextLength = _resultTextArray.length;
     var currentResultSelectionStart = 0;
     var currentResultSelectionLength = 0;
 
@@ -203,7 +203,7 @@ class MaskTextInputFormatter implements TextInputFormatter {
       }
     }
 
-    final replacementText = afterText.substring(afterChangeStart, afterChangeEnd);
+    final String replacementText = afterText.substring(afterChangeStart, afterChangeEnd);
     var targetCursorPosition = currentResultSelectionStart;
     if (replacementText.isEmpty) {
       _resultTextArray.removeRange(
@@ -231,8 +231,8 @@ class MaskTextInputFormatter implements TextInputFormatter {
         }
       }
       if (prefixLength > 0) {
-        final resultPrefix = _resultTextArray._symbolArray.take(prefixLength).toList();
-        final effectivePrefixLength = min(_resultTextArray.length, resultPrefix.length);
+        final List<String> resultPrefix = _resultTextArray._symbolArray.take(prefixLength).toList();
+        final int effectivePrefixLength = min(_resultTextArray.length, resultPrefix.length);
         for (var j = 0; j < effectivePrefixLength; j++) {
           if (mask[j] != resultPrefix[j]) {
             _resultTextArray.removeRange(0, j);
@@ -249,15 +249,15 @@ class MaskTextInputFormatter implements TextInputFormatter {
     var curTextPos = 0;
     var maskPos = 0;
     _resultTextMasked = '';
-    var cursorPos = -1;
+    int cursorPos = -1;
     var nonMaskedCount = 0;
     var maskInside = 0;
 
     while (maskPos < mask.length) {
-      final curMaskChar = mask[maskPos];
-      final isMaskChar = _maskChars.contains(curMaskChar);
+      final String curMaskChar = mask[maskPos];
+      final bool isMaskChar = _maskChars.contains(curMaskChar);
 
-      var curTextInRange = curTextPos < _resultTextArray.length;
+      bool curTextInRange = curTextPos < _resultTextArray.length;
 
       String? curTextChar;
       if (isMaskChar && curTextInRange) {
@@ -267,7 +267,7 @@ class MaskTextInputFormatter implements TextInputFormatter {
         }
         maskInside = 0;
         while (curTextChar == null && curTextInRange) {
-          final potentialTextChar = _resultTextArray[curTextPos];
+          final String potentialTextChar = _resultTextArray[curTextPos];
           if (_maskFilter?[curMaskChar]?.hasMatch(potentialTextChar) ?? false) {
             curTextChar = potentialTextChar;
           } else {
@@ -339,7 +339,7 @@ class MaskTextInputFormatter implements TextInputFormatter {
       _resultTextArray.removeRange(_maskLength, _resultTextArray.length);
     }
 
-    final finalCursorPosition = cursorPos < 0 ? _resultTextMasked.length : cursorPos;
+    final int finalCursorPosition = cursorPos < 0 ? _resultTextMasked.length : cursorPos;
 
     return TextEditingValue(
       text: _resultTextMasked,
@@ -354,7 +354,7 @@ class MaskTextInputFormatter implements TextInputFormatter {
 
   void _calcMaskLength() {
     _maskLength = 0;
-    final mask = _mask;
+    final String? mask = _mask;
     if (mask != null) {
       for (var i = 0; i < mask.length; i++) {
         if (_maskChars.contains(mask[i])) {
@@ -366,12 +366,12 @@ class MaskTextInputFormatter implements TextInputFormatter {
 
   void _updateFilter(Map<String, RegExp> filter) {
     _maskFilter = filter;
-    _maskChars = _maskFilter?.keys.toList(growable: false) ?? [];
+    _maskChars = _maskFilter?.keys.toList(growable: false) ?? <String>[];
   }
 }
 
 class _TextMatcher {
-  final List<String> _symbolArray = <String>[];
+  final _symbolArray = <String>[];
 
   int get length => _symbolArray.fold(0, (prev, match) => prev + match.length);
 

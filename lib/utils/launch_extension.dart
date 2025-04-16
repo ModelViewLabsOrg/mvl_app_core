@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 extension LaunchExt on String {
   Future<bool> launchURL({LaunchMode launchMode = LaunchMode.platformDefault}) async {
     try {
-      final result = await launchUrl(Uri.parse(this), mode: launchMode);
+      final bool result = await launchUrl(Uri.parse(this), mode: launchMode);
       return result;
       // } else {
       // AppLogger().error('launchURL',
@@ -23,15 +23,19 @@ extension LaunchExt on String {
 extension LaunchNullExt on String? {
   Future<bool> launchURL({LaunchMode launchMode = LaunchMode.platformDefault}) async {
     final url = this;
-    if (url == null) return false;
+    if (url == null) {
+      return false;
+    }
     return url.launchURL(launchMode: launchMode);
   }
 
   Future<bool> downloadFile() => launchURL(launchMode: LaunchMode.externalApplication);
 
   Future<void> launchWhatsapp({String? msg}) async {
-    var number = onlyNumbers();
-    if (number.isReallyEmpty()) return;
+    String number = onlyNumbers();
+    if (number.isReallyEmpty()) {
+      return;
+    }
     number = number.startsWith('55') ? number : '55$number';
     // number = number.startsWith('55') ? number.substring(2) : number;
     final text = msg == null ? '' : 'text=${Uri.encodeFull(msg)}';
@@ -50,7 +54,7 @@ extension LaunchNullExt on String? {
       shouldTryAgain = false;
     }
 
-    final result = await url.launchURL();
+    final bool result = await url.launchURL();
     if (!result && shouldTryAgain) {
       await 'https://wa.me/$number?$text'.launchURL();
     }

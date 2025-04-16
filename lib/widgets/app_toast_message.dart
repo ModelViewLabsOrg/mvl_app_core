@@ -25,14 +25,16 @@ class AppToastMessages {
        );
 
   static Widget _content(String message, IconData? iconData) {
-    if (iconData == null) return Text(message);
+    if (iconData == null) {
+      return Text(message);
+    }
 
-    return Row(children: [Icon(iconData), gapS, Expanded(child: Text(message))]);
+    return Row(children: <Widget>[Icon(iconData), gapS, Expanded(child: Text(message))]);
   }
 
   final SnackBar snackBar;
 
-  static const int secondsDuration = 4;
+  static const secondsDuration = 4;
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> show(BuildContext context) {
     return ScaffoldMessenger.of(context).showSnackBar(snackBar);

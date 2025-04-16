@@ -21,25 +21,35 @@ class AppStorage {
   final String key;
 
   Future<void> delete() async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(key);
   }
 
   Future<T?> read<T>() async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.get(key) as T?;
   }
 
   Future<String?> readString() => read<String>();
 
-  Future<bool> write(dynamic value) async {
-    final prefs = await SharedPreferences.getInstance();
+  Future<bool> write(Object value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (value is double) return prefs.setDouble(key, value);
-    if (value is bool) return prefs.setBool(key, value);
-    if (value is int) return prefs.setInt(key, value);
-    if (value is String) return prefs.setString(key, value);
-    if (value is List<String>) return prefs.setStringList(key, value);
+    if (value is double) {
+      return prefs.setDouble(key, value);
+    }
+    if (value is bool) {
+      return prefs.setBool(key, value);
+    }
+    if (value is int) {
+      return prefs.setInt(key, value);
+    }
+    if (value is String) {
+      return prefs.setString(key, value);
+    }
+    if (value is List<String>) {
+      return prefs.setStringList(key, value);
+    }
 
     throw ArgumentError('Type of value ${value.runtimeType} is not supported! ');
   }

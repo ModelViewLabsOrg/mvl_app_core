@@ -34,25 +34,25 @@ class AppRemoteConfig {
     await _remoteConfig.ensureInitialized();
 
     try {
-      final defaultValues = Map.fromEntries(keys.map((e) => MapEntry(e.key, e.defaultValue)));
+      final Map<String, dynamic> defaultValues = Map.fromEntries(
+        keys.map((e) => MapEntry(e.key, e.defaultValue)),
+      );
 
       await _remoteConfig.setDefaults(defaultValues);
 
-      _remoteConfig.onConfigUpdated.listen(
-        (data) {
-          AppLogger.I().info('AppRemoteConfig onConfigUpdated: ${data.updatedKeys}');
-        },
-        onError: (dynamic e) {
-          AppLogger.I().error(
-            'AppRemoteConfig onConfigUpdated error',
-            e is Object ? e : 'onConfigUpdated error',
-            StackTrace.current,
-          );
-        },
-        onDone: () => AppLogger.I().info('AppRemoteConfig onConfigUpdated done'),
-      );
+      if (!kIsWeb) {
+        _remoteConfig.onConfigUpdated.listen(
+          (data) {
+            AppLogger.I().info('AppRemoteConfig onConfigUpdated: ${data.updatedKeys}');
+          },
+          onError: (Object e) {
+            AppLogger.I().error('AppRemoteConfig onConfigUpdated error', e, StackTrace.current);
+          },
+          onDone: () => AppLogger.I().info('AppRemoteConfig onConfigUpdated done'),
+        );
+      }
 
-      final result = await _remoteConfig.fetchAndActivate();
+      final bool result = await _remoteConfig.fetchAndActivate();
       AppLogger.I().debug('AppRemoteConfig result: $result');
     } catch (e) {
       AppLogger.I().debug('AppRemoteConfig setup error: $e');

@@ -24,7 +24,7 @@ extension WidgetExtensions on Widget {
     Offset offset = const Offset(10, 10),
   }) => DecoratedBox(
     decoration: BoxDecoration(
-      boxShadow: [
+      boxShadow: <BoxShadow>[
         BoxShadow(
           color: shadowColor,
           blurRadius: blurRadius,
@@ -46,7 +46,7 @@ extension WidgetExtensions on Widget {
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: AppDimens.defaultBorder(radius: borderRadius),
-        boxShadow: [
+        boxShadow: <BoxShadow>[
           BoxShadow(offset: offset, blurRadius: blurRadius, color: bottomShadowColor),
           BoxShadow(
             offset: Offset(-offset.dx, -offset.dx),

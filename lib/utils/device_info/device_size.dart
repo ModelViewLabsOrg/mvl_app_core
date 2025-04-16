@@ -43,19 +43,35 @@ extension DeviceSizeExt on DeviceInfo {
     if (diagonalInches <= 2.55) {
       return DeviceSizeType.mobileSmall; // 375 SE2 8 12Mini
     }
-    if (diagonalInches <= 2.85) return DeviceSizeType.mobileMedium; // 425 12
-    if (diagonalInches <= 3) return DeviceSizeType.mobileLarge; // 475 12 Pro
-    if (diagonalInches <= 5.5) return DeviceSizeType.tabletMedium; // 800
-    if (diagonalInches < 7) return DeviceSizeType.tabletLarge; // 1024
+    if (diagonalInches <= 2.85) {
+      return DeviceSizeType.mobileMedium; // 425 12
+    }
+    if (diagonalInches <= 3) {
+      return DeviceSizeType.mobileLarge; // 475 12 Pro
+    }
+    if (diagonalInches <= 5.5) {
+      return DeviceSizeType.tabletMedium; // 800
+    }
+    if (diagonalInches < 7) {
+      return DeviceSizeType.tabletLarge; // 1024
+    }
 
     return DeviceSizeType.desktop;
   }
 
   DeviceScreenType get deviceScreenType {
-    if (isExtraSmall) return DeviceScreenType.extraSmall;
-    if (isSmall) return DeviceScreenType.small;
-    if (isMedium) return DeviceScreenType.medium;
-    if (isLarge) return DeviceScreenType.large;
+    if (isExtraSmall) {
+      return DeviceScreenType.extraSmall;
+    }
+    if (isSmall) {
+      return DeviceScreenType.small;
+    }
+    if (isMedium) {
+      return DeviceScreenType.medium;
+    }
+    if (isLarge) {
+      return DeviceScreenType.large;
+    }
 
     // if (isExtraLarge)
     return DeviceScreenType.extraLarge;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mvl_app_core/utils/show_exception_alert_dialog.dart';
 
 extension ContextExtensions on BuildContext {
   ThemeData get theme => Theme.of(this);
@@ -18,4 +19,8 @@ extension ContextExtensions on BuildContext {
 
   /// Returns same as MediaQuery.of(context).height
   double get heightPx => sizePx.height;
+
+  void showToast(Object? message) {
+    showException(context: this, exception: message);
+  }
 }

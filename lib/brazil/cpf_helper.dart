@@ -9,7 +9,7 @@ class CPFHelper {
   CPFHelper(String cpf) : value = _strip(cpf);
   final String value;
 
-  static const _blockList = [
+  static const _blockList = <String>[
     '00000000000',
     '11111111111',
     '22222222222',
@@ -28,9 +28,10 @@ class CPFHelper {
   // Compute the Verifier Digit (or 'Dígito Verificador (DV)' in PT-BR).
   // You can learn more about the algorithm on [wikipedia (pt-br)](https://pt.wikipedia.org/wiki/D%C3%ADgito_verificador)
   int _verifierDigit(String cpf) {
-    final numbers = cpf.split('').map((number) => int.parse(number, radix: 10)).toList();
+    final List<int> numbers =
+        cpf.split('').map((number) => int.parse(number, radix: 10)).toList();
 
-    final modulus = numbers.length + 1;
+    final int modulus = numbers.length + 1;
 
     final multiplied = <int>[];
 
@@ -38,13 +39,15 @@ class CPFHelper {
       multiplied.add(numbers[i] * (modulus - i));
     }
 
-    final mod = multiplied.reduce((buffer, number) => buffer + number) % 11;
+    final int mod = multiplied.reduce((buffer, number) => buffer + number) % 11;
 
     return mod < 2 ? 0 : 11 - mod;
   }
 
   String format() {
-    if (!isValid()) return '';
+    if (!isValid()) {
+      return '';
+    }
     final regExp = RegExp(r'^(\d{3})(\d{3})(\d{3})(\d{2})$');
 
     return _strip(value).replaceAllMapped(regExp, (m) => '${m[1]}.${m[2]}.${m[3]}-${m[4]}');
@@ -52,23 +55,25 @@ class CPFHelper {
 
   static String _strip(String? value) {
     final regExp = RegExp(_stipRegex);
-    final cpf = value ?? '';
+    final String cpf = value ?? '';
 
     return cpf.replaceAll(regExp, '');
   }
 
   bool isValid() {
-    final cpf = _strip(value);
+    final String cpf = _strip(value);
 
     // CPF must have 11 chars
-    if (cpf.length != 11) return false;
+    if (cpf.length != 11) {
+      return false;
+    }
 
     // CPF can't be blacklisted
     if (_blockList.contains(cpf)) {
       return false;
     }
 
-    var numbers = cpf.limit(9);
+    String numbers = cpf.limit(9);
     numbers += _verifierDigit(numbers).toString();
     numbers += _verifierDigit(numbers).toString();
 

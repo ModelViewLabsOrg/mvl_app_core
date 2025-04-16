@@ -16,8 +16,8 @@ extension StringExt on String {
   }
 
   String capitalizeFirstLetter() {
-    final first = this[0].toUpperCase();
-    final last = substring(1).toLowerCase();
+    final String first = this[0].toUpperCase();
+    final String last = substring(1).toLowerCase();
 
     return '$first$last';
   }
@@ -43,12 +43,16 @@ extension StringExt on String {
   String cleanLimit(int chars) => removeAccentsAndEmojiWithTrim().limit(chars).trim();
 
   String removeHtml() {
-    var text = replaceAll(RegExp(r'<(br|BR|Br|bR|h\d|p)\s?\/?>'), '\n');
+    String text = replaceAll(RegExp(r'<(br|BR|Br|bR|h\d|p)\s?\/?>'), '\n');
     text = parseFragment(text).text ?? '';
     text = text.split('\n').map((e) => e.trim()).join('\n');
 
-    if (text.startsWith('\n')) text = text.substring(1);
-    if (text.endsWith('\n')) text = text.substring(0, text.length - 1);
+    if (text.startsWith('\n')) {
+      text = text.substring(1);
+    }
+    if (text.endsWith('\n')) {
+      text = text.substring(0, text.length - 1);
+    }
 
     return text.trim();
   }
@@ -59,14 +63,18 @@ extension StringExt on String {
 extension StringNullableExt on String? {
   bool isReallyEmpty() {
     final value = this;
-    if (value == null) return true;
+    if (value == null) {
+      return true;
+    }
 
     return value.trim().isEmpty;
   }
 
   int reallyLength() {
     final value = this;
-    if (value == null) return 0;
+    if (value == null) {
+      return 0;
+    }
 
     return value.trim().length;
   }
@@ -74,15 +82,19 @@ extension StringNullableExt on String? {
   int toAmount() => (moedaToDouble() * 100).toInt();
 
   double? toDouble() {
-    final value = this?.replaceAll('.', '').replaceAll(',', '.');
-    if (value == null) return null;
+    final String? value = this?.replaceAll('.', '').replaceAll(',', '.');
+    if (value == null) {
+      return null;
+    }
 
     return double.tryParse(value);
   }
 
   double moedaToDouble() {
     final value = this;
-    if (value == null || value.isReallyEmpty()) return 0;
+    if (value == null || value.isReallyEmpty()) {
+      return 0;
+    }
 
     return UtilBrasilFields.currencyToDouble(value);
   }
@@ -91,7 +103,9 @@ extension StringNullableExt on String? {
 
   String toZipCodeFormatted() {
     final value = this;
-    if (value == null) return '';
+    if (value == null) {
+      return '';
+    }
 
     return UtilBrasilFields.getCep(value);
   }

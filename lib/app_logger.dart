@@ -9,9 +9,9 @@ class AppLogger {
 
   bool Function(Object error) shouldLogAsError = (error) => true;
 
-  final talker = TalkerFlutter.init();
+  final Talker talker = TalkerFlutter.init();
 
-  static final AppLogger _instance = AppLogger._internal();
+  static final _instance = AppLogger._internal();
 
   void error(
     String method,
@@ -23,10 +23,12 @@ class AppLogger {
       _instance.talker.handle(error, stackTrace, 'Error $method $parameters. $error');
     }
 
-    if (!shouldLogAsError(error)) return;
+    if (!shouldLogAsError(error)) {
+      return;
+    }
 
-    parameters ??= {};
-    parameters.addAll({
+    parameters ??= <String, String>{};
+    parameters.addAll(<String, String>{
       'method': method,
       'error': error.toString(),
       'stacktrace': stackTrace.toString(),
@@ -37,11 +39,15 @@ class AppLogger {
   }
 
   void info(String message) {
-    if (kDebugMode) _instance.talker.info(message);
+    if (kDebugMode) {
+      _instance.talker.info(message);
+    }
     tracking.info(message);
   }
 
   void debug(String message) {
-    if (kDebugMode) _instance.talker.debug(message);
+    if (kDebugMode) {
+      _instance.talker.debug(message);
+    }
   }
 }

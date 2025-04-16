@@ -2,11 +2,11 @@ class AppFonts {
   AppFonts._();
 
   /// Font family: InterVariable
-  static const String interVariable = 'Inter-Variable';
+  static const interVariable = 'Inter-Variable';
 
   /// Font family: FigtreeVariable
-  static const String figtreeVariable = 'Figtree-Variable';
+  static const figtreeVariable = 'Figtree-Variable';
 
   /// Font family: RobotoFlex
-  static const String robotoFlex = 'RobotoFlex';
+  static const robotoFlex = 'RobotoFlex';
 }

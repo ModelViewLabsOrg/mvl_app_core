@@ -23,7 +23,9 @@ class PushNotification {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     return other is PushNotification &&
         other.id == id &&

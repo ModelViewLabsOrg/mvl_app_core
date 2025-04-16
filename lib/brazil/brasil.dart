@@ -40,7 +40,7 @@ extension BrasilStateExt on BrasilState {
 mixin Brasil {
   static const country = 'br';
 
-  static const Map<BrasilState, String> listStates = {
+  static const listStates = <BrasilState, String>{
     BrasilState.ac: 'Acre',
     BrasilState.al: 'Alagoas',
     BrasilState.ap: 'Amapá',
@@ -72,5 +72,5 @@ mixin Brasil {
 
   static List<String> get statesFullNames => listStates.values.toList();
 
-  static const List<String> listaRegioes = ['Centro-Oeste', 'Nordeste', 'Norte', 'Sudeste', 'Sul'];
+  static const listaRegioes = <String>['Centro-Oeste', 'Nordeste', 'Norte', 'Sudeste', 'Sul'];
 }

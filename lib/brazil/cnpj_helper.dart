@@ -11,7 +11,7 @@ class CNPJHelper {
 
   static const _stipRegex = r'[^\d]';
 
-  static const _blockList = [
+  static const _blockList = <String>[
     '00000000000000',
     '11111111111111',
     '22222222222222',
@@ -28,35 +28,39 @@ class CNPJHelper {
   // You can learn more about the algorithm on [wikipedia (pt-br)](https://pt.wikipedia.org/wiki/D%C3%ADgito_verificador)
   int _verifierDigit(String cnpj) {
     var index = 2;
-    final reverse = cnpj.split('').map(int.parse).toList().reversed.toList();
+    final List<int> reverse = cnpj.split('').map(int.parse).toList().reversed.toList();
     var sum = 0;
 
     for (final number in reverse) {
       sum += number * index;
       index = index == 9 ? 2 : index + 1;
     }
-    final mod = sum % 11;
+    final int mod = sum % 11;
 
     return mod < 2 ? 0 : 11 - mod;
   }
 
   String format() {
-    if (!isValid()) return '';
+    if (!isValid()) {
+      return '';
+    }
 
     final regExp = RegExp(r'^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$');
 
-    return _strip(value).replaceAllMapped(regExp, (m) => '${m[1]}.${m[2]}.${m[3]}/${m[4]}-${m[5]}');
+    return _strip(
+      value,
+    ).replaceAllMapped(regExp, (m) => '${m[1]}.${m[2]}.${m[3]}/${m[4]}-${m[5]}');
   }
 
   static String _strip(String? value) {
     final regex = RegExp(_stipRegex);
-    final cnpj = value ?? '';
+    final String cnpj = value ?? '';
 
     return cnpj.replaceAll(regex, '');
   }
 
   bool isValid() {
-    final cnpj = _strip(value);
+    final String cnpj = _strip(value);
 
     // cnpj must have 14 chars
     if (cnpj.length != 14) {
@@ -68,7 +72,7 @@ class CNPJHelper {
       return false;
     }
 
-    var numbers = cnpj.limit(12);
+    String numbers = cnpj.limit(12);
     numbers += _verifierDigit(numbers).toString();
     numbers += _verifierDigit(numbers).toString();
 

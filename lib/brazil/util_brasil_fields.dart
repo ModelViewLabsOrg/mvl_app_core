@@ -16,7 +16,7 @@ mixin UtilBrasilFields {
 
   static double currencyToDouble(String value) {
     assert(value.isNotEmpty, '');
-    final doubleValue = double.tryParse(
+    final double? doubleValue = double.tryParse(
       value.replaceAll(r'R$ ', '').replaceAll('.', '').replaceAll(',', '.'),
     );
 
@@ -26,7 +26,7 @@ mixin UtilBrasilFields {
   static String addSeparator(String value) {
     var valueFinal = '';
     var pointCount = 0;
-    for (var i = value.length - 1; i > -1; i--) {
+    for (int i = value.length - 1; i > -1; i--) {
       if (pointCount == 3) {
         valueFinal = '.$valueFinal';
         pointCount = 0;
@@ -56,7 +56,9 @@ mixin UtilBrasilFields {
   /// Para retornar apenas os números, informe `mascara=false`.
   static String getPhone(String phone, {bool ddd = true, bool mask = true}) {
     assert(phone.length <= 15, 'phone com tamanho inválido. Deve conter 10 ou 11 caracteres');
-    if (!mask) return removeCaracteres(phone);
+    if (!mask) {
+      return removeCaracteres(phone);
+    }
 
     if (ddd) {
       assert(
@@ -136,11 +138,11 @@ mixin UtilBrasilFields {
       value = number;
     }
 
-    final fixed = value.toStringAsFixed(decimal);
-    final separatedValues = fixed.split('.');
+    final String fixed = value.toStringAsFixed(decimal);
+    final List<String> separatedValues = fixed.split('.');
 
     separatedValues[0] = addSeparator(separatedValues[0]);
-    var formatted = separatedValues.join(',');
+    String formatted = separatedValues.join(',');
 
     if (isNegative) {
       formatted = '-$formatted';

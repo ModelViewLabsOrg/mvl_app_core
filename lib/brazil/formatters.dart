@@ -11,37 +11,47 @@ class Formatters {
   String phoneWithoutDdi() => value.replaceAll('+55', '').onlyNumbers();
 
   String toPhoneFormatted() {
-    final phone = phoneWithoutDdi();
+    final String phone = phoneWithoutDdi();
     return (phone.length < 10 || phone.length > 12) ? value : UtilBrasilFields.getPhone(phone);
   }
 
   String toReaisFormatted() => CurrencyHelper.toCurrency(value.toAmount());
 
   String toDocumentFormatted() {
-    final length = value.onlyNumbersLength();
-    if (length == 11) return toCpfFormatted();
-    if (length == 14) return toCnpjFormatted();
+    final int length = value.onlyNumbersLength();
+    if (length == 11) {
+      return toCpfFormatted();
+    }
+    if (length == 14) {
+      return toCnpjFormatted();
+    }
 
     return '';
   }
 
   String toCpfFormatted() {
     final helper = CPFHelper(value.trim());
-    if (!helper.isValid()) return '';
+    if (!helper.isValid()) {
+      return '';
+    }
 
     return helper.format();
   }
 
   String toCnpjFormatted() {
     final helper = CNPJHelper(value);
-    if (!helper.isValid()) return '';
+    if (!helper.isValid()) {
+      return '';
+    }
 
     return helper.format();
   }
 
   String toZipCodeFormatted() {
-    final numbers = value.onlyNumbers();
-    if (numbers.length != 8) return value;
+    final String numbers = value.onlyNumbers();
+    if (numbers.length != 8) {
+      return value;
+    }
 
     return '${numbers.substring(0, 2)}.'
         '${numbers.substring(2, 5)}-'
@@ -49,13 +59,15 @@ class Formatters {
   }
 
   String capitalizeFullName() {
-    const exceptions = ['da', 'de', 'di', 'do', 'du', 'das', 'dos', 'e'];
+    const exceptions = <String>['da', 'de', 'di', 'do', 'du', 'das', 'dos', 'e'];
 
-    final split = value.toLowerCase().split(' ');
-    var result = split.map((e) => exceptions.contains(e) ? e : e.capitalizeFirstLetter()).join(' ');
+    final List<String> split = value.toLowerCase().split(' ');
+    String result = split
+        .map((e) => exceptions.contains(e) ? e : e.capitalizeFirstLetter())
+        .join(' ');
 
     if (result.contains("'")) {
-      final index = result.indexOf("'");
+      final int index = result.indexOf("'");
       if (index > -1) {
         result =
             result.substring(0, index + 1) +

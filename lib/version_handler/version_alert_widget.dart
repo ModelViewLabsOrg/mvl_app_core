@@ -79,22 +79,29 @@ class VersionAlertWidget extends StatelessWidget {
       maxLines: 9,
     );
 
-    final image = mandatoryLocalization.image;
-    if (image == null) return text;
+    final Image? image = mandatoryLocalization.image;
+    if (image == null) {
+      return text;
+    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
-      children: [gap, image, gapXL, text],
+      children: <Widget>[gap, image, gapXL, text],
     );
   }
 
   Future<void> _mainAction(BuildContext context) async {
-    tracking.event('atualizar_alerta_agora', customParams: {'opcional': allowCancel.toPtBr()});
+    tracking.event(
+      'atualizar_alerta_agora',
+      customParams: <String, String>{'opcional': allowCancel.toPtBr()},
+    );
 
     await tracking.openStore();
 
-    if (context.mounted && allowCancel) Navigator.of(context).pop();
+    if (context.mounted && allowCancel) {
+      Navigator.of(context).pop();
+    }
   }
 
   void _notNow(BuildContext context) {

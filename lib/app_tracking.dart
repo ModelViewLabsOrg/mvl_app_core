@@ -41,7 +41,7 @@ class TrackingItem {
     price: value?.amountToDouble(),
   );
 
-  Map<String, String> get properties => {
+  Map<String, String> get properties => <String, String>{
     'id': id.toString(),
     'name': name,
     'value': (value ?? 0).toString(),
@@ -50,12 +50,12 @@ class TrackingItem {
 
 class AppTracking {
   AppTracking._internal();
-  static final AppTracking _instance = AppTracking._internal();
+  static final _instance = AppTracking._internal();
 
   Future<void> init(AppConfigValues config) async {
     _config = config;
 
-    await Future.wait([
+    await Future.wait(<Future<void>>[
       _analytics.setAnalyticsCollectionEnabled(config.trackingEnabled),
       _initSentry(),
       Aptabase.init(_config.aptabaseKey, InitOptions(host: _config.aptabaseHost)),
@@ -71,7 +71,7 @@ class AppTracking {
   }
 
   Future<void> _initSentry() async {
-    final rate = _config.sentryConfig.rateRemote.getDouble();
+    final double rate = _config.sentryConfig.rateRemote.getDouble();
 
     AppLogger.I().info('Sentry init, rate: $rate');
     await SentryFlutter.init((options) {
@@ -102,13 +102,15 @@ class AppTracking {
   // static late final Mixpanel? _mixpanel;
 
   void _triggerEvent(String eventName) {
-    if (kIsWeb) return;
+    if (kIsWeb) {
+      return;
+    }
 
     unawaited(FirebaseInAppMessaging.instance.triggerEvent(eventName));
   }
 
   List<NavigatorObserver> get navigatorObservers {
-    return [
+    return <NavigatorObserver>[
       FirebaseAnalyticsObserver(analytics: _analytics),
       SentryNavigatorObserver(),
       TalkerRouteObserver(AppLogger.I().talker),
@@ -118,7 +120,7 @@ class AppTracking {
   var _eventsParameters = <String, String>{};
 
   void _resetDefaultEventParams() {
-    _eventsParameters = {
+    _eventsParameters = <String, String>{
       'app': AppVersion.I().appName,
       'app_details': AppVersion.I().toString().replaceAll('\n', ' '),
     };
@@ -140,13 +142,15 @@ class AppTracking {
     Sentry.configureScope((scope) => scope.clear());
 
     await _analytics.setUserId();
-    if (!kIsWeb) await _analytics.resetAnalyticsData();
+    if (!kIsWeb) {
+      await _analytics.resetAnalyticsData();
+    }
 
     _resetDefaultEventParams();
   }
 
   Future<void> setUser(AppAnalyticsUser user) async {
-    final userId = user.id;
+    final String? userId = user.id;
 
     Sentry.configureScope((scope) => scope.setUser(user));
 
@@ -164,7 +168,7 @@ class AppTracking {
 
     unawaited(_analytics.logSignUp(signUpMethod: signUpMethod));
 
-    final properties = {'method': signUpMethod};
+    final properties = <String, String>{'method': signUpMethod};
 
     _aptabaseTrackEvent('register', properties);
 
@@ -201,7 +205,8 @@ class AppTracking {
   void event(String eventName, {AnalyticsParameters? customParams, bool triggerInApp = false}) {
     assert(eventName.length >= 3, 'Event name must be at least 3 characters long');
 
-    final parameters = (customParams ?? {})..addAll(_eventsParameters);
+    final Map<String, String> parameters =
+        (customParams ?? <String, String>{})..addAll(_eventsParameters);
 
     unawaited(
       Sentry.addBreadcrumb(
@@ -209,27 +214,29 @@ class AppTracking {
       ),
     );
 
-    final safeEventName = eventName; //.cleanLimit(kEventNameMaxLength);
+    final String safeEventName = eventName; //.cleanLimit(kEventNameMaxLength);
 
     unawaited(_analytics.logEvent(name: safeEventName, parameters: parameters));
 
-    if (triggerInApp) _triggerEvent(safeEventName);
+    if (triggerInApp) {
+      _triggerEvent(safeEventName);
+    }
 
     _aptabaseTrackEvent(safeEventName, parameters);
   }
 
   void beginCheckout(int value, List<TrackingItem>? items) {
-    final total = value.amountToDouble();
+    final double total = value.amountToDouble();
 
     final parameters =
-        {'total': total.toString()}
+        <String, String>{'total': total.toString()}
           ..addAll(_eventsParameters)
           ..addAll(
-            items?.fold({}, (m, e) {
+            items?.fold(<String, String>{}, (m, e) {
                   m?[e.id.toString()] = e.name;
                   return m;
                 }) ??
-                {},
+                <String, String>{},
           );
 
     unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'BeginCheckout', data: parameters)));
@@ -246,17 +253,17 @@ class AppTracking {
   }
 
   void purchase(int value, String transactionId, List<TrackingItem>? items) {
-    final total = value.amountToDouble();
+    final double total = value.amountToDouble();
 
     final parameters =
-        {'total': total.toString()}
+        <String, String>{'total': total.toString()}
           ..addAll(_eventsParameters)
           ..addAll(
-            items?.fold({}, (m, e) {
+            items?.fold(<String, String>{}, (m, e) {
                   m?[e.id.toString()] = e.name;
                   return m;
                 }) ??
-                {},
+                <String, String>{},
           );
 
     unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'purchase', data: parameters)));
@@ -277,18 +284,20 @@ class AppTracking {
     unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'Select $listName -> ${item.name}')));
 
     const eventName = 'item_selecionado';
-    final props = {'lista': listName, 'item': item.name}..addAll(_eventsParameters);
+    final props = <String, String>{'lista': listName, 'item': item.name}..addAll(_eventsParameters);
 
     _aptabaseTrackEvent(eventName, props);
 
-    unawaited(_analytics.logSelectItem(items: [item.analytics], itemListName: listName));
+    unawaited(
+      _analytics.logSelectItem(items: <AnalyticsEventItem>[item.analytics], itemListName: listName),
+    );
   }
 
   void share(String contentType, String id, String method) {
     unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'share $method $contentType')));
 
     const eventName = 'share';
-    final props = {'metodo': method, 'id': id, 'tipo conteudo': contentType}
+    final props = <String, String>{'metodo': method, 'id': id, 'tipo conteudo': contentType}
       ..addAll(_eventsParameters);
 
     _aptabaseTrackEvent(eventName, props);
@@ -299,9 +308,11 @@ class AppTracking {
   Future<void> requestReview() async {
     event('request_review');
 
-    final review = InAppReview.instance;
+    final InAppReview review = InAppReview.instance;
 
-    if (await review.isAvailable()) await review.requestReview();
+    if (await review.isAvailable()) {
+      await review.requestReview();
+    }
   }
 
   /// Returns the download URL for each store depending on the platform
@@ -314,7 +325,7 @@ class AppTracking {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         {
-          final packageInfo = await PackageInfo.fromPlatform();
+          final PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
           // * On Android, use the package name from PackageInfo
           final store =
@@ -351,10 +362,10 @@ class AppTracking {
   Future<void> openStore() async {
     event('open_store');
 
-    final store = await _storeUrl();
+    final String? store = await _storeUrl();
     AppLogger.I().debug('store: $store');
 
-    final review = InAppReview.instance;
+    final InAppReview review = InAppReview.instance;
 
     if (await review.isAvailable()) {
       await review.openStoreListing(appStoreId: _config.appStoreId);

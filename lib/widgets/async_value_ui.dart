@@ -6,6 +6,8 @@ extension AsyncValueUI on AsyncValue<dynamic> {
   bool get isLoading => this is AsyncLoading<dynamic>;
 
   void showAlertDialogOnError(BuildContext context) {
-    if (hasError && error != null && !isLoading) showException(context: context, exception: error);
+    if (hasError && error != null) {
+      showException(context: context, exception: error);
+    }
   }
 }

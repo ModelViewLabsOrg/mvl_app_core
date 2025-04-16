@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 
 extension TextStyleHelpers on TextStyle {
   TextStyle get bold {
-    final index = fontWeight?.index;
-    if (index == null) return this;
-    final newIndex = min(FontWeight.values.length, index + 2);
+    final int? index = fontWeight?.index;
+    if (index == null) {
+      return this;
+    }
+    final int newIndex = min(FontWeight.values.length, index + 2);
     return copyWith(fontWeight: FontWeight.values[newIndex]);
   }
 
@@ -19,7 +21,7 @@ extension TextStyleHelpers on TextStyle {
       copyWith(decoration: TextDecoration.lineThrough, color: Theme.of(context).colorScheme.error);
 
   TextStyle letterMoreSpacing({double add = 0.1}) {
-    final value = (letterSpacing ?? 1) + add;
+    final double value = (letterSpacing ?? 1) + add;
     return copyWith(letterSpacing: value);
   }
 }

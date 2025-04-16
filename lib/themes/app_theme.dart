@@ -46,6 +46,6 @@ class AppTheme {
     ),
   );
 
-  late final lightTheme = _basicTheme(_lightScheme);
-  late final darkTheme = _basicTheme(_darkScheme);
+  late final ThemeData lightTheme = _basicTheme(_lightScheme);
+  late final ThemeData darkTheme = _basicTheme(_darkScheme);
 }

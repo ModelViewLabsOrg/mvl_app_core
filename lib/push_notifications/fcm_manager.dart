@@ -36,7 +36,7 @@ class AppFcmManager {
   String? get token => _token;
 
   Future<bool> _isAuthorizaded() async {
-    final settings = await _messaging.getNotificationSettings();
+    final NotificationSettings settings = await _messaging.getNotificationSettings();
     return settings.authorizationStatus == AuthorizationStatus.authorized;
   }
 
@@ -49,22 +49,26 @@ class AppFcmManager {
   }
 
   Future<void> requestPermission() async {
-    if (kIsWeb) return;
+    if (kIsWeb) {
+      return;
+    }
 
-    var settings = await _messaging.getNotificationSettings();
-    final status = settings.authorizationStatus;
+    NotificationSettings settings = await _messaging.getNotificationSettings();
+    final AuthorizationStatus status = settings.authorizationStatus;
     if (status != AuthorizationStatus.notDetermined) {
       return;
     }
     settings = await _messaging.requestPermission();
 
-    if (DeviceInfo.isApple) tracking.event('notifications_${settings.authorizationStatus}');
+    if (DeviceInfo.isApple) {
+      tracking.event('notifications_${settings.authorizationStatus}');
+    }
 
     await _setup();
   }
 
   Future<void> _setup() async {
-    final isAuthorized = await _isAuthorizaded();
+    final bool isAuthorized = await _isAuthorizaded();
     if (!isAuthorized) {
       AppLogger.I().info('>> FirebaseMessaging isNotAuthorized');
 
@@ -111,9 +115,11 @@ class AppFcmManager {
   }
 
   void _showNotification(RemoteNotification notification) {
-    final title = notification.title;
-    final body = notification.body;
-    if (title == null || body == null) return;
+    final String? title = notification.title;
+    final String? body = notification.body;
+    if (title == null || body == null) {
+      return;
+    }
 
     showSimpleNotification(
       Text(title, style: const TextStyle(color: Colors.white)),
@@ -130,8 +136,8 @@ class AppFcmManager {
     //     arguments: ChatArguments(message),
     //   );
     // }
-    final notification = message.notification;
-    final data = message.data;
+    final RemoteNotification? notification = message.notification;
+    final Map<String, dynamic> data = message.data;
 
     if (notification != null) {
       AppLogger.I().info(
@@ -166,7 +172,7 @@ class AppFcmManager {
   // }
 
   Future<void> _initialMessage() async {
-    final initial = await _messaging.getInitialMessage();
+    final RemoteMessage? initial = await _messaging.getInitialMessage();
     if (initial != null) {
       AppLogger.I().info('>> initial: ${initial.toMap()}');
       _onMessage(initial);

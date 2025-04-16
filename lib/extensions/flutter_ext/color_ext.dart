@@ -5,11 +5,15 @@ import 'package:flutter/material.dart';
 extension ColorExt on Color {
   String toHex({bool leadingHashSign = true, bool includeAlpha = false}) {
     final hex = StringBuffer();
-    if (leadingHashSign) hex.write('#');
+    if (leadingHashSign) {
+      hex.write('#');
+    }
     // ignore: deprecated_member_use
-    if (includeAlpha) hex.write(alpha.toRadixString(16).padLeft(2, '0'));
+    if (includeAlpha) {
+      hex.write(alpha.toRadixString(16).padLeft(2, '0'));
+    }
 
-    hex.writeAll([
+    hex.writeAll(<String>[
       // ignore: deprecated_member_use
       red.toRadixString(16).padLeft(2, '0'),
       // ignore: deprecated_member_use
@@ -67,8 +71,8 @@ extension ColorExt on Color {
   /// Returns a double value between 1 and 21,
   /// where higher values mean better contrast.
   double contrast(Color otherColor) {
-    final luminance1 = computeLuminance();
-    final luminance2 = otherColor.computeLuminance();
+    final double luminance1 = computeLuminance();
+    final double luminance2 = otherColor.computeLuminance();
 
     return (math.max(luminance1, luminance2) + 0.05) / (math.min(luminance1, luminance2) + 0.05);
   }
@@ -92,7 +96,7 @@ extension ColorExt on Color {
 
   /// Converts this color to grayscale.
   Color grayscale() {
-    final grayValue = ((0.299 * r) + (0.587 * g) + (0.114 * b)).toInt();
+    final int grayValue = ((0.299 * r) + (0.587 * g) + (0.114 * b)).toInt();
     return Color.fromRGBO(grayValue, grayValue, grayValue, a);
   }
 
@@ -110,10 +114,14 @@ extension FHUColorExt on String {
 
   /// it tries to convert the current string to Color returns null if failed.
   Color? get toColor {
-    if (!isHexColor) return null;
+    if (!isHexColor) {
+      return null;
+    }
 
     final buffer = StringBuffer();
-    if (length == 6 || length == 7) buffer.write('FF');
+    if (length == 6 || length == 7) {
+      buffer.write('FF');
+    }
     buffer.write(replaceFirst('#', ''));
     return Color(int.parse(buffer.toString(), radix: 16));
   }

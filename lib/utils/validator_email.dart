@@ -10,17 +10,33 @@ class EmailValidator {
   );
 
   bool isValid() {
-    final value = normalize(email ?? '');
-    if (value.isEmpty) return false;
-    if (value.contains('..')) return false;
-    if (value.contains('--')) return false;
-    if (value.contains('-.')) return false;
-    if (!value.contains('@')) return false;
-    if (value.length > 254) return false;
+    final String value = normalize(email ?? '');
+    if (value.isEmpty) {
+      return false;
+    }
+    if (value.contains('..')) {
+      return false;
+    }
+    if (value.contains('--')) {
+      return false;
+    }
+    if (value.contains('-.')) {
+      return false;
+    }
+    if (!value.contains('@')) {
+      return false;
+    }
+    if (value.length > 254) {
+      return false;
+    }
 
-    final split = value.split('@');
-    if (split.length != 2) return false;
-    if (split.first.length > 63) return false;
+    final List<String> split = value.split('@');
+    if (split.length != 2) {
+      return false;
+    }
+    if (split.first.length > 63) {
+      return false;
+    }
 
     return _emailRegex.hasMatch(value);
   }

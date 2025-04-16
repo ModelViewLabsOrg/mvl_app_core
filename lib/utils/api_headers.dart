@@ -9,7 +9,7 @@ class ApiHeaders {
     required this.fcmToken,
   });
 
-  JsonString toJson() => {
+  JsonString toJson() => <String, String>{
     'appVersion': version,
     'appOs': os,
     'appOsVersion': osVersion,

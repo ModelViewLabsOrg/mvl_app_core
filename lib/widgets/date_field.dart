@@ -23,7 +23,9 @@ class AppBirthdayField extends StatelessWidget {
       lastDate: DateTime.now().add(Duration(days: -365 * minAge)),
       initialPickerDateTime: DateTime.now(),
       onChanged: (value) {
-        if (value != null) onChanged(value);
+        if (value != null) {
+          onChanged(value);
+        }
       },
     );
   }

@@ -27,10 +27,10 @@ class AppVersionArgs {
 class AppVersion {
   factory AppVersion.I() => _instance;
   AppVersion._internal();
-  static final AppVersion _instance = AppVersion._internal();
+  static final _instance = AppVersion._internal();
 
   Future<void> init() async {
-    final info = await PackageInfo.fromPlatform();
+    final PackageInfo info = await PackageInfo.fromPlatform();
     versionStr = info.version;
     version = Version.parse(info.version);
 
@@ -70,7 +70,7 @@ class AppVersion {
   Widget versionWidget(BuildContext context) {
     return GestureDetector(
       onLongPress: () async {
-        final token = AppFcmManager.I().token;
+        final String? token = AppFcmManager.I().token;
         if (token == null) {
           AppToastMessages('Sem token!', isError: true).show(context);
         } else {
@@ -85,14 +85,14 @@ class AppVersion {
   }
 
   Widget _versionChild(BuildContext context) {
-    final env = AppConfig.env;
+    final EnvEnum env = AppConfig.env;
 
     if (env.isPrd) {
       return AppText.titleLarge(context, versionStr);
     }
 
     return Column(
-      children: [
+      children: <Widget>[
         AppText.titleLarge(context, versionFull),
         gapM,
         AppText.titleLarge(context, env.name.toUpperCase()),
@@ -104,7 +104,7 @@ class AppVersion {
     final plugin = DeviceInfoPlugin();
 
     if (kIsWeb) {
-      final info = await plugin.webBrowserInfo;
+      final WebBrowserInfo info = await plugin.webBrowserInfo;
 
       osName = 'web';
       osVersion = info.appVersion ?? '';
@@ -115,23 +115,23 @@ class AppVersion {
     osName = Platform.operatingSystem;
 
     if (Platform.isAndroid) {
-      final info = await plugin.androidInfo;
-      final version = info.version;
+      final AndroidDeviceInfo info = await plugin.androidInfo;
+      final AndroidBuildVersion version = info.version;
       osVersion = '${version.release} (SDK ${version.sdkInt})';
       deviceFull = '${info.manufacturer} ${info.model}';
       deviceId = null;
     } else if (Platform.isIOS) {
-      final info = await plugin.iosInfo;
+      final IosDeviceInfo info = await plugin.iosInfo;
       osVersion = info.systemVersion;
       deviceFull = info.model;
       deviceId = info.identifierForVendor;
     } else if (Platform.isMacOS) {
-      final info = await plugin.macOsInfo;
+      final MacOsDeviceInfo info = await plugin.macOsInfo;
       osVersion = info.osRelease;
       deviceFull = info.model;
       deviceId = info.systemGUID;
     } else if (Platform.isLinux) {
-      final info = await plugin.linuxInfo;
+      final LinuxDeviceInfo info = await plugin.linuxInfo;
       osVersion = info.version ?? '?';
       deviceFull = info.prettyName;
       deviceId = info.id;
@@ -142,6 +142,6 @@ class AppVersion {
   String toString() => '$appName $versionFull\n$osName $osVersion';
 
   JsonString toHeaders() {
-    return {'app-name': appName, 'version': versionFull, 'os': osName, 'os-version': osVersion};
+    return <String, String>{'app-name': appName, 'version': versionFull, 'os': osName, 'os-version': osVersion};
   }
 }

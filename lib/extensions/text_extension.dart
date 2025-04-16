@@ -86,7 +86,7 @@ extension StyledText<T extends Text> on T {
   }) =>
       copyWith(
             style: (style ?? const TextStyle()).copyWith(
-              shadows: [Shadow(color: color, blurRadius: blurRadius, offset: offset)],
+              shadows: <Shadow>[Shadow(color: color, blurRadius: blurRadius, offset: offset)],
             ),
           )
           as T;

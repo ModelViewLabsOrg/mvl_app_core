@@ -22,9 +22,11 @@ class AppText extends Text {
     int? maxLines,
     Key? key,
   }) {
-    var style = textStyle?.copyWith(color: color) ?? TextStyle(color: color);
+    TextStyle style = textStyle?.copyWith(color: color) ?? TextStyle(color: color);
 
-    if (bold) style = style.copyWith(fontWeight: FontWeight.w700);
+    if (bold) {
+      style = style.copyWith(fontWeight: FontWeight.w700);
+    }
 
     if (underline) {
       style = style.copyWith(decorationStyle: TextDecorationStyle.solid);

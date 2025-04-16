@@ -50,7 +50,9 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (state == AppLifecycleState.resumed) await _checkIfAppUpdateIsNeeded();
+    if (state == AppLifecycleState.resumed) {
+      await _checkIfAppUpdateIsNeeded();
+    }
   }
 
   @override
@@ -72,14 +74,17 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
     }
 
     try {
-      final updateResult = await widget.forceUpdateClient.checkUpdate();
+      final ForceUpdateStatus updateResult = await widget.forceUpdateClient.checkUpdate();
       _lastCheck = DateTime.now();
       AppLogger.I().info(
         'Check Update result: '
         '${updateResult.name.toUpperCase()}',
       );
 
-      tracking.event('atualizar_alerta_verificação', customParams: {'status': updateResult.name});
+      tracking.event(
+        'atualizar_alerta_verificação',
+        customParams: <String, String>{'status': updateResult.name},
+      );
 
       switch (updateResult) {
         case ForceUpdateStatus.must:
@@ -99,16 +104,18 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
   }
 
   bool _checkCacheIsValid() {
-    final lastCheck = _lastCheck;
-    if (lastCheck == null) return false;
+    final DateTime? lastCheck = _lastCheck;
+    if (lastCheck == null) {
+      return false;
+    }
 
-    final diff = DateTime.now().difference(lastCheck);
-    final isValid = diff.inMinutes < widget.cacheMinutes;
+    final Duration diff = DateTime.now().difference(lastCheck);
+    final bool isValid = diff.inMinutes < widget.cacheMinutes;
 
     if (isValid) {
       tracking.event(
         'atualizar_alerta_cache',
-        customParams: {'diferença minutos': diff.inMinutes.toString()},
+        customParams: <String, String>{'diferença minutos': diff.inMinutes.toString()},
       );
     }
 
@@ -116,13 +123,13 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
   }
 
   Future<void> _shouldShowRecommendedAlertAgain() async {
-    final sharedPrefs = await SharedPreferences.getInstance();
-    final lastTimeMs = sharedPrefs.getInt(widget.versionLaterKey);
+    final SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+    final int? lastTimeMs = sharedPrefs.getInt(widget.versionLaterKey);
 
     if (lastTimeMs != null) {
       final lastTime = DateTime.fromMillisecondsSinceEpoch(lastTimeMs);
 
-      final diff = DateTime.now().difference(lastTime).inDays;
+      final int diff = DateTime.now().difference(lastTime).inDays;
       if (diff < widget.repeatRecommendedAlertDays) {
         AppLogger.I().info(
           'Last alert showed in $diff days, '
@@ -130,7 +137,7 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
         );
         tracking.event(
           'atualizar_alerta_depois',
-          customParams: {'diferença dias': diff.toString()},
+          customParams: <String, String>{'diferença dias': diff.toString()},
         );
 
         return;
@@ -156,7 +163,7 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
 
   Future<void> _triggerForceUpdate(bool allowCancel) async {
     _isAlertVisible = true;
-    final ctx = widget.navigatorKey.currentContext ?? context;
+    final BuildContext ctx = widget.navigatorKey.currentContext ?? context;
     await _showAlert(ctx, allowCancel);
 
     _isAlertVisible = false;
@@ -165,7 +172,7 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
   }
 
   Future<void> _saveForLater() async {
-    final sharedPrefs = await SharedPreferences.getInstance();
+    final SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
 
     await sharedPrefs.setInt(widget.versionLaterKey, DateTime.now().millisecondsSinceEpoch);
   }
