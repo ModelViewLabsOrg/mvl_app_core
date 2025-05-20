@@ -26,7 +26,7 @@ dependencies:
   flutter_timezone: any
   equatable: any
   share_plus: any
-  talker_flutter: any
+  talker_flutter: ^4.7.9
   enum_to_string: any
   version: any
 
