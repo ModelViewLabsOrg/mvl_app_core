@@ -10,7 +10,7 @@ analyzer:
     strict-inference: true
     strict-raw-types: true
   errors:
-    # always_use_package_imports: error
+    always_use_package_imports: error
     close_sinks: ignore
     deprecated_member_use_from_same_package: ignore
     invalid_annotation_target: ignore
@@ -32,6 +32,8 @@ analyzer:
     - packages/shared/test/full_coverage_test.dart
     - test/.test_coverage.dart
     - test/full_coverage_test.dart
+    - "dev/conductor/lib/proto/*"
+    - "engine/**"
 
 # https://dart.dev/tools/linter-rules/all
 # https://github.com/dart-lang/sdk/blob/main/pkg/linter/example/all.yaml
@@ -209,7 +211,7 @@ linter:
     - specify_nonobvious_local_variable_types
     - specify_nonobvious_property_types
     - strict_top_level_inference
-    # - switch_on_type
+    # - switch_on_type #"'switch_on_type' is not a recognized lint rule.\nTry using the name of a recognized lint rule.",
     - test_types_in_equals
     - throw_in_finally
     - tighten_type_of_initializing_formals
@@ -245,7 +247,7 @@ linter:
     - unnecessary_string_interpolations
     - unnecessary_this
     - unnecessary_to_list_in_spreads
-    - unnecessary_unawaited
+    # - unnecessary_unawaited # "'unnecessary_unawaited' is not a recognized lint rule.\nTry using the name of a recognized lint rule.",
     - unnecessary_underscores
     - unreachable_from_main
     - unrelated_type_equality_checks
