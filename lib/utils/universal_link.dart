@@ -14,10 +14,9 @@ class _AppStoreApp with HasStoreLink {
   final String appId;
 
   @override
-  Uri get storeLink =>
-      DeviceInfo.isApple
-          ? Uri.parse('itms-apps://itunes.apple.com/app/apple-store/id$appId')
-          : Uri.parse('https://apps.apple.com/$country/app/id$appId');
+  Uri get storeLink => DeviceInfo.isApple
+      ? Uri.parse('itms-apps://itunes.apple.com/app/apple-store/id$appId')
+      : Uri.parse('https://apps.apple.com/$country/app/id$appId');
 }
 
 @immutable
@@ -26,10 +25,9 @@ class _PlayStoreApp with HasStoreLink {
   final String packageName;
 
   @override
-  Uri get storeLink =>
-      DeviceInfo.isAndroid
-          ? Uri.parse('market://details?id=$packageName')
-          : Uri.parse('https://play.google.com/store/apps/details?id=$packageName');
+  Uri get storeLink => DeviceInfo.isAndroid
+      ? Uri.parse('market://details?id=$packageName')
+      : Uri.parse('https://play.google.com/store/apps/details?id=$packageName');
 }
 
 @immutable

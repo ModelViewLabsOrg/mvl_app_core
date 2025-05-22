@@ -142,6 +142,11 @@ class AppVersion {
   String toString() => '$appName $versionFull\n$osName $osVersion';
 
   JsonString toHeaders() {
-    return <String, String>{'app-name': appName, 'version': versionFull, 'os': osName, 'os-version': osVersion};
+    return <String, String>{
+      'app-name': appName,
+      'version': versionFull,
+      'os': osName,
+      'os-version': osVersion,
+    };
   }
 }

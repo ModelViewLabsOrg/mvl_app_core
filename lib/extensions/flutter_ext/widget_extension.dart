@@ -62,7 +62,7 @@ extension WidgetExtensions on Widget {
   Widget withTooltip(
     String message, {
     Decoration? decoration,
-    double? height,
+    BoxConstraints? constraints,
     bool? preferBelow,
     EdgeInsetsGeometry? padding,
     TextStyle? textStyle,
@@ -71,7 +71,7 @@ extension WidgetExtensions on Widget {
   }) => Tooltip(
     message: message,
     decoration: decoration,
-    height: height,
+    constraints: constraints,
     padding: padding,
     preferBelow: preferBelow,
     textStyle: textStyle,

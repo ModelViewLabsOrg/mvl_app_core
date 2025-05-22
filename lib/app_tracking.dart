@@ -205,8 +205,8 @@ class AppTracking {
   void event(String eventName, {AnalyticsParameters? customParams, bool triggerInApp = false}) {
     assert(eventName.length >= 3, 'Event name must be at least 3 characters long');
 
-    final Map<String, String> parameters =
-        (customParams ?? <String, String>{})..addAll(_eventsParameters);
+    final Map<String, String> parameters = (customParams ?? <String, String>{})
+      ..addAll(_eventsParameters);
 
     unawaited(
       Sentry.addBreadcrumb(
@@ -228,16 +228,15 @@ class AppTracking {
   void beginCheckout(int value, List<TrackingItem>? items) {
     final double total = value.amountToDouble();
 
-    final parameters =
-        <String, String>{'total': total.toString()}
-          ..addAll(_eventsParameters)
-          ..addAll(
-            items?.fold(<String, String>{}, (m, e) {
-                  m?[e.id.toString()] = e.name;
-                  return m;
-                }) ??
-                <String, String>{},
-          );
+    final parameters = <String, String>{'total': total.toString()}
+      ..addAll(_eventsParameters)
+      ..addAll(
+        items?.fold(<String, String>{}, (m, e) {
+              m?[e.id.toString()] = e.name;
+              return m;
+            }) ??
+            <String, String>{},
+      );
 
     unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'BeginCheckout', data: parameters)));
 
@@ -255,16 +254,15 @@ class AppTracking {
   void purchase(int value, String transactionId, List<TrackingItem>? items) {
     final double total = value.amountToDouble();
 
-    final parameters =
-        <String, String>{'total': total.toString()}
-          ..addAll(_eventsParameters)
-          ..addAll(
-            items?.fold(<String, String>{}, (m, e) {
-                  m?[e.id.toString()] = e.name;
-                  return m;
-                }) ??
-                <String, String>{},
-          );
+    final parameters = <String, String>{'total': total.toString()}
+      ..addAll(_eventsParameters)
+      ..addAll(
+        items?.fold(<String, String>{}, (m, e) {
+              m?[e.id.toString()] = e.name;
+              return m;
+            }) ??
+            <String, String>{},
+      );
 
     unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'purchase', data: parameters)));
 

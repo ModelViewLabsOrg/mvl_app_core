@@ -74,8 +74,9 @@ class FormValidator {
         return error;
       }
 
-      final DateTime date =
-          Jiffy.parseFromDateTime(DateTime(year, month)).endOf(Unit.month).toLocal().dateTime;
+      final DateTime date = Jiffy.parseFromDateTime(
+        DateTime(year, month),
+      ).endOf(Unit.month).toLocal().dateTime;
 
       if (!date.isFuture()) {
         return 'A data não pode ser no passado';

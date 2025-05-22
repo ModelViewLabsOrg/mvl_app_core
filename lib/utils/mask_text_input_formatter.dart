@@ -27,13 +27,12 @@ class MaskTextInputFormatter implements TextInputFormatter {
     updateMask(
       mask: mask,
       filter: filter ?? <String, RegExp>{'#': RegExp('[0-9]'), 'A': RegExp('[^0-9]')},
-      newValue:
-          initialText == null
-              ? null
-              : TextEditingValue(
-                text: initialText,
-                selection: TextSelection.collapsed(offset: initialText.length),
-              ),
+      newValue: initialText == null
+          ? null
+          : TextEditingValue(
+              text: initialText,
+              selection: TextSelection.collapsed(offset: initialText.length),
+            ),
     );
   }
 
@@ -150,12 +149,11 @@ class MaskTextInputFormatter implements TextInputFormatter {
     final TextSelection beforeSelection = oldValue.selection;
     final TextSelection afterSelection = newValue.selection;
 
-    int beforeSelectionStart =
-        afterSelection.isValid
-            ? beforeSelection.isValid
-                ? beforeSelection.start
-                : 0
-            : 0;
+    int beforeSelectionStart = afterSelection.isValid
+        ? beforeSelection.isValid
+              ? beforeSelection.start
+              : 0
+        : 0;
 
     for (
       var i = 0;
@@ -168,12 +166,11 @@ class MaskTextInputFormatter implements TextInputFormatter {
       }
     }
 
-    final int beforeSelectionLength =
-        afterSelection.isValid
-            ? beforeSelection.isValid
-                ? beforeSelection.end - beforeSelectionStart
-                : 0
-            : oldValue.text.length;
+    final int beforeSelectionLength = afterSelection.isValid
+        ? beforeSelection.isValid
+              ? beforeSelection.end - beforeSelectionStart
+              : 0
+        : oldValue.text.length;
 
     final int lengthDifference = afterText.length - (beforeText.length - beforeSelectionLength);
     final int lengthRemoved = lengthDifference < 0 ? lengthDifference.abs() : 0;
@@ -249,7 +246,7 @@ class MaskTextInputFormatter implements TextInputFormatter {
     var curTextPos = 0;
     var maskPos = 0;
     _resultTextMasked = '';
-    int cursorPos = -1;
+    var cursorPos = -1;
     var nonMaskedCount = 0;
     var maskInside = 0;
 

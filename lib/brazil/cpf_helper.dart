@@ -28,8 +28,7 @@ class CPFHelper {
   // Compute the Verifier Digit (or 'Dígito Verificador (DV)' in PT-BR).
   // You can learn more about the algorithm on [wikipedia (pt-br)](https://pt.wikipedia.org/wiki/D%C3%ADgito_verificador)
   int _verifierDigit(String cpf) {
-    final List<int> numbers =
-        cpf.split('').map((number) => int.parse(number, radix: 10)).toList();
+    final List<int> numbers = cpf.split('').map((number) => int.parse(number, radix: 10)).toList();
 
     final int modulus = numbers.length + 1;
 

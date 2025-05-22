@@ -29,7 +29,13 @@ class AppToastMessages {
       return Text(message);
     }
 
-    return Row(children: <Widget>[Icon(iconData), gapS, Expanded(child: Text(message))]);
+    return Row(
+      children: <Widget>[
+        Icon(iconData),
+        gapS,
+        Expanded(child: Text(message)),
+      ],
+    );
   }
 
   final SnackBar snackBar;

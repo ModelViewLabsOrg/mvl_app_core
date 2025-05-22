@@ -66,8 +66,9 @@ class ForceUpdateClient {
     // * But semver can only parse this if it's formatted as `X.Y.Z-flavor`
     // * and we only care about X.Y.Z, so we can remove the flavor
     const String flavorStr = appFlavor ?? '';
-    final String currentVersionStr =
-        flavorStr.isEmpty ? packageInfo.version : packageInfo.version.replaceAll('.$flavorStr', '');
+    final String currentVersionStr = flavorStr.isEmpty
+        ? packageInfo.version
+        : packageInfo.version.replaceAll('.$flavorStr', '');
 
     // * Parse versions in semver format
     final Version currentVersion = Version.parse(currentVersionStr);

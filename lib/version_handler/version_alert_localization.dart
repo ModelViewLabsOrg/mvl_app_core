@@ -19,7 +19,7 @@ class VersionAlertLocalizationMandatory extends VersionAlertLocalization {
     super.title = 'Versão desatualizada',
     super.message =
         'Você tem uma versão que não é suportada, '
-            'atualize antes de continuar!',
+        'atualize antes de continuar!',
     this.buttonLater = 'Depois',
     super.buttonNow,
     super.image,
@@ -33,7 +33,7 @@ class VersionAlertLocalizationRecommended extends VersionAlertLocalization {
     super.title = 'Atualização disponível',
     super.message =
         'Mantenha seu aplicativo atualizado '
-            'para manter livre de falhas e fique com as novidades em dia.',
+        'para manter livre de falhas e fique com as novidades em dia.',
     super.buttonNow,
     super.image,
   });

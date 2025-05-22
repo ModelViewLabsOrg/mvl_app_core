@@ -66,8 +66,8 @@ class VersionControlOutdated extends VersionControl {
     super.title = 'Versão desatualizada!',
     super.message =
         'Essa versão está antiga e não vai funcionar como deveria, por '
-            'favor atualize seu app pela loja de aplicativos para continuar '
-            'usando a nossa plataforma!',
+        'favor atualize seu app pela loja de aplicativos para continuar '
+        'usando a nossa plataforma!',
   });
 }
 
@@ -77,7 +77,7 @@ class VersionControlAdvised extends VersionControl {
     super.title = 'Existe uma nova atualização disponível!',
     super.message =
         'Tem uma versão nova disponível. '
-            'Atualize seu app para ter acesso às últimas novidades, '
-            'novos recursos e correções de erros!',
+        'Atualize seu app para ter acesso às últimas novidades, '
+        'novos recursos e correções de erros!',
   });
 }

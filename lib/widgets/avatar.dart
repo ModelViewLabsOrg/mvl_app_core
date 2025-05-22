@@ -18,14 +18,9 @@ class Avatar extends StatelessWidget {
         radius: 24,
         backgroundColor: context.theme.colorScheme.secondaryContainer,
         backgroundImage: _image,
-        child:
-            _image == null
-                ? Icon(
-                  placeholderIcon,
-                  size: 32,
-                  color: context.theme.colorScheme.onSecondaryContainer,
-                )
-                : null,
+        child: _image == null
+            ? Icon(placeholderIcon, size: 32, color: context.theme.colorScheme.onSecondaryContainer)
+            : null,
       ),
     );
   }
