@@ -35,7 +35,7 @@ class CopyAndShowMessage extends StatelessWidget {
     final String? label = buttonLabel;
 
     const icon = Icon(Icons.copy);
-    Future<void> onPressed() async => show(context);
+    Future<void> onPressed() => show(context);
 
     if (label == null) {
       return IconButton(onPressed: onPressed, icon: icon);

@@ -69,15 +69,15 @@ class AppVersion {
 
   Widget versionWidget(BuildContext context) {
     return GestureDetector(
-      onLongPress: () async {
+      onLongPress: () {
         final String? token = AppFcmManager.I().token;
         if (token == null) {
           AppToastMessages('Sem token!', isError: true).show(context);
         } else {
-          return CopyAndShowMessage(
+          CopyAndShowMessage(
             textToCopy: token,
             messageFeedback: 'Copiado: $token',
-          ).show(context);
+          ).show(context).ignore();
         }
       },
       child: _versionChild(context),

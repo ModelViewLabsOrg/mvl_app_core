@@ -147,7 +147,7 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
     return _triggerForceUpdate(true);
   }
 
-  Future<bool?> _showAlert(BuildContext context, bool allowCancel) async {
+  Future<bool?> _showAlert(BuildContext context, bool allowCancel) {
     return showAdaptiveDialog<bool>(
       context: context,
       barrierDismissible: allowCancel,

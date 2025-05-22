@@ -37,7 +37,7 @@ class VersionAlertWidget extends StatelessWidget {
             child: Text(recommendedLocalization.buttonLater),
           ),
         FilledButton(
-          onPressed: () async => _mainAction(context),
+          onPressed: () => _mainAction(context),
           child: Text(mandatoryLocalization.buttonNow),
         ),
       ],
@@ -55,7 +55,7 @@ class VersionAlertWidget extends StatelessWidget {
             child: Text(recommendedLocalization.buttonLater),
           ),
         CupertinoDialogAction(
-          onPressed: () async => _mainAction(context),
+          onPressed: () => _mainAction(context),
           isDefaultAction: true,
           child: Text(mandatoryLocalization.buttonNow),
         ),

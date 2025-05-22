@@ -21,7 +21,7 @@ class AppShare extends StatelessWidget {
     final String? label = buttonLabel;
 
     final icon = Icon(Icons.adaptive.share);
-    Future<void> onPressed() async => shareText(context);
+    Future<void> onPressed() => shareText(context);
 
     if (label == null) {
       return IconButton(onPressed: onPressed, icon: icon);

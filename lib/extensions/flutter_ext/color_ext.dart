@@ -8,8 +8,9 @@ extension ColorExt on Color {
     if (leadingHashSign) {
       hex.write('#');
     }
-    // ignore: deprecated_member_use
+
     if (includeAlpha) {
+      // ignore: deprecated_member_use
       hex.write(alpha.toRadixString(16).padLeft(2, '0'));
     }
 

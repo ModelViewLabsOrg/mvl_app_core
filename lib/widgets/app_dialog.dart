@@ -18,7 +18,7 @@ class AppDialog {
   final String? content;
   final String? cancelActionText;
 
-  Future<bool?> showAlertDialog(BuildContext context) async {
+  Future<bool?> showAlertDialog(BuildContext context) {
     final String? content = this.content;
     final String? cancelActionText = this.cancelActionText;
 
