@@ -22,16 +22,16 @@ Future<AsyncValue<T>> valueGuard<T>(
     withLoading = AsyncLoading();
   }
 
-  return AsyncValue.guard(
-    future,
-    (e) {
-      AppLogger.I().error(
-        method,
-        e,
-        StackTrace.current,
-        {'method': method, 'error': e.toString()},
-      );
-      return true;
-    },
-  );
+  bool handleError(Object e) {
+    AppLogger.I().error(
+      method,
+      e,
+      StackTrace.current,
+      {'method': method, 'error': e.toString()},
+    );
+
+    return true;
+  }
+
+  return AsyncValue.guard(future, handleError);
 }
