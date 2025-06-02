@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mvl_app_core/app_logger.dart';
+import 'package:mvl_app_core/utils/app_exception.dart';
 import 'package:mvl_app_core/widgets/app_toast_message.dart';
 
 String? Function(BuildContext context, Object? exception) handleException = (_, _) => null;
 
-void showException({required BuildContext context, required Object? exception}) {
+void showException({
+  required BuildContext context,
+  required String method,
+  required Object exception,
+}) {
+  AppLogger.I().error(method, exception, StackTrace.current);
   AppToastMessages(_message(context, exception), isError: true).show(context);
 }
 
 String _message(BuildContext context, Object? exception) {
   if (exception is String) {
     return exception;
+  }
+
+  if (exception is AppException) {
+    return exception.message;
   }
 
   final String? message = handleException(context, exception);
