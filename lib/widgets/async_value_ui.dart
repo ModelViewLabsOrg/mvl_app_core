@@ -8,7 +8,8 @@ extension AsyncValueUI on AsyncValue<dynamic> {
 
   void showAlertDialogOnError(BuildContext context, [String? method]) {
     final Object? error = this.error;
-    if (hasError && error != null) {
+
+    if (error != null) {
       showException(
         context: context,
         method: method ?? 'showAlertDialogOnError',
