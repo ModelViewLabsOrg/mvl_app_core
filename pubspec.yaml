@@ -1,6 +1,6 @@
 name: mvl_app_core
 description: "An App Core features for every app"
-version: 1.1.3
+version: 1.1.4
 homepage: https://github.com/ModelViewLabsOrg/mvl_app_core.git
 
 publish_to: none
@@ -46,7 +46,7 @@ dependencies:
     #   ref: proposal
   jiffy: any
   url_launcher: any
-  flutter_secure_storage: any
+  flutter_secure_storage: ^10.0.0-beta.4
   shared_preferences: any
   overlay_notification: any
   remove_emoji: any

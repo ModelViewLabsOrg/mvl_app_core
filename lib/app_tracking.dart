@@ -21,9 +21,8 @@ AppTracking get tracking => AppTracking._instance;
 
 typedef AnalyticsParameters = JsonString;
 
-@immutable
 class AppAnalyticsUser extends SentryUser {
-  AppAnalyticsUser({required super.id, super.email, super.name, super.segment, super.data});
+  AppAnalyticsUser({required super.id, super.email, super.name, super.data});
 }
 
 class TrackingItem {
@@ -58,7 +57,10 @@ class AppTracking {
     await Future.wait(<Future<void>>[
       _analytics.setAnalyticsCollectionEnabled(config.trackingEnabled),
       _initSentry(),
-      Aptabase.init(_config.aptabaseKey, InitOptions(host: _config.aptabaseHost)),
+      Aptabase.init(
+        _config.aptabaseKey,
+        InitOptions(host: _config.aptabaseHost),
+      ),
     ]);
 
     if (!kIsWeb) {
@@ -166,7 +168,9 @@ class AppTracking {
   }
 
   void signUp(String signUpMethod) {
-    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'SignUp $signUpMethod')));
+    unawaited(
+      Sentry.addBreadcrumb(Breadcrumb(message: 'SignUp $signUpMethod')),
+    );
 
     unawaited(_analytics.logSignUp(signUpMethod: signUpMethod));
 
@@ -178,10 +182,19 @@ class AppTracking {
   }
 
   void info(String message) {
-    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: message, level: SentryLevel.info)));
+    unawaited(
+      Sentry.addBreadcrumb(
+        Breadcrumb(message: message, level: SentryLevel.info),
+      ),
+    );
   }
 
-  void recordError(String method, Object error, StackTrace? stackTrace, {bool fatal = false}) {
+  void recordError(
+    String method,
+    Object error,
+    StackTrace? stackTrace, {
+    bool fatal = false,
+  }) {
     unawaited(
       Sentry.captureException(
         error,
@@ -204,15 +217,26 @@ class AppTracking {
     }
   }
 
-  void event(String eventName, {AnalyticsParameters? customParams, bool triggerInApp = false}) {
-    assert(eventName.length >= 3, 'Event name must be at least 3 characters long');
+  void event(
+    String eventName, {
+    AnalyticsParameters? customParams,
+    bool triggerInApp = false,
+  }) {
+    assert(
+      eventName.length >= 3,
+      'Event name must be at least 3 characters long',
+    );
 
     final Map<String, String> parameters = (customParams ?? <String, String>{})
       ..addAll(_eventsParameters);
 
     unawaited(
       Sentry.addBreadcrumb(
-        Breadcrumb(message: eventName, data: parameters, level: SentryLevel.info),
+        Breadcrumb(
+          message: eventName,
+          data: parameters,
+          level: SentryLevel.info,
+        ),
       ),
     );
 
@@ -240,7 +264,11 @@ class AppTracking {
             <String, String>{},
       );
 
-    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'BeginCheckout', data: parameters)));
+    unawaited(
+      Sentry.addBreadcrumb(
+        Breadcrumb(message: 'BeginCheckout', data: parameters),
+      ),
+    );
 
     _aptabaseTrackEvent('checkout', parameters);
 
@@ -266,7 +294,9 @@ class AppTracking {
             <String, String>{},
       );
 
-    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'purchase', data: parameters)));
+    unawaited(
+      Sentry.addBreadcrumb(Breadcrumb(message: 'purchase', data: parameters)),
+    );
 
     _aptabaseTrackEvent('compra', parameters);
 
@@ -281,7 +311,11 @@ class AppTracking {
   }
 
   void selectItem(String listName, TrackingItem item) {
-    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'Select $listName -> ${item.name}')));
+    unawaited(
+      Sentry.addBreadcrumb(
+        Breadcrumb(message: 'Select $listName -> ${item.name}'),
+      ),
+    );
 
     const eventName = 'item_selecionado';
     final props = <String, String>{'lista': listName, 'item': item.name}..addAll(_eventsParameters);
@@ -289,20 +323,30 @@ class AppTracking {
     _aptabaseTrackEvent(eventName, props);
 
     unawaited(
-      _analytics.logSelectItem(items: <AnalyticsEventItem>[item.analytics], itemListName: listName),
+      _analytics.logSelectItem(
+        items: <AnalyticsEventItem>[item.analytics],
+        itemListName: listName,
+      ),
     );
   }
 
   void share(String contentType, String id, String method) {
-    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'share $method $contentType')));
+    unawaited(
+      Sentry.addBreadcrumb(Breadcrumb(message: 'share $method $contentType')),
+    );
 
     const eventName = 'share';
-    final props = <String, String>{'metodo': method, 'id': id, 'tipo conteudo': contentType}
-      ..addAll(_eventsParameters);
+    final props = <String, String>{
+      'metodo': method,
+      'id': id,
+      'tipo conteudo': contentType,
+    }..addAll(_eventsParameters);
 
     _aptabaseTrackEvent(eventName, props);
 
-    unawaited(_analytics.logShare(contentType: contentType, itemId: id, method: method));
+    unawaited(
+      _analytics.logShare(contentType: contentType, itemId: id, method: method),
+    );
   }
 
   Future<void> requestReview() async {
