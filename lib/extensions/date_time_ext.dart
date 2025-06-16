@@ -5,9 +5,6 @@ import 'package:mvl_app_core/extensions/date_time_ext_extras.dart';
 import 'package:mvl_app_core/extensions/string_extension.dart';
 
 extension DateTimeExt on DateTime {
-  /// 10
-  String mm() => DateFormat('MM').format(this).capitalize();
-
   /// Out
   String mmm() => DateFormat('MMM').format(this).capitalize();
 
@@ -20,41 +17,47 @@ extension DateTimeExt on DateTime {
   /// Segunda-feira
   String eeee() => DateFormat('EEEE').format(this).capitalize();
 
-  /// 31
+  // /// 31
   String dd() => DateFormat('dd').format(this);
 
-  /// 22
+  // /// 22
   String yy() => DateFormat('yy').format(this);
 
-  /// 2022
+  // /// 2022
   String yyyy() => DateFormat('yyyy').format(this);
 
-  /// Outubro / 2022
-  String yMMMM() => '${mmmm()} / $year';
+  // / Outubro / 2022
+  // String yMMMM() => '${mmmm()} / $year';
+  String yMMMM() => DateFormat.yMMMM().format(this).capitalizeFirstLetter();
 
   /// Outubro 2022
-  String monthYear() => '${mmmm()} $year';
+  // String monthYear() => '${mmmm()} $year';
 
   /// 31 / Out
-  String toDDMM() => '${dd()} / ${mmm()}';
+  // String toDDMM() => '${dd()} / ${mmm()}';
 
   /// 31 de Outubro
-  String ddmmmm() => '${dd()} de ${mmmm()}';
+  String mmmmd() => DateFormat.MMMMd().format(this); //'${dd()} de ${mmmm()}';
 
   /// Seg, 31 de Out
-  String dateWithDay() => '${eee()}, ${ddmmmm()}';
+  String dateWithDay() => DateFormat.MMMEd().format(this).capitalizeFirstLetter();
+  String mmmed() => dateWithDay();
 
   /// 31 / Outubro / 2022
-  String dateFull() => '${dd()} / ${mmmm()} / ${yyyy()}';
+  // String dateFull() => '${dd()} / ${mmmm()} / ${yyyy()}';
+  String dateFull() => DateFormat.yMMMd().format(this).capitalizeFirstLetter();
+  String yMMMd() => dateFull();
 
   /// 31/10/22
-  String dateFullShort() => '${dd()}/${mm()}/${yy()}';
+  // String dateFullShort() => '${dd()}/$month/${yy()}';
+  String dateFullShort() => DateFormat.yMd().format(this).capitalizeFirstLetter();
+  String yMd() => dateFullShort();
 
   /// 31/10/22 13:58
-  String dateTimeShort() => '${dateFullShort()} ${onlyTime()}';
+  // String dateTimeShort() => '${dateFullShort()} ${onlyTime()}';
 
   /// 31/Outubro/2022 13:58
-  String dateTimeFull() => '${dateFull()} ${onlyTime()}';
+  // String dateTimeFull() => '${dateFull()} ${onlyTime()}';
 
   /// 14:58
   String onlyTime() => DateFormat('HH:mm').format(this);
@@ -102,8 +105,13 @@ extension DateTimeExt on DateTime {
   // }
 
   /// 2022-10-31 14:58:09.123 -> 2022-10-31 14:58:00
-  DateTime removeSeconds() =>
-      subtract(Duration(seconds: second, milliseconds: millisecond, microseconds: microsecond));
+  DateTime removeSeconds() => subtract(
+    Duration(
+      seconds: second,
+      milliseconds: millisecond,
+      microseconds: microsecond,
+    ),
+  );
 
   /// 2022-10-01 -> 2022-09-01
   DateTime previousMonth() => Jiffy.parseFromDateTime(this).subtract(months: 1).dateTime;
