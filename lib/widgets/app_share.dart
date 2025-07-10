@@ -13,7 +13,12 @@ class AppShare extends StatelessWidget {
       return Future.value();
     }
 
-    return Share.share(content, sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
+    return SharePlus.instance.share(
+      ShareParams(
+        text: content,
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+      ),
+    );
   }
 
   @override

@@ -6,16 +6,23 @@ import 'package:mvl_app_core/widgets/app_toast_message.dart';
 
 String? Function(BuildContext context, Object? exception) handleException = (_, _) => null;
 
+var defaultErrorMessage = 'Houve um erro aqui, tente novamente mais tarde!';
+
 void showException({
   required BuildContext context,
   required String method,
   required Object exception,
+  StackTrace? stackTrace,
 }) {
-  AppLogger.I().error(method, exception, StackTrace.current);
-  AppToastMessages(_message(context, exception), isError: true).show(context);
+  AppLogger.I().error(method, exception, stackTrace ?? StackTrace.current);
+
+  AppToastMessages(
+    handleErrorMessage(context, exception),
+    isError: true,
+  ).show(context);
 }
 
-String _message(BuildContext context, Object? exception) {
+String handleErrorMessage(BuildContext context, Object? exception) {
   if (exception is String) {
     return exception;
   }
@@ -36,5 +43,5 @@ String _message(BuildContext context, Object? exception) {
     }
   }
 
-  return 'Houve um erro aqui, tente novamente mais tarde!';
+  return defaultErrorMessage;
 }
