@@ -21,8 +21,13 @@ extension ContextExtensions on BuildContext {
   /// Returns same as MediaQuery.of(context).height
   double get heightPx => sizePx.height;
 
-  void showToastError(Object exception, [String? method]) {
-    showException(context: this, method: method ?? 'showToastError', exception: exception);
+  void showToastError(Object exception, {StackTrace? stackTrace, String? method}) {
+    showException(
+      context: this,
+      method: method ?? 'showToastError',
+      exception: exception,
+      stackTrace: stackTrace,
+    );
   }
 
   void showToast(String message) {
