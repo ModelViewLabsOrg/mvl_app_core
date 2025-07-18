@@ -8,8 +8,12 @@ const gapXL = SizedBox.square(dimension: AppDimens.kPaddingXL);
 const padS = EdgeInsets.all(AppDimens.kPaddingS);
 const padM = EdgeInsets.all(AppDimens.kPaddingM);
 const padDefault = EdgeInsets.all(AppDimens.kDefaultPadding);
-const padHorizontal = EdgeInsets.symmetric(horizontal: AppDimens.kDefaultPadding);
+const padHorizontal = EdgeInsets.symmetric(
+  horizontal: AppDimens.kDefaultPadding,
+);
 const padVertical = EdgeInsets.symmetric(vertical: AppDimens.kDefaultPadding);
+
+const empty = SizedBox();
 
 class AppDimens {
   AppDimens._();
