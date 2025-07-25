@@ -1,13 +1,27 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:mvl_app_core/extensions/flutter_ext/context_extension.dart';
 
 class Avatar extends StatelessWidget {
-  const Avatar(this.profileUrl, {super.key, this.placeholderIcon = Icons.image});
+  Avatar({
+    String? profileUrl,
+    Uint8List? file,
+    super.key,
+    this.placeholderIcon = Icons.image,
+  }) : _image = profileUrl != null
+           ? NetworkImage(profileUrl)
+           : file != null
+           ? MemoryImage(file)
+           : null,
+       assert(
+         (profileUrl == null && file != null) || (profileUrl != null && file == null),
+         'Only one must be provide: profile url or file',
+       );
 
-  final String? profileUrl;
   final IconData placeholderIcon;
 
-  NetworkImage? get _image => profileUrl == null ? null : NetworkImage(profileUrl!);
+  final ImageProvider? _image;
 
   @override
   Widget build(BuildContext context) {
