@@ -1,6 +1,6 @@
 name: mvl_app_core
 description: "An App Core features for every app"
-version: 1.1.7
+version: 1.2.1
 homepage: https://github.com/ModelViewLabsOrg/mvl_app_core.git
 
 publish_to: none
@@ -56,6 +56,8 @@ dependencies:
   font_awesome_flutter: any
   date_field: any
   flutter_riverpod: any
+  ulid: ^2.0.1
+  nanoid: ^1.0.0
 
 dev_dependencies:
   flutter_test:
