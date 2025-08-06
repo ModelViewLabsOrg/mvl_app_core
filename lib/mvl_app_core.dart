@@ -7,3 +7,4 @@ export 'package:mvl_app_core/utils/json.dart';
 
 export 'app_logger.dart';
 export 'app_tracking.dart';
+export 'utils/random_generator.dart';
