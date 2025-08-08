@@ -58,6 +58,8 @@ extension StringExt on String {
   }
 
   String normalizeEmail() => EmailValidator(this).normalize();
+
+  DateTime fromTzToLocalDate() => DateTime.parse(this).toLocal();
 }
 
 extension StringNullableExt on String? {
