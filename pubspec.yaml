@@ -46,7 +46,7 @@ dependencies:
     #   ref: proposal
   jiffy: any
   url_launcher: any
-  flutter_secure_storage: ^10.0.0-beta.4
+  flutter_secure_storage: ^9.2.4
   shared_preferences: any
   overlay_notification: any
   remove_emoji: any

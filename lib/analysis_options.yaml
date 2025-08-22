@@ -17,6 +17,8 @@ analyzer:
     missing_return: error
     record_literal_one_positional_no_trailing_comma: error
 
+    # inference_failure_on_function_invocation: ignore
+    # avoid_dynamic_calls: ignore
     # close_sinks: ignore
     # deprecated_member_use_from_same_package: ignore
     # public_member_api_docs: ignore
