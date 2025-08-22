@@ -1,6 +1,6 @@
 name: mvl_app_core
 description: "An App Core features for every app"
-version: 1.2.1
+version: 1.2.2
 homepage: https://github.com/ModelViewLabsOrg/mvl_app_core.git
 
 publish_to: none
@@ -9,7 +9,7 @@ module:
   androidX: true
 
 environment:
-  sdk: ^3.8.0
+  sdk: ^3.9.0
 
 dependencies:
   flutter:

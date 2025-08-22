@@ -71,16 +71,15 @@ class MaskTextInputFormatter implements TextInputFormatter {
       _type = type;
     }
     _calcMaskLength();
-    TextEditingValue? targetValue = newValue;
-    if (targetValue == null) {
+    if (newValue == null) {
       final String unmaskedText = getUnmaskedText();
-      targetValue = TextEditingValue(
+      newValue = TextEditingValue(
         text: unmaskedText,
         selection: TextSelection.collapsed(offset: unmaskedText.length),
       );
     }
     clear();
-    return formatEditUpdate(TextEditingValue.empty, targetValue);
+    return formatEditUpdate(TextEditingValue.empty, newValue);
   }
 
   /// Get current mask

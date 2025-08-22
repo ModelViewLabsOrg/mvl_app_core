@@ -240,15 +240,15 @@ class AppTracking {
       ),
     );
 
-    final String safeEventName = eventName; //.cleanLimit(kEventNameMaxLength);
+    // final String safeEventName = eventName; //.cleanLimit(kEventNameMaxLength);
 
-    unawaited(_analytics.logEvent(name: safeEventName, parameters: parameters));
+    unawaited(_analytics.logEvent(name: eventName, parameters: parameters));
 
     if (triggerInApp) {
-      _triggerEvent(safeEventName);
+      _triggerEvent(eventName);
     }
 
-    _aptabaseTrackEvent(safeEventName, parameters);
+    _aptabaseTrackEvent(eventName, parameters);
   }
 
   void beginCheckout(int value, List<TrackingItem>? items) {

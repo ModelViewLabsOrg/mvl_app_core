@@ -11,14 +11,16 @@ analyzer:
     strict-raw-types: true
   errors:
     always_use_package_imports: error
-    close_sinks: ignore
-    deprecated_member_use_from_same_package: ignore
-    invalid_annotation_target: ignore
     library_private_types_in_public_api: ignore
+    invalid_annotation_target: ignore
     missing_required_param: error
     missing_return: error
-    public_member_api_docs: ignore
     record_literal_one_positional_no_trailing_comma: error
+
+    # close_sinks: ignore
+    # deprecated_member_use_from_same_package: ignore
+    # public_member_api_docs: ignore
+    # use_null_aware_elements: ignore
 
   exclude:
     - "**.mocks.dart"
@@ -211,7 +213,7 @@ linter:
     - specify_nonobvious_local_variable_types
     - specify_nonobvious_property_types
     - strict_top_level_inference
-    # - switch_on_type #"'switch_on_type' is not a recognized lint rule.\nTry using the name of a recognized lint rule.",
+    - switch_on_type
     - test_types_in_equals
     - throw_in_finally
     - tighten_type_of_initializing_formals
@@ -247,7 +249,7 @@ linter:
     - unnecessary_string_interpolations
     - unnecessary_this
     - unnecessary_to_list_in_spreads
-    # - unnecessary_unawaited # "'unnecessary_unawaited' is not a recognized lint rule.\nTry using the name of a recognized lint rule.",
+    - unnecessary_unawaited
     - unnecessary_underscores
     - unreachable_from_main
     - unrelated_type_equality_checks
