@@ -16,3 +16,13 @@ class AppException implements Exception {
     return 'AppException: $message${' (Error: $error)'}';
   }
 }
+
+class AppFormError extends AppException {
+  const AppFormError(super.message) : super(error: message);
+
+  @override
+  bool get shouldLogAsError => false;
+
+  @override
+  String toString() => 'AppFormError: $message';
+}
