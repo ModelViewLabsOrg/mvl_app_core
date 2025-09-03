@@ -14,6 +14,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   intl: any
   package_info_plus: any
   path: any
@@ -58,6 +59,7 @@ dependencies:
   flutter_riverpod: any
   ulid: ^2.0.1
   nanoid: ^1.0.0
+  universal_io: ^2.2.2
 
 dev_dependencies:
   flutter_test:

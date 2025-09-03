@@ -26,7 +26,7 @@ class AppAnalyticsUser extends SentryUser {
 }
 
 class TrackingItem {
-  TrackingItem(this.id, this.name, {this.value, this.currency = 'BRL'});
+  const TrackingItem(this.id, this.name, {this.value, this.currency = 'BRL'});
 
   final int id;
   final String name;
@@ -50,6 +50,13 @@ class TrackingItem {
 class AppTracking {
   AppTracking._internal();
   static final _instance = AppTracking._internal();
+
+  static const kEventNameMaxLength = 40;
+
+  late final AppConfigValues _config;
+
+  FirebaseAnalytics get _analytics => FirebaseAnalytics.instance;
+  Aptabase get _aptabase => Aptabase.instance;
 
   Future<void> init(AppConfigValues config) async {
     _config = config;
@@ -82,6 +89,7 @@ class AppTracking {
       options
         ..debug = kDebugMode
         ..dsn = _config.sentryConfig.dsnRemote.getString()
+        ..release = AppVersion.I().versionStr
         ..environment = _config.env.name
         ..sampleRate = rate
         ..tracesSampleRate = rate
@@ -92,13 +100,6 @@ class AppTracking {
 
     AppLogger.I().debug('Sentry ok!');
   }
-
-  static const kEventNameMaxLength = 40;
-
-  late final AppConfigValues _config;
-
-  FirebaseAnalytics get _analytics => FirebaseAnalytics.instance;
-  Aptabase get _aptabase => Aptabase.instance;
 
   // https://amplitude.com/docs/sdks/analytics/flutter/flutter-sdk-4-0
   // https://posthog.com/docs/libraries/flutter
