@@ -4,8 +4,6 @@ import 'package:mvl_app_core/mvl_app_core.dart';
 import 'package:mvl_app_core/utils/show_exception_alert_dialog.dart';
 
 extension AsyncValueUI on AsyncValue<dynamic> {
-  bool get isLoading => this is AsyncLoading<dynamic>;
-
   void showAlertDialogOnError(BuildContext context, [String? method]) {
     final Object? error = this.error;
 
