@@ -1,6 +1,6 @@
 name: mvl_app_core
 description: "An App Core features for every app"
-version: 1.2.3
+version: 1.2.4
 homepage: https://github.com/ModelViewLabsOrg/mvl_app_core.git
 
 publish_to: none
@@ -9,54 +9,53 @@ module:
   androidX: true
 
 environment:
-  sdk: ^3.9.0
+  sdk: ^3.9.2
 
 dependencies:
   flutter:
     sdk: flutter
 
-  intl: any
-  package_info_plus: any
-  path: any
-  async: any
-  badges: any
-  clock: any
-  collection: any
-  device_info_plus: any
-  timezone: any
-  flutter_timezone: any
-  equatable: any
-  share_plus: any
-  talker_flutter: ^4.7.9
-  enum_to_string: any
-  version: any
+  intl: ^0.20.2
+  package_info_plus: ^9.0.0
+  path: ^1.9.1
+  async: ^2.13.0
+  badges: ^3.1.2
+  clock: ^1.1.2
+  collection: ^1.19.1
+  device_info_plus: ^12.1.0
+  timezone: ^0.10.1
+  flutter_timezone: ^4.1.1
+  equatable: ^2.0.7
+  share_plus: ^12.0.0
+  talker_flutter: ^5.0.1
+  version: ^3.0.2
 
-  firebase_analytics: any
-  firebase_remote_config: any
-  firebase_crashlytics: any
-  firebase_core: any
-  firebase_in_app_messaging: any
-  firebase_messaging: any
+  firebase_analytics: ^12.0.1
+  firebase_remote_config: ^6.0.1
+  firebase_crashlytics: ^5.0.1
+  firebase_core: ^4.1.0
+  firebase_in_app_messaging: ^0.9.0
+  firebase_messaging: ^16.0.1
 
-  uuid: any
-  url_strategy: any
-  sentry_flutter: any
-  aptabase_flutter: any
-    # git:
-    #   url: https://github.com/GabrielRozendo/aptabase_flutter
-    #   ref: proposal
-  jiffy: any
-  url_launcher: any
-  flutter_secure_storage: ^9.2.4
-  shared_preferences: any
-  overlay_notification: any
-  remove_emoji: any
-  diacritic: any
-  html: any
-  in_app_review: any
-  font_awesome_flutter: any
-  date_field: any
-  flutter_riverpod: any
+  uuid: ^4.5.1
+  url_strategy: ^0.3.0
+  sentry_flutter: ^9.6.0
+  aptabase_flutter: #^0.4.1
+    git:
+      url: https://github.com/GabrielRozendo/aptabase_flutter
+      ref: main
+  jiffy: ^6.4.3
+  url_launcher: ^6.3.2
+  flutter_secure_storage: ^10.0.0-beta.4
+  shared_preferences: ^2.5.3
+  overlay_notification: ^23.5.12
+  remove_emoji: ^0.0.10
+  diacritic: ^0.1.6
+  html: ^0.15.6
+  in_app_review: ^2.0.11
+  font_awesome_flutter: ^10.10.0
+  date_field: ^6.0.3
+  flutter_riverpod: ^3.0.0
   ulid: ^2.0.1
   nanoid: ^1.0.0
   universal_io: ^2.2.2

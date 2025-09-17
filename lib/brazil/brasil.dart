@@ -1,5 +1,3 @@
-import 'package:enum_to_string/enum_to_string.dart';
-
 enum BrasilState {
   ac,
   al,
@@ -30,8 +28,7 @@ enum BrasilState {
   to,
 }
 
-BrasilState stateFromJson(String value) =>
-    EnumToString.fromString(BrasilState.values, value.toLowerCase())!;
+BrasilState stateFromJson(String value) => BrasilState.values.byName(value);
 
 extension BrasilStateExt on BrasilState {
   String get state => Brasil.listStates[this] ?? '';
