@@ -5,19 +5,23 @@ const gapS = SizedBox.square(dimension: AppDimens.kPaddingS);
 const gapM = SizedBox.square(dimension: AppDimens.kPaddingM);
 const gapXL = SizedBox.square(dimension: AppDimens.kPaddingXL);
 
+const gapSliver = SliverToBoxAdapter(child: gap);
+
 const padS = EdgeInsets.all(AppDimens.kPaddingS);
 const padM = EdgeInsets.all(AppDimens.kPaddingM);
 const padDefault = EdgeInsets.all(AppDimens.kDefaultPadding);
-const padHorizontal = EdgeInsets.symmetric(
-  horizontal: AppDimens.kDefaultPadding,
-);
+const padHorizontal = EdgeInsets.symmetric(horizontal: AppDimens.kDefaultPadding);
 const padVertical = EdgeInsets.symmetric(vertical: AppDimens.kDefaultPadding);
 
-const empty = SizedBox();
+const marginDefault = EdgeInsets.symmetric(
+  horizontal: AppDimens.kDefaultPadding,
+  vertical: AppDimens.kPaddingM,
+);
+
+const emptyBox = SizedBox.shrink();
+const emptyBoxExpanded = Expanded(child: emptyBox);
 
 class AppDimens {
-  AppDimens._();
-
   static const double kDefaultPadding = kPaddingL;
 
   // Padding
