@@ -4,7 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mvl_app_core/app_logger.dart';
-import 'package:mvl_app_core/app_tracking.dart';
+import 'package:mvl_app_core/tracking/app_tracking.dart';
 import 'package:mvl_app_core/utils/device_info/device_info.dart';
 import 'package:overlay_notification/overlay_notification.dart';
 

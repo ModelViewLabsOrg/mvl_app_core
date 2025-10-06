@@ -26,9 +26,11 @@ class AppConfigValues {
     required this.env,
     required this.sentryConfig,
     required this.aptabaseKey,
+    required this.posthogKey,
     required this.appStoreId,
     required this.playStoreId,
     this.aptabaseHost = 'https://aptabase.modelviewlabs.com',
+    this.posthogHost = 'https://eu.i.posthog.com',
     this.trackingEnabled = !kDebugMode,
     this.currency = 'BRL',
   });
@@ -38,6 +40,9 @@ class AppConfigValues {
   final AppSentryConfig sentryConfig;
   final String aptabaseKey;
   final String aptabaseHost;
+
+  final String? posthogKey;
+  final String posthogHost;
 
   final String playStoreId;
   final String appStoreId;

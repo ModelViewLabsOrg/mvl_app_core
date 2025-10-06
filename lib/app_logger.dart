@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:mvl_app_core/app_tracking.dart';
+import 'package:mvl_app_core/tracking/app_tracking.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 AppLogger get appLogger => AppLogger.I();

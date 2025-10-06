@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mvl_app_core/app_tracking.dart';
 import 'package:mvl_app_core/extensions/bool_ext.dart';
+import 'package:mvl_app_core/tracking/app_tracking.dart';
 import 'package:mvl_app_core/utils/device_info/device_info.dart';
 import 'package:mvl_app_core/version_handler/version_alert_localization.dart';
 import 'package:mvl_app_core/widgets/app_dimens.dart';

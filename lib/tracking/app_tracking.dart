@@ -11,41 +11,18 @@ import 'package:mvl_app_core/app_config_values.dart';
 import 'package:mvl_app_core/app_logger.dart';
 import 'package:mvl_app_core/app_remote_config.dart';
 import 'package:mvl_app_core/extensions/num_extension.dart';
+import 'package:mvl_app_core/tracking/tracking_item.dart';
+import 'package:mvl_app_core/tracking/tracking_user.dart';
 import 'package:mvl_app_core/utils/app_version.dart';
 import 'package:mvl_app_core/utils/json.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 AppTracking get tracking => AppTracking._instance;
 
-typedef AnalyticsParameters = JsonString;
-
-class AppAnalyticsUser extends SentryUser {
-  AppAnalyticsUser({required super.id, super.email, super.name, super.data});
-}
-
-class TrackingItem {
-  const TrackingItem(this.id, this.name, {this.value, this.currency = 'BRL'});
-
-  final int id;
-  final String name;
-  final int? value;
-  final String currency;
-
-  AnalyticsEventItem get analytics => AnalyticsEventItem(
-    itemId: id.toString(),
-    itemName: name,
-    currency: value == null ? null : currency,
-    price: value?.amountToDouble(),
-  );
-
-  Map<String, String> get properties => <String, String>{
-    'id': id.toString(),
-    'name': name,
-    'value': (value ?? 0).toString(),
-  };
-}
+typedef AnalyticsParameters = Map<String, Object>;
 
 class AppTracking {
   AppTracking._internal();
@@ -57,6 +34,7 @@ class AppTracking {
 
   FirebaseAnalytics get _analytics => FirebaseAnalytics.instance;
   Aptabase get _aptabase => Aptabase.instance;
+  Posthog? get _posthog => _config.posthogKey == null ? null : Posthog();
 
   Future<void> init(AppConfigValues config) async {
     _config = config;
@@ -64,6 +42,7 @@ class AppTracking {
     await Future.wait(<Future<void>>[
       _analytics.setAnalyticsCollectionEnabled(config.trackingEnabled),
       _initSentry(),
+      _initPosthog(),
       Aptabase.init(
         _config.aptabaseKey,
         InitOptions(host: _config.aptabaseHost),
@@ -101,6 +80,23 @@ class AppTracking {
     AppLogger.I().debug('Sentry ok!');
   }
 
+  Future<void> _initPosthog() async {
+    final String? posthogKey = _config.posthogKey;
+    if (posthogKey != null) {
+      await Posthog().setup(
+        PostHogConfig(posthogKey)
+          ..host = _config.posthogHost
+          ..debug = kDebugMode
+          ..captureApplicationLifecycleEvents = false
+          ..surveys = false
+          ..sessionReplay = false
+          ..flushAt = 1,
+      );
+    }
+
+    AppLogger.I().debug('Posthog ${posthogKey == null ? 'not configured' : 'ok'}');
+  }
+
   // https://amplitude.com/docs/sdks/analytics/flutter/flutter-sdk-4-0
   // https://posthog.com/docs/libraries/flutter
   // https://github.com/stevenosse/openpanel_flutter
@@ -119,6 +115,7 @@ class AppTracking {
       FirebaseAnalyticsObserver(analytics: _analytics),
       SentryNavigatorObserver(),
       TalkerRouteObserver(AppLogger.I().talker),
+      if (_config.posthogKey != null) PosthogObserver(),
     ];
   }
 
@@ -135,12 +132,17 @@ class AppTracking {
     unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'open')));
 
     _aptabaseTrackEvent('app_open');
+    _posthogTrackEvent('app_open');
     unawaited(_analytics.logAppOpen());
     _triggerEvent('appOpen');
   }
 
   void _aptabaseTrackEvent(String eventName, [Json? props]) {
     unawaited(_aptabase.trackEvent(eventName, props));
+  }
+
+  void _posthogTrackEvent(String eventName, [Map<String, Object>? props]) {
+    unawaited(_posthog?.capture(eventName: eventName, properties: props));
   }
 
   Future<void> clearUser() async {
@@ -150,6 +152,8 @@ class AppTracking {
     if (!kIsWeb) {
       await _analytics.resetAnalyticsData();
     }
+
+    await _posthog?.reset();
 
     _resetDefaultEventParams();
   }
@@ -161,6 +165,31 @@ class AppTracking {
 
     await _analytics.setUserId(id: userId);
     await _analytics.logLogin();
+
+    if (userId == null) {
+      await _posthog?.reset();
+    } else {
+      final userProperties = <String, Object>{};
+      if (user.email != null) {
+        userProperties['email'] = user.email ?? '';
+      }
+      if (user.name != null) {
+        userProperties['name'] = user.name ?? '';
+      }
+
+      for (final MapEntry<String, dynamic> e in user.data?.entries ?? []) {
+        final dynamic value = e.value;
+        if (value is Object) {
+          userProperties[e.key] = value;
+        }
+      }
+
+      await _posthog?.identify(
+        userId: userId,
+        userPropertiesSetOnce: userProperties,
+      );
+    }
+
     _triggerEvent('login');
 
     if (!kIsWeb && userId != null) {
@@ -178,6 +207,7 @@ class AppTracking {
     final properties = <String, String>{'method': signUpMethod};
 
     _aptabaseTrackEvent('register', properties);
+    _posthogTrackEvent('register', properties);
 
     _triggerEvent('signUp');
   }
@@ -228,7 +258,7 @@ class AppTracking {
       'Event name must be at least 3 characters long',
     );
 
-    final Map<String, String> parameters = (customParams ?? <String, String>{})
+    final AnalyticsParameters parameters = (customParams ?? AnalyticsParameters())
       ..addAll(_eventsParameters);
 
     unawaited(
@@ -250,6 +280,7 @@ class AppTracking {
     }
 
     _aptabaseTrackEvent(eventName, parameters);
+    _posthogTrackEvent(eventName, parameters);
   }
 
   void beginCheckout(int value, List<TrackingItem>? items) {
@@ -272,6 +303,7 @@ class AppTracking {
     );
 
     _aptabaseTrackEvent('checkout', parameters);
+    _posthogTrackEvent('checkout', parameters);
 
     unawaited(
       _analytics.logBeginCheckout(
@@ -300,6 +332,7 @@ class AppTracking {
     );
 
     _aptabaseTrackEvent('compra', parameters);
+    _posthogTrackEvent('compra', parameters);
 
     unawaited(
       _analytics.logPurchase(
@@ -322,6 +355,7 @@ class AppTracking {
     final props = <String, String>{'lista': listName, 'item': item.name}..addAll(_eventsParameters);
 
     _aptabaseTrackEvent(eventName, props);
+    _posthogTrackEvent(eventName, props);
 
     unawaited(
       _analytics.logSelectItem(
@@ -344,6 +378,7 @@ class AppTracking {
     }..addAll(_eventsParameters);
 
     _aptabaseTrackEvent(eventName, props);
+    _posthogTrackEvent(eventName, props);
 
     unawaited(
       _analytics.logShare(contentType: contentType, itemId: id, method: method),

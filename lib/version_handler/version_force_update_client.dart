@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:mvl_app_core/app_logger.dart';
-import 'package:mvl_app_core/app_tracking.dart';
+import 'package:mvl_app_core/tracking/app_tracking.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:version/version.dart';
 
