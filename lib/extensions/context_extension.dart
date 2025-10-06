@@ -33,4 +33,18 @@ extension ContextExtensions on BuildContext {
   void showToast(String message) {
     AppToastMessages(message).show(this);
   }
+
+  void unfocus() {
+    try {
+      FocusScope.of(this).unfocus();
+      final FocusScopeNode currentScope = FocusScope.of(this);
+      if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+        FocusManager.instance.primaryFocus?.unfocus();
+      }
+    } catch (_) {}
+  }
+
+  void requestFocus(FocusNode node) {
+    FocusScope.of(this).requestFocus(node);
+  }
 }

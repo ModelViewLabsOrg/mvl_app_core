@@ -40,6 +40,8 @@ class EmailValidator {
 
     return _emailRegex.hasMatch(value);
   }
+
+  String? validate() => isValid() ? null : 'E-mail inválido';
 }
 
 extension EmailValidatorExt on EmailValidator {

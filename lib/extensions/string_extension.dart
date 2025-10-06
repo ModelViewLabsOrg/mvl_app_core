@@ -103,6 +103,24 @@ extension StringNullableExt on String? {
 
   String toPhoneServer() => reallyLength() == 0 ? '' : '+55${onlyNumbers()}';
 
+  String toPhoneFormatted() {
+    if (reallyLength() == 0) {
+      return '';
+    }
+
+    final String numbers = onlyNumbers();
+    if (numbers.length < 11) {
+      return numbers;
+    }
+
+    final String ddd = numbers.substring(0, 2);
+    final String phone = numbers.substring(2);
+
+    final parseIndex = phone.length == 9 ? 5 : 4;
+
+    return '($ddd) ${phone.substring(0, parseIndex)}-${phone.substring(5)}';
+  }
+
   String toZipCodeFormatted() {
     final value = this;
     if (value == null) {

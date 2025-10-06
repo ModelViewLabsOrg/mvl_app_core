@@ -53,4 +53,9 @@ class AppDimens {
       offset: const Offset(2, 4),
     ),
   ];
+
+  static const avatarUploadSize = 720.0;
+  static const avatarUploadMaxHeight = 360;
+  static const avatarUploadMaxWidth = 3600;
+  static const avatarUploadQuality = 100;
 }
