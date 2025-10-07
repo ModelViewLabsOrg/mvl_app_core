@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:aptabase_flutter/aptabase_flutter.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -49,7 +50,7 @@ class AppTracking {
       ),
     ]);
 
-    if (!kIsWeb) {
+    if (!kIsWeb && !Platform.isMacOS) {
       await FirebaseInAppMessaging.instance.setAutomaticDataCollectionEnabled(
         config.trackingEnabled,
       );
@@ -94,7 +95,9 @@ class AppTracking {
       );
     }
 
-    AppLogger.I().debug('Posthog ${posthogKey == null ? 'not configured' : 'ok'}');
+    AppLogger.I().debug(
+      'Posthog ${posthogKey == null ? 'not configured' : 'ok'}',
+    );
   }
 
   // https://amplitude.com/docs/sdks/analytics/flutter/flutter-sdk-4-0

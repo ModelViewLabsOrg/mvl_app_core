@@ -25,7 +25,14 @@ class AppErrorHandler {
     ErrorWidget.builder = (details) {
       return Scaffold(
         appBar: AppBar(backgroundColor: Colors.red, title: const Text('An error occurred')),
-        body: Center(child: Text(details.toString())),
+        body: Center(
+          child: Column(
+            children: [
+              Text('Error: ${details.exceptionAsString()}'),
+              Text(details.summary.toString()),
+            ],
+          ),
+        ),
       );
     };
   }

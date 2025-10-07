@@ -69,8 +69,8 @@ abstract class AppSetupBase {
       tz.Location location;
 
       try {
-        final String currentLocation = await FlutterTimezone.getLocalTimezone();
-        location = tz.getLocation(currentLocation);
+        final TimezoneInfo localTimezone = await FlutterTimezone.getLocalTimezone();
+        location = tz.getLocation(localTimezone.identifier);
       } catch (e, s) {
         AppLogger.I().error('AppSetup Set Location error', e, s);
         location = tz.getLocation('UTC');
