@@ -132,4 +132,22 @@ extension StringNullableExt on String? {
 
   String onlyNumbers() => this?.replaceAll(RegExp('[^0-9]+'), '') ?? '';
   int onlyNumbersLength() => onlyNumbers().reallyLength();
+
+  String? maskEmail() {
+    final value = this;
+
+    if (value == null) {
+      return null;
+    }
+
+    final List<String> parts = value.split('@');
+    if (parts.length != 2) {
+      return value;
+    }
+
+    final String local = parts[0];
+    final String domain = parts[1];
+
+    return '${local.substring(0, 2)}***@$domain';
+  }
 }
