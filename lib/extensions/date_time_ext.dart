@@ -33,8 +33,8 @@ extension DateTimeExt on DateTime {
   /// Outubro 2022
   // String monthYear() => '${mmmm()} $year';
 
-  /// 31 / Out
-  // String toDDMM() => '${dd()} / ${mmm()}';
+  // / 31 / Out
+  String toDDMM() => '${dd()} / ${mmm()}';
 
   /// 31 de Outubro
   String mmmmd() => DateFormat.MMMMd().format(this); //'${dd()} de ${mmmm()}';
