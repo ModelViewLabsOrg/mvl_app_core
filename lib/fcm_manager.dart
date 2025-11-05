@@ -30,6 +30,8 @@ class FCMManager {
   String? _token;
   String? get token => _token;
 
+  void Function(String token)? onTokenRefresh;
+
   Future<bool> _isAuthorizaded() async {
     final NotificationSettings settings = await _messaging.getNotificationSettings();
     return settings.authorizationStatus == AuthorizationStatus.authorized;
@@ -101,6 +103,8 @@ class FCMManager {
   void _onTokenRefresh(String token) {
     _token = token;
     AppLogger.I().info('>> FCM NewToken: $token');
+
+    onTokenRefresh?.call(token);
   }
 
   void _onError(Object e, StackTrace s) {
