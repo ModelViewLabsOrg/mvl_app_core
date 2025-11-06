@@ -3,23 +3,33 @@ import 'package:mvl_app_core/utils/show_exception_alert_dialog.dart';
 import 'package:mvl_app_core/widgets/app_toast_message.dart';
 
 extension ContextExtensions on BuildContext {
+  // Returns the MediaQuery
+  MediaQueryData get mq => MediaQuery.of(this);
+  MediaQueryData get media => MediaQuery.of(this);
+
   ThemeData get theme => Theme.of(this);
   TextTheme get textTheme => theme.textTheme;
 
-  // Returns the MediaQuery
-  MediaQueryData get mq => MediaQuery.of(this);
+  /// Returns same as MediaQuery.of(context).size
+  Size get size => mq.size;
+
+  double get deviceHeight => size.height;
+  double get deviceWidth => size.width;
+
+  double get textScaleFactor => mq.textScaler.scale(1);
+  bool get isTextBig => textScaleFactor > 1.1;
+
+  double get deviceScaleFactor {
+    return switch (deviceWidth) {
+      <= 400 => .85,
+      >= 600 => 1.25,
+      _ => 1,
+    };
+  }
 
   /// Returns if Orientation is landscape
   bool get isLandscape => mq.orientation == Orientation.landscape;
-
-  /// Returns same as MediaQuery.of(context).size
-  Size get sizePx => mq.size;
-
-  /// Returns same as MediaQuery.of(context).size.width
-  double get widthPx => sizePx.width;
-
-  /// Returns same as MediaQuery.of(context).height
-  double get heightPx => sizePx.height;
+  bool get isPortrait => mq.orientation == Orientation.portrait;
 
   void showToastError(Object exception, {StackTrace? stackTrace, String? method}) {
     showException(
