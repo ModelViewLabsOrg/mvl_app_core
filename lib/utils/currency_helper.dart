@@ -19,5 +19,5 @@ class CurrencyHelper {
   }
   // The character  is invisible. Adjust settings
 
-  static String get currencySymbol => NumberFormat.compactSimpleCurrency().currencySymbol;
+  static String get currencySymbol => NumberFormat.compactSimpleCurrency(locale: 'pt_BR').currencySymbol;
 }
