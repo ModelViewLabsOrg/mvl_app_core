@@ -13,27 +13,47 @@ class AppToastAction {
 class AppToastMessages {
   AppToastMessages(
     String message, {
+    String? title,
     AppToastAction? action,
     IconData? iconData,
     bool isError = false,
     bool showCloseIcon = false,
   }) : assert(message.isNotEmpty, 'Message must not be empty'),
        snackBar = SnackBar(
-         content: _content(message, iconData ?? (isError ? Icons.error_outline : null)),
+         content: _content(
+           message,
+           title: title,
+           iconData: iconData ?? (isError ? Icons.error_outline : null),
+         ),
          showCloseIcon: !isError && showCloseIcon,
          action: action?.toToastAction(),
        );
 
-  static Widget _content(String message, IconData? iconData) {
+  static Widget _content(String message, {String? title, IconData? iconData}) {
+    final Widget messageWidget = title == null || title.isEmpty
+        ? Text(message)
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 4),
+              Text(message),
+            ],
+          );
+
     if (iconData == null) {
-      return Text(message);
+      return messageWidget;
     }
 
     return Row(
       children: <Widget>[
         Icon(iconData),
         gapS,
-        Expanded(child: Text(message)),
+        Expanded(child: messageWidget),
       ],
     );
   }

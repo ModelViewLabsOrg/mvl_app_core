@@ -9,6 +9,7 @@ import 'package:mvl_app_core/utils/device_info/device_info.dart';
 import 'package:overlay_notification/overlay_notification.dart';
 
 export 'package:firebase_messaging/firebase_messaging.dart';
+export 'package:mvl_app_core/push_notifications/push_notification_payload.dart';
 
 // Future<void> _setBadge(SharedPreferences prefs, int value) async {
 //   await Future.wait([
@@ -36,13 +37,13 @@ class AppFcmManager {
 
   /// Callback for handling messages (called for background messages and foreground data-only messages)
   void Function(RemoteMessage message)? onMessage;
-  
+
   /// Callback for handling when user taps a notification (deep links)
   void Function(RemoteMessage message)? onMessageOpenedApp;
-  
+
   /// Callback for handling initial message when app is opened from terminated state
   void Function(RemoteMessage message)? onInitialMessage;
-  
+
   void Function(String token)? onTokenRefresh;
 
   Future<bool> _isAuthorizaded() async {
@@ -161,7 +162,7 @@ class AppFcmManager {
 
   void _onMessage(RemoteMessage message) {
     AppLogger.I().info('>> _onMessage (foreground): ${message.toMap()}');
-    
+
     final RemoteNotification? notification = message.notification;
     final Map<String, dynamic> data = message.data;
 
@@ -189,7 +190,7 @@ class AppFcmManager {
 
   void _onMessageOpenedApp(RemoteMessage message) {
     AppLogger.I().info('>> onMessageOpenedApp: $message');
-    
+
     // Call user's callback to handle deep links
     onMessageOpenedApp?.call(message);
   }
@@ -210,7 +211,7 @@ class AppFcmManager {
     final RemoteMessage? initial = await _messaging.getInitialMessage();
     if (initial != null) {
       AppLogger.I().info('>> initial: ${initial.toMap()}');
-      
+
       // Call user's callback to handle deep links from terminated state
       onInitialMessage?.call(initial);
     }
