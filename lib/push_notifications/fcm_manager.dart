@@ -34,39 +34,60 @@ class AppFcmManager {
   String? _token;
   String? get token => _token;
 
+  /// Callback for handling messages (called for background messages and foreground data-only messages)
   void Function(RemoteMessage message)? onMessage;
+  
+  /// Callback for handling when user taps a notification (deep links)
+  void Function(RemoteMessage message)? onMessageOpenedApp;
+  
+  /// Callback for handling initial message when app is opened from terminated state
+  void Function(RemoteMessage message)? onInitialMessage;
+  
   void Function(String token)? onTokenRefresh;
 
   Future<bool> _isAuthorizaded() async {
-    final NotificationSettings settings = await _messaging.getNotificationSettings();
-    return settings.authorizationStatus == AuthorizationStatus.authorized;
+    return await status() == AuthorizationStatus.authorized;
   }
 
-  Future<void> init(String? fcmWebToken, {void Function(RemoteMessage message)? onMessage}) async {
+  Future<void> init(
+    String? fcmWebToken, {
+    void Function(RemoteMessage message)? onMessage,
+    void Function(RemoteMessage message)? onMessageOpenedApp,
+    void Function(RemoteMessage message)? onInitialMessage,
+  }) async {
     _fcmWebToken = fcmWebToken;
     this.onMessage = onMessage;
+    this.onMessageOpenedApp = onMessageOpenedApp;
+    this.onInitialMessage = onInitialMessage;
 
     await _setup();
     await _initialMessage();
   }
 
-  Future<void> requestPermission() async {
+  Future<AuthorizationStatus> status() async {
+    final NotificationSettings settings = await _messaging.getNotificationSettings();
+    return settings.authorizationStatus;
+  }
+
+  Future<AuthorizationStatus?> requestPermission() async {
     if (kIsWeb) {
-      return;
+      return null; // TODO: Null indeed?
     }
 
-    NotificationSettings settings = await _messaging.getNotificationSettings();
-    final AuthorizationStatus status = settings.authorizationStatus;
-    if (status != AuthorizationStatus.notDetermined) {
-      return;
+    AuthorizationStatus authorizationStatus = await status();
+    if (authorizationStatus != AuthorizationStatus.notDetermined) {
+      return authorizationStatus;
     }
-    settings = await _messaging.requestPermission();
+
+    authorizationStatus = (await _messaging.requestPermission()).authorizationStatus;
 
     if (DeviceInfo.isApple) {
-      tracking.event('notifications_${settings.authorizationStatus}');
+      tracking.event('notifications_$authorizationStatus');
     }
 
     await _setup();
+
+    return authorizationStatus;
   }
 
   Future<void> _setup() async {
@@ -78,7 +99,9 @@ class AppFcmManager {
     }
 
     try {
-      _token = await _messaging.getToken(vapidKey: kIsWeb ? _fcmWebToken : null);
+      _token = await _messaging.getToken(
+        vapidKey: kIsWeb ? _fcmWebToken : null,
+      );
     } catch (e) {
       AppLogger.I().info('Could not get token: $e');
     }
@@ -94,7 +117,10 @@ class AppFcmManager {
     }
 
     try {
-      FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenedApp, onError: _onError);
+      FirebaseMessaging.onMessageOpenedApp.listen(
+        _onMessageOpenedApp,
+        onError: _onError,
+      );
     } catch (e) {
       /* Dont do anything */
     }
@@ -134,15 +160,12 @@ class AppFcmManager {
   }
 
   void _onMessage(RemoteMessage message) {
-    AppLogger.I().info('>> _onMessage: ${message.toMap()}');
-    //  if (message.data['type'] == 'chat') {
-    //   Navigator.pushNamed(context, '/chat',
-    //     arguments: ChatArguments(message),
-    //   );
-    // }
+    AppLogger.I().info('>> _onMessage (foreground): ${message.toMap()}');
+    
     final RemoteNotification? notification = message.notification;
     final Map<String, dynamic> data = message.data;
 
+    // If message has notification payload, show overlay notification
     if (notification != null) {
       AppLogger.I().info(
         'Message also contained a notification: '
@@ -151,16 +174,24 @@ class AppFcmManager {
       _showNotification(notification);
     }
 
+    // Log data payload
     if (data.isNotEmpty) {
       AppLogger.I().info(
         'Message also contained a data: '
         '$data',
       );
     }
+
+    // Call user's callback for data-only messages or to handle additional logic
+    // This allows user to show toast for data-only messages or handle custom logic
+    onMessage?.call(message);
   }
 
   void _onMessageOpenedApp(RemoteMessage message) {
     AppLogger.I().info('>> onMessageOpenedApp: $message');
+    
+    // Call user's callback to handle deep links
+    onMessageOpenedApp?.call(message);
   }
 
   // Future<String?> _fcmToken() async {
@@ -179,7 +210,9 @@ class AppFcmManager {
     final RemoteMessage? initial = await _messaging.getInitialMessage();
     if (initial != null) {
       AppLogger.I().info('>> initial: ${initial.toMap()}');
-      _onMessage(initial);
+      
+      // Call user's callback to handle deep links from terminated state
+      onInitialMessage?.call(initial);
     }
   }
 }
