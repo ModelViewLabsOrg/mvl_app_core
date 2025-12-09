@@ -89,12 +89,12 @@ extension DateTimeExt on DateTime {
 
   /// 2022-10-31T14:58:09.123 or 2022-10-31T14:58:00
   String toServerFormat({bool removeSeconds = false, bool convertUtc = true}) {
-    DateTime date = removeSeconds ? this.removeSeconds() : this;
+    final DateTime date = removeSeconds ? this.removeSeconds() : this;
     if (convertUtc) {
-      date = date.toUtc();
+      return date.toUtc().toIso8601String().replaceAll('Z', '');
     }
 
-    return date.toIso8601String().replaceAll('Z', '');
+    return date.toIso8601String();
   }
 
   // String toServerDTWithTz({bool removeSeconds = true}) {
