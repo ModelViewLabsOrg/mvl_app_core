@@ -57,7 +57,7 @@ extension DateTimeExt on DateTime {
   String yMd() => dateFullShort();
 
   /// 31/10/22 13:58
-  // String dateTimeShort() => '${dateFullShort()} ${onlyTime()}';
+  String dateTimeShort() => '${dateFullShort()} ${onlyTime()}';
 
   /// 31/Outubro/2022 13:58
   // String dateTimeFull() => '${dateFull()} ${onlyTime()}';
