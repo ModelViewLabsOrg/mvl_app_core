@@ -39,6 +39,9 @@ extension DateTimeExt on DateTime {
   /// 31 de Outubro
   String mmmmd() => DateFormat.MMMMd().format(this); //'${dd()} de ${mmmm()}';
 
+  /// Seg, 31 de Outubro de 2025
+  String dateWithDayAndYear() => '${eee()}, ${mmmmd()} de $year';
+
   /// Seg, 31 de Out
   String dateWithDay() => DateFormat.MMMEd().format(this).capitalizeFirstLetter();
   String mmmed() => dateWithDay();
