@@ -92,12 +92,9 @@ extension DateTimeExt on DateTime {
 
   /// 2022-10-31T14:58:09.123 or 2022-10-31T14:58:00
   String toServerFormat({bool removeSeconds = false, bool convertUtc = true}) {
-    DateTime date = removeSeconds ? this.removeSeconds() : this;
-    if (convertUtc) {
-      date = date.toUtc();
-    }
+    final DateTime date = removeSeconds ? this.removeSeconds() : this;
 
-    return date.toIso8601String().replaceAll('Z', '');
+    return (convertUtc ? date.toUtc() : date).toIso8601String();
   }
 
   // String toServerDTWithTz({bool removeSeconds = true}) {
@@ -161,5 +158,5 @@ extension DateTimeExt on DateTime {
 
   String toDate() => DateFormat('yyyy-MM-dd').format(this);
 
-  DateTime toUtc() => DateTime.utc(year, month, day, hour, minute, second);
+  DateTime forceToUtc() => DateTime.utc(year, month, day, hour, minute, second);
 }

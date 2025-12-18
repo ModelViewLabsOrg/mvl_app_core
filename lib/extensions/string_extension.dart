@@ -142,12 +142,26 @@ extension StringNullableExt on String? {
 
     final List<String> parts = value.split('@');
     if (parts.length != 2) {
+      return null;
+    }
+
+    final String prefix = parts[0];
+    final String domain = parts[1];
+
+    return '${prefix.firstAndLastChar()}@${domain.firstAndLastChar()}';
+  }
+
+  String firstAndLastChar() {
+    final value = this;
+
+    if (value == null || value.isEmpty) {
+      return '';
+    }
+
+    if (value.length == 1) {
       return value;
     }
 
-    final String local = parts[0];
-    final String domain = parts[1];
-
-    return '${local.substring(0, 2)}***@$domain';
+    return '${value.substring(0, 1)}*****${value.substring(value.length - 1)}';
   }
 }

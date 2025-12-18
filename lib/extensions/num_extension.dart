@@ -9,6 +9,8 @@ extension IntExt on int {
   double amountToDouble() => this / 100;
 }
 
+double jsonToDouble(dynamic value) => (value as num).toDouble();
+
 extension NumExt on num {
   String toPercent({int decimal = 1}) {
     final String value = toStringAsFixed(decimal);
