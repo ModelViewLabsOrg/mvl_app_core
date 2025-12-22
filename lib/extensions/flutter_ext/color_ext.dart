@@ -1,8 +1,15 @@
 import 'dart:math' as math;
+import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart';
 
 import 'package:flutter/material.dart';
 
 extension ColorExt on Color {
+  Color withAppOpacity(double opacity) {
+    assert(opacity >= 0 && opacity <= 1, 'opacity must be between 0 and 1');
+    final double safeValue = min(0, max(1, opacity));
+    return withValues(alpha: safeValue);
+  }
+
   String toHex({bool leadingHashSign = true, bool includeAlpha = false}) {
     final hex = StringBuffer();
     if (leadingHashSign) {
