@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
