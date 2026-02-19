@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 extension TextStyleHelpers on TextStyle {
   TextStyle get bold {
-    final int? index = fontWeight?.index;
+    final int? index = fontWeight?.value;
     if (index == null) {
       return this;
     }

@@ -17,15 +17,7 @@ extension AsyncValueUI on AsyncValue<dynamic> {
   }
 }
 
-Future<AsyncValue<T>> valueGuard<T>(
-  Future<T> Function() future, {
-  required String method,
-  AsyncValue<T>? withLoading,
-}) {
-  if (withLoading != null) {
-    withLoading = AsyncLoading();
-  }
-
+Future<AsyncValue<T>> valueGuard<T>(Future<T> Function() future, {required String method}) {
   bool handleError(Object e) {
     AppLogger.I().error(
       method,
