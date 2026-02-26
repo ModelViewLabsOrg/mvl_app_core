@@ -6,7 +6,7 @@ import 'package:mvl_app_core/utils/validator.dart';
 import 'package:mvl_app_core/utils/validator_email.dart';
 
 class FormValidator {
-  FormValidator(this.value);
+  const FormValidator(this.value);
 
   final String? value;
   static const nameMinChars = 3;
@@ -18,14 +18,14 @@ class FormValidator {
 
   String? email() => EmailValidator(value).isValid() ? null : 'E-mail inválido';
 
-  String? password() {
+  String? password({int minLength = pswMinLength, int maxLength = pswMaxLength}) {
     const error = 'Senha inválida. Pelo menos 8 caracteres';
     final String? value = this.value;
     if (value == null) {
       return error;
     }
 
-    if (Validator(value).isPasswordValid()) {
+    if (Validator(value).isPasswordValid(minLength: minLength, maxLength: maxLength)) {
       return null;
     }
 
@@ -189,7 +189,7 @@ class FormValidator {
     if (value == null) {
       return birthDayError;
     }
-    final bool isValid = Validator('').isBirthdayValid(value);
+    final bool isValid = const Validator('').isBirthdayValid(value);
     if (!isValid) {
       return birthDayError;
     }

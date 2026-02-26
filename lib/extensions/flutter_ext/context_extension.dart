@@ -22,6 +22,8 @@ extension ContextExtensions on BuildContext {
   double get heightPx => sizePx.height;
 
   double get textScaleFactor => mq.textScaler.scale(1);
+  double textScaleFactorAjustment(double value) => value * textScaleFactor;
+
   bool get isTextBig => textScaleFactor > 1.1;
 
   double get deviceScaleFactor {
@@ -48,7 +50,11 @@ extension ContextExtensions on BuildContext {
 
   void dismissKeyboard() => FocusManager.instance.primaryFocus?.unfocus();
 
-  void showToastError(Object exception, {StackTrace? stackTrace, String? method}) {
+  void showToastError(
+    Object exception, {
+    StackTrace? stackTrace,
+    String? method,
+  }) {
     showException(
       context: this,
       method: method ?? 'showToastError',

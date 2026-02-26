@@ -4,11 +4,17 @@ import 'package:mvl_app_core/extensions/date_time_ext.dart';
 import 'package:mvl_app_core/extensions/string_extension.dart';
 import 'package:mvl_app_core/utils/validator_form.dart';
 
+const pswMinLength = 8;
+const pswMaxLength = 30;
+
 class Validator {
-  Validator(this.value);
+  const Validator(this.value);
   final String value;
 
-  bool isPasswordValid() => value.length >= 8 && value.length < 30;
+  bool isPasswordValid({
+    int minLength = pswMinLength,
+    int maxLength = pswMaxLength,
+  }) => value.length >= minLength && value.length < maxLength;
 
   bool isAddressValid() => value.reallyLength() > 3;
 

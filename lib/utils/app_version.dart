@@ -88,14 +88,14 @@ class AppVersion {
     final EnvEnum env = AppConfig.env;
 
     if (env.isPrd) {
-      return AppText.titleLarge(context, versionStr);
+      return AppText.titleSmall(context, versionStr);
     }
 
     return Column(
       children: <Widget>[
-        AppText.titleLarge(context, versionFull),
+        AppText.titleSmall(context, versionFull),
         gapM,
-        AppText.titleLarge(context, env.name.toUpperCase()),
+        AppText.titleSmall(context, env.name.toUpperCase()),
       ],
     );
   }
