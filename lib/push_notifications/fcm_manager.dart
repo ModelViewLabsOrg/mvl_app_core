@@ -19,7 +19,7 @@ export 'package:mvl_app_core/push_notifications/push_notification_payload.dart';
 // }
 
 Future<void> onBackgroundMessage(RemoteMessage message) async {
-  AppLogger.I().info('>> background: $message');
+  appLogger.info('>> Firebase FCM background: $message');
 
   AppFcmManager.I().onMessage?.call(message);
 }
@@ -94,7 +94,7 @@ class AppFcmManager {
   Future<void> _setup() async {
     final bool isAuthorized = await _isAuthorizaded();
     if (!isAuthorized) {
-      AppLogger.I().info('>> FirebaseMessaging isNotAuthorized');
+      appLogger.info('>> Firebase FCM isNotAuthorized');
 
       return;
     }
@@ -104,10 +104,14 @@ class AppFcmManager {
         vapidKey: kIsWeb ? _fcmWebToken : null,
       );
     } catch (e) {
-      AppLogger.I().info('Could not get token: $e');
+      appLogger.info('>> Firebase FCM Could not get token: $e');
     }
 
-    AppLogger.I().info('>> FirebaseMessaging instance token id: $token');
+    final String? token = _token;
+    appLogger.info('>> Firebase FCM instance token id: $token');
+    if (token != null) {
+      onTokenRefresh?.call(token);
+    }
 
     try {
       FirebaseMessaging.onMessage.listen(_onMessage);
@@ -135,14 +139,14 @@ class AppFcmManager {
 
   void _onTokenRefresh(String token) {
     _token = token;
-    AppLogger.I().info('>> FCM NewToken: $token');
+    appLogger.info('>> Firebase FCM NewToken: $token');
 
     onTokenRefresh?.call(token);
   }
 
   void _onError(Object e, StackTrace s) {
-    // AppAppLogger.I().error('FirebaseMessaging.onMessageOpenedApp', e, s);
-    AppLogger.I().info('>> onError $e !! $s');
+    // AppappLogger.error('FirebaseMessaging.onMessageOpenedApp', e, s);
+    appLogger.info('>> Firebase FCM onError $e !! $s');
   }
 
   void _showNotification(RemoteNotification notification) {
@@ -161,14 +165,16 @@ class AppFcmManager {
   }
 
   void _onMessage(RemoteMessage message) {
-    AppLogger.I().info('>> _onMessage (foreground): ${message.toMap()}');
+    appLogger.info(
+      '>> Firebase FCM _onMessage (foreground): ${message.toMap()}',
+    );
 
     final RemoteNotification? notification = message.notification;
     final Map<String, dynamic> data = message.data;
 
     // If message has notification payload, show overlay notification
     if (notification != null) {
-      AppLogger.I().info(
+      appLogger.info(
         'Message also contained a notification: '
         '${notification.toMap()}',
       );
@@ -177,7 +183,7 @@ class AppFcmManager {
 
     // Log data payload
     if (data.isNotEmpty) {
-      AppLogger.I().info(
+      appLogger.info(
         'Message also contained a data: '
         '$data',
       );
@@ -189,7 +195,7 @@ class AppFcmManager {
   }
 
   void _onMessageOpenedApp(RemoteMessage message) {
-    AppLogger.I().info('>> onMessageOpenedApp: $message');
+    appLogger.info('>> Firebase FCM onMessageOpenedApp: $message');
 
     // Call user's callback to handle deep links
     onMessageOpenedApp?.call(message);
@@ -210,7 +216,7 @@ class AppFcmManager {
   Future<void> _initialMessage() async {
     final RemoteMessage? initial = await _messaging.getInitialMessage();
     if (initial != null) {
-      AppLogger.I().info('>> initial: ${initial.toMap()}');
+      appLogger.info('>> Firebase FCM initial: ${initial.toMap()}');
 
       // Call user's callback to handle deep links from terminated state
       onInitialMessage?.call(initial);
