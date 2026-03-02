@@ -304,4 +304,14 @@ class FormValidator {
 
     return 'Cep inválido';
   }
+
+  String? amount({int minAmount = 0, int? maxAmount}) {
+    final String? value = this.value;
+
+    if (value == null || !Validator(value).isAmountValid(minAmount, maxAmount)) {
+      return 'Valor inválido';
+    }
+
+    return null;
+  }
 }

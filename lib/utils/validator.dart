@@ -48,4 +48,23 @@ class Validator {
   bool isCPFValid() => CPFHelper(value).isValid();
 
   bool isCNPJValid() => CNPJHelper(value).isValid();
+
+  bool isAmountValid([int minAmount = 0, int? maxAmount = 999999]) {
+    if (value.isEmpty) {
+      return false;
+    }
+
+    for (final String c in value.split('')) {
+      if (int.tryParse(c) == null) {
+        return false;
+      }
+    }
+
+    final int amount = value.toAmount();
+    if (maxAmount != null && amount > maxAmount) {
+      return false;
+    }
+
+    return amount >= minAmount;
+  }
 }
