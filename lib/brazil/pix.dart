@@ -65,7 +65,8 @@ class Pix {
 
     return switch (pixKeyType) {
       PixKeyType.cpf || PixKeyType.cnpj || PixKeyType.telefone => value.onlyNumbers(),
-      PixKeyType.email || PixKeyType.aleatorio => value.trim(),
+      PixKeyType.email => EmailValidator.normalize(value),
+      PixKeyType.aleatorio => value.trim(),
       null => value,
     };
   }
