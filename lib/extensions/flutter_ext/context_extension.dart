@@ -38,6 +38,7 @@ extension ContextExtensions on BuildContext {
     try {
       FocusScope.of(this).unfocus();
       final FocusScopeNode currentScope = FocusScope.of(this);
+
       if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
         FocusManager.instance.primaryFocus?.unfocus();
       }
@@ -48,7 +49,7 @@ extension ContextExtensions on BuildContext {
     FocusScope.of(this).requestFocus(node);
   }
 
-  void dismissKeyboard() => FocusManager.instance.primaryFocus?.unfocus();
+  void dismissKeyboard() => unfocus();
 
   void showToastError(
     Object exception, {

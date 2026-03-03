@@ -22,6 +22,16 @@ class Pix {
 
   final String value;
 
+  bool validate(PixKeyType pixKeyTypeCheck) {
+    return switch (pixKeyTypeCheck) {
+      PixKeyType.cpf => CPFHelper(value).isValid(),
+      PixKeyType.cnpj => CNPJHelper(value).isValid(),
+      PixKeyType.telefone => Validator(value).isPhoneValid(),
+      PixKeyType.email => EmailValidator(value).isValid(),
+      PixKeyType.aleatorio => Validator(value).isUUID(),
+    };
+  }
+
   PixKeyType? get pixKeyType {
     if (value.isReallyEmpty()) {
       return null;
