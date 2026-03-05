@@ -30,7 +30,7 @@ extension DateTimeExt on DateTime {
   // String yMMMM() => '${mmmm()} / $year';
   String yMMMM() => DateFormat.yMMMM().format(this).capitalizeFirstLetter();
 
-  / Outubro 2022
+  // Outubro 2022
   String monthYear() => '${mmmm()} $year';
 
   // / 31 / Out
