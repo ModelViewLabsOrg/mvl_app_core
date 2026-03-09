@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mvl_app_core/utils/show_exception_alert_dialog.dart';
-import 'package:mvl_app_core/widgets/app_toast_message.dart';
 
 extension ContextExtensions on BuildContext {
   ThemeData get theme => Theme.of(this);
@@ -51,20 +49,16 @@ extension ContextExtensions on BuildContext {
 
   void dismissKeyboard() => unfocus();
 
-  void showToastError(
-    Object exception, {
-    StackTrace? stackTrace,
-    String? method,
-  }) {
-    showException(
-      context: this,
-      method: method ?? 'showToastError',
-      exception: exception,
-      stackTrace: stackTrace,
-    );
-  }
-
-  void showToast(String message) {
-    AppToastMessages(message).show(this);
-  }
+  // void showToastError(
+  //   Object exception, {
+  //   StackTrace? stackTrace,
+  //   String? method,
+  // }) {
+  //   showException(
+  //     context: this,
+  //     method: method ?? 'showToastError',
+  //     exception: exception,
+  //     stackTrace: stackTrace,
+  //   );
+  // }
 }

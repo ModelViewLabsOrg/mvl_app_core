@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:mvl_app_core/constants/account_strings.dart';
 import 'package:mvl_app_core/models/server_response.dart';
-import 'package:mvl_app_core/mvl_app_core.dart';
 import 'package:mvl_app_core/mvl_app_core_view.dart';
-import 'package:mvl_app_core/network/exceptions.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:mvl_app_core/utils/show_exception_alert_dialog.dart';
 
 Widget withConstraint(Widget child) {
   return Container(
@@ -54,37 +52,7 @@ Future<void> showSnackbarError(
   Object? error, {
   String customError = StringsCore.genericError,
 }) {
-  if (error is String) {
-    return showSnackbar(context, error, isError: true);
-  }
-
-  var errorMessage = customError;
-  if (error is NetworkException) {
-    final String? userMessage = error.userMessage;
-    if (userMessage != null) {
-      errorMessage = userMessage;
-    }
-  } else if (error is ServerResponse) {
-    errorMessage = error.userMessage;
-  } else if (error is FunctionException) {
-    final dynamic details = error.details;
-    if (details is Json) {
-      final userMessage = details['user_message'] as String?;
-      if (userMessage != null) {
-        errorMessage = userMessage;
-      }
-    }
-  } else if (error is AppException) {
-    final String? userMessage = error.userMessage;
-    if (userMessage != null) {
-      errorMessage = userMessage;
-    }
-  }
-  // else if (error is AuthWeakPasswordException) {
-  //   errorMessage = 'Essa senha é muito fraca, tente usar uma senha mais forte';
-  // }
-
-  return showSnackbar(context, errorMessage, isError: true);
+  return showSnackbar(context, handleErrorMessage(context, error), isError: true);
 }
 
 void dismissKeyboard(BuildContext context) => context.unfocus();
