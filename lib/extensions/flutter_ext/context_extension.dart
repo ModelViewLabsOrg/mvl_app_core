@@ -54,6 +54,10 @@ extension ContextExtensions on BuildContext {
 
   void dismissKeyboard() => unfocus();
 
+  void showToast(String message, {String? title}) {
+    showSnackbar(this, message, title: title).ignore();
+  }
+
   void showError(Object error) {
     showSnackbarError(this, error).ignore();
   }
