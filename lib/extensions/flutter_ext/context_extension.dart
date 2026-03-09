@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mvl_app_core/constants/account_strings.dart';
+import 'package:mvl_app_core/mvl_app_core.dart';
+import 'package:mvl_app_core/utils/show_exception_alert_dialog.dart';
+import 'package:mvl_app_core/widgets/app_toast_message.dart';
+import 'package:mvl_app_core/widgets/base_view.dart';
 
 extension ContextExtensions on BuildContext {
   ThemeData get theme => Theme.of(this);
@@ -49,16 +54,21 @@ extension ContextExtensions on BuildContext {
 
   void dismissKeyboard() => unfocus();
 
-  // void showToastError(
-  //   Object exception, {
-  //   StackTrace? stackTrace,
-  //   String? method,
-  // }) {
-  //   showException(
-  //     context: this,
-  //     method: method ?? 'showToastError',
-  //     exception: exception,
-  //     stackTrace: stackTrace,
-  //   );
-  // }
+  void showError(Object error) {
+    showSnackbarError(this, error).ignore();
+  }
+
+  void logAndShowException({
+    required Object exception,
+    required String method,
+    StackTrace? stackTrace,
+    String customError = StringsCore.genericError,
+  }) {
+    AppLogger.I().error(method, exception, stackTrace ?? StackTrace.current);
+
+    AppToastMessages(
+      handleErrorMessage(this, exception),
+      isError: true,
+    ).show(this);
+  }
 }

@@ -1,15 +1,14 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mvl_app_core/extensions/flutter_ext/context_extension.dart';
 import 'package:mvl_app_core/mvl_app_core.dart';
-import 'package:mvl_app_core/utils/show_exception_alert_dialog.dart';
 
 extension AsyncValueUI on AsyncValue<dynamic> {
   void showAlertDialogOnError(BuildContext context, [String? method]) {
     final Object? error = this.error;
 
     if (error != null) {
-      showException(
-        context: context,
+      context.logAndShowException(
         method: method ?? 'showAlertDialogOnError',
         exception: error,
       );

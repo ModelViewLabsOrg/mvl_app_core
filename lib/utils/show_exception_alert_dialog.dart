@@ -1,31 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mvl_app_core/app_logger.dart';
 import 'package:mvl_app_core/constants/account_strings.dart';
 import 'package:mvl_app_core/models/server_response.dart';
 import 'package:mvl_app_core/network/exceptions.dart';
 import 'package:mvl_app_core/utils/json.dart';
-import 'package:mvl_app_core/widgets/app_toast_message.dart';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 String? Function(BuildContext context, Object? exception) handleException = (_, _) => null;
 
 String defaultErrorMessage = StringsCore.genericError;
-
-void showException({
-  required BuildContext context,
-  required String method,
-  required Object exception,
-  StackTrace? stackTrace,
-  String customError = StringsCore.genericError,
-}) {
-  AppLogger.I().error(method, exception, stackTrace ?? StackTrace.current);
-
-  AppToastMessages(
-    handleErrorMessage(context, exception),
-    isError: true,
-  ).show(context);
-}
 
 String handleErrorMessage(BuildContext context, Object? exception, {String? customMessage}) {
   if (exception == null) {
