@@ -110,7 +110,7 @@ class AppTracking {
       return;
     }
 
-    unawaited(FirebaseInAppMessaging.instance.triggerEvent(eventName));
+    FirebaseInAppMessaging.instance.triggerEvent(eventName).ignore();
   }
 
   List<NavigatorObserver> get navigatorObservers {
@@ -132,20 +132,20 @@ class AppTracking {
   }
 
   void appOpen() {
-    unawaited(Sentry.addBreadcrumb(Breadcrumb(message: 'open')));
+    Sentry.addBreadcrumb(Breadcrumb(message: 'open')).ignore();
 
     _aptabaseTrackEvent('app_open');
     _posthogTrackEvent('app_open');
-    unawaited(_analytics.logAppOpen());
+    _analytics.logAppOpen().ignore();
     _triggerEvent('appOpen');
   }
 
   void _aptabaseTrackEvent(String eventName, [Json? props]) {
-    unawaited(_aptabase.trackEvent(eventName, props));
+    _aptabase.trackEvent(eventName, props).ignore();
   }
 
   void _posthogTrackEvent(String eventName, [Map<String, Object>? props]) {
-    unawaited(_posthog?.capture(eventName: eventName, properties: props));
+    _posthog?.capture(eventName: eventName, properties: props).ignore();
   }
 
   Future<void> clearUser() async {
@@ -201,11 +201,9 @@ class AppTracking {
   }
 
   void signUp(String signUpMethod) {
-    unawaited(
-      Sentry.addBreadcrumb(Breadcrumb(message: 'SignUp $signUpMethod')),
-    );
+    Sentry.addBreadcrumb(Breadcrumb(message: 'SignUp $signUpMethod')).ignore();
 
-    unawaited(_analytics.logSignUp(signUpMethod: signUpMethod));
+    _analytics.logSignUp(signUpMethod: signUpMethod).ignore();
 
     final properties = <String, String>{'method': signUpMethod};
 
@@ -216,11 +214,7 @@ class AppTracking {
   }
 
   void info(String message) {
-    unawaited(
-      Sentry.addBreadcrumb(
-        Breadcrumb(message: message, level: SentryLevel.info),
-      ),
-    );
+    Sentry.addBreadcrumb(Breadcrumb(message: message, level: SentryLevel.info)).ignore();
   }
 
   void recordError(
@@ -229,25 +223,21 @@ class AppTracking {
     StackTrace? stackTrace, {
     bool fatal = false,
   }) {
-    unawaited(
-      Sentry.captureException(
-        error,
-        stackTrace: stackTrace,
-        withScope: (scope) {
-          scope.fingerprint.add(method);
-        },
-      ),
-    );
+    Sentry.captureException(
+      error,
+      stackTrace: stackTrace,
+      message: SentryMessage(method),
+    ).ignore();
 
     if (!kIsWeb) {
-      unawaited(
-        FirebaseCrashlytics.instance.recordError(
-          error,
-          stackTrace,
-          fatal: fatal,
-          printDetails: kDebugMode,
-        ),
-      );
+      FirebaseCrashlytics.instance
+          .recordError(
+            error,
+            stackTrace,
+            fatal: fatal,
+            printDetails: kDebugMode,
+          )
+          .ignore();
     }
   }
 
@@ -264,19 +254,17 @@ class AppTracking {
     final AnalyticsParameters parameters = (customParams ?? AnalyticsParameters())
       ..addAll(_eventsParameters);
 
-    unawaited(
-      Sentry.addBreadcrumb(
-        Breadcrumb(
-          message: eventName,
-          data: parameters,
-          level: SentryLevel.info,
-        ),
+    Sentry.addBreadcrumb(
+      Breadcrumb(
+        message: eventName,
+        data: parameters,
+        level: SentryLevel.info,
       ),
-    );
+    ).ignore();
 
     // final String safeEventName = eventName; //.cleanLimit(kEventNameMaxLength);
 
-    unawaited(_analytics.logEvent(name: eventName, parameters: parameters));
+    _analytics.logEvent(name: eventName, parameters: parameters).ignore();
 
     if (triggerInApp) {
       _triggerEvent(eventName);
@@ -299,22 +287,18 @@ class AppTracking {
             <String, String>{},
       );
 
-    unawaited(
-      Sentry.addBreadcrumb(
-        Breadcrumb(message: 'BeginCheckout', data: parameters),
-      ),
-    );
+    Sentry.addBreadcrumb(Breadcrumb(message: 'BeginCheckout', data: parameters)).ignore();
 
     _aptabaseTrackEvent('checkout', parameters);
     _posthogTrackEvent('checkout', parameters);
 
-    unawaited(
-      _analytics.logBeginCheckout(
-        value: total,
-        currency: _config.currency,
-        items: items?.map((e) => e.analytics).toList(),
-      ),
-    );
+    _analytics
+        .logBeginCheckout(
+          value: total,
+          currency: _config.currency,
+          items: items?.map((e) => e.analytics).toList(),
+        )
+        .ignore();
   }
 
   void purchase(int value, String transactionId, List<TrackingItem>? items) {
@@ -330,29 +314,23 @@ class AppTracking {
             <String, String>{},
       );
 
-    unawaited(
-      Sentry.addBreadcrumb(Breadcrumb(message: 'purchase', data: parameters)),
-    );
+    Sentry.addBreadcrumb(Breadcrumb(message: 'purchase', data: parameters)).ignore();
 
     _aptabaseTrackEvent('compra', parameters);
     _posthogTrackEvent('compra', parameters);
 
-    unawaited(
-      _analytics.logPurchase(
-        value: total,
-        currency: _config.currency,
-        transactionId: transactionId,
-        items: items?.map((e) => e.analytics).toList(),
-      ),
-    );
+    _analytics
+        .logPurchase(
+          value: total,
+          currency: _config.currency,
+          transactionId: transactionId,
+          items: items?.map((e) => e.analytics).toList(),
+        )
+        .ignore();
   }
 
   void selectItem(String listName, TrackingItem item) {
-    unawaited(
-      Sentry.addBreadcrumb(
-        Breadcrumb(message: 'Select $listName -> ${item.name}'),
-      ),
-    );
+    Sentry.addBreadcrumb(Breadcrumb(message: 'Select $listName -> ${item.name}')).ignore();
 
     const eventName = 'item_selecionado';
     final props = <String, String>{'lista': listName, 'item': item.name}..addAll(_eventsParameters);
@@ -360,18 +338,16 @@ class AppTracking {
     _aptabaseTrackEvent(eventName, props);
     _posthogTrackEvent(eventName, props);
 
-    unawaited(
-      _analytics.logSelectItem(
-        items: <AnalyticsEventItem>[item.analytics],
-        itemListName: listName,
-      ),
-    );
+    _analytics
+        .logSelectItem(
+          items: <AnalyticsEventItem>[item.analytics],
+          itemListName: listName,
+        )
+        .ignore();
   }
 
   void share(String contentType, String id, String method) {
-    unawaited(
-      Sentry.addBreadcrumb(Breadcrumb(message: 'share $method $contentType')),
-    );
+    Sentry.addBreadcrumb(Breadcrumb(message: 'share $method $contentType')).ignore();
 
     const eventName = 'share';
     final props = <String, String>{
@@ -383,9 +359,7 @@ class AppTracking {
     _aptabaseTrackEvent(eventName, props);
     _posthogTrackEvent(eventName, props);
 
-    unawaited(
-      _analytics.logShare(contentType: contentType, itemId: id, method: method),
-    );
+    _analytics.logShare(contentType: contentType, itemId: id, method: method).ignore();
   }
 
   Future<void> requestReview() async {
