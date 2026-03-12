@@ -9,6 +9,9 @@ extension ContextExtensions on BuildContext {
   ThemeData get theme => Theme.of(this);
   TextTheme get textTheme => theme.textTheme;
 
+  bool get isDarkMode => theme.brightness == Brightness.dark;
+  bool get isLightMode => theme.brightness == Brightness.light;
+
   // Returns the MediaQuery
   MediaQueryData get mq => MediaQuery.of(this);
 
