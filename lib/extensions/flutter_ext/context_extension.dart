@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mvl_app_core/constants/account_strings.dart';
 import 'package:mvl_app_core/mvl_app_core.dart';
-import 'package:mvl_app_core/utils/show_exception_alert_dialog.dart';
-import 'package:mvl_app_core/widgets/app_toast_message.dart';
 import 'package:mvl_app_core/widgets/base_view.dart';
 
 extension ContextExtensions on BuildContext {
@@ -72,10 +70,6 @@ extension ContextExtensions on BuildContext {
     String customError = StringsCore.genericError,
   }) {
     AppLogger.I().error(method, exception, stackTrace ?? StackTrace.current);
-
-    AppToastMessages(
-      handleErrorMessage(this, exception),
-      isError: true,
-    ).show(this);
+    showSnackbarError(this, exception, customError: customError).ignore();
   }
 }

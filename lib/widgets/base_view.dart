@@ -52,7 +52,11 @@ Future<void> showSnackbarError(
   Object? error, {
   String customError = StringsCore.genericError,
 }) {
-  return showSnackbar(context, handleErrorMessage(context, error), isError: true);
+  return showSnackbar(
+    context,
+    handleErrorMessage(context, error, customMessage: customError),
+    isError: true,
+  );
 }
 
 void dismissKeyboard(BuildContext context) => context.unfocus();
