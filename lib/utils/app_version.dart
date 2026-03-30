@@ -37,9 +37,7 @@ final class AppVersionArgs {
   final Version ideal;
   final List<Version> blacklist;
 
-  AppVersionUpdate check(String currentVersion) {
-    final Version current = Version.parse(currentVersion);
-
+  AppVersionUpdate check(Version current) {
     if (blacklist.contains(current) || current < min) {
       return AppVersionUpdate.must;
     }
