@@ -16,12 +16,14 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:version/version.dart';
 
 class AppVersionArgs {
-  AppVersionArgs({required String min, required String ideal})
+  AppVersionArgs({required String min, required String ideal, required List<String> blacklist})
     : min = Version.parse(min),
-      ideal = Version.parse(ideal);
+      ideal = Version.parse(ideal),
+      blacklist = blacklist.map(Version.parse).toList();
 
   final Version min;
   final Version ideal;
+  final List<Version> blacklist;
 }
 
 class AppVersion {
@@ -49,7 +51,7 @@ class AppVersion {
   late final String deviceFull;
   late final String? deviceId;
 
-  late final VersionControl? versionControl;
+  VersionControl? versionControl;
 
   String get appHeader => '$versionFull $osName $osVersion';
 
