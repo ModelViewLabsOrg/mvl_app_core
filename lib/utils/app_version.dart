@@ -15,6 +15,8 @@ import 'package:mvl_app_core/widgets/copy_text.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:version/version.dart';
 
+enum AppVersionUpdate { must, should, updated }
+
 final class AppVersionArgs {
   AppVersionArgs({required String min, required String ideal, required List<String> blacklist})
     : min = Version.parse(min),
@@ -34,6 +36,18 @@ final class AppVersionArgs {
   final Version min;
   final Version ideal;
   final List<Version> blacklist;
+
+  AppVersionUpdate check(String currentVersion) {
+    final Version current = Version.parse(currentVersion);
+
+    if (blacklist.contains(current) || current < min) {
+      return AppVersionUpdate.must;
+    }
+    if (ideal > current) {
+      return AppVersionUpdate.should;
+    }
+    return AppVersionUpdate.updated;
+  }
 
   Json toJson() => <String, dynamic>{
     'min': min.toString(),
