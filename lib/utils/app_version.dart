@@ -18,31 +18,19 @@ import 'package:version/version.dart';
 enum AppVersionUpdate { must, should, updated }
 
 final class AppVersionArgs {
-  const AppVersionArgs({
-    required this.min,
-    required this.ideal,
-    required this.blacklist,
-  });
-
-  factory AppVersionArgs.parse({
+  AppVersionArgs({
     required String min,
     required String ideal,
-    required List<String> blacklist,
-  }) {
-    return AppVersionArgs(
-      min: Version.parse(min),
-      ideal: Version.parse(ideal),
-      blacklist: blacklist.map(Version.parse).toList(),
-    );
-  }
+    required String blacklist,
+  }) : min = Version.parse(min),
+       ideal = Version.parse(ideal),
+       blacklist = blacklist.split(',').map(Version.parse).toList();
 
   factory AppVersionArgs.fromJson(Json json) {
-    return AppVersionArgs.parse(
+    return AppVersionArgs(
       min: json['min'] as String,
       ideal: json['ideal'] as String,
-      blacklist: ((json['blacklist'] as List<dynamic>?) ?? <dynamic>[])
-          .map((e) => e as String)
-          .toList(),
+      blacklist: json['blacklist'] as String,
     );
   }
 
@@ -63,7 +51,7 @@ final class AppVersionArgs {
   Json toJson() => <String, dynamic>{
     'min': min.toString(),
     'ideal': ideal.toString(),
-    'blacklist': blacklist.map((e) => e.toString()).toList(),
+    'blacklist': blacklist.map((e) => e.toString()).join(','),
   };
 }
 
