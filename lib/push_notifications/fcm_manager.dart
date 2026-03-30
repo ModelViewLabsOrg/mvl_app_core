@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:mvl_app_core/app_logger.dart';
 import 'package:mvl_app_core/tracking/app_tracking.dart';
 import 'package:mvl_app_core/utils/device_info/device_info.dart';
+import 'package:mvl_app_core/utils/json.dart';
 import 'package:overlay_notification/overlay_notification.dart';
 
 export 'package:firebase_messaging/firebase_messaging.dart';
@@ -149,18 +150,27 @@ class AppFcmManager {
     appLogger.info('>> Firebase FCM onError $e !! $s');
   }
 
-  void _showNotification(RemoteNotification notification) {
-    final String? title = notification.title;
-    final String? body = notification.body;
-    if (title == null || body == null) {
+  void _showNotification(RemoteMessage message) {
+    final RemoteNotification? notification = message.notification;
+    if (notification == null) {
       return;
     }
 
+    final String? title = notification.title;
+    final String? body = notification.body;
+    if (title == null || title.isEmpty) {
+      return;
+    }
+
+    final Json data = message.data;
+
     showSimpleNotification(
       Text(title, style: const TextStyle(color: Colors.white)),
-      subtitle: Text(body, style: const TextStyle(color: Colors.white)),
+      subtitle: body == null || body.isEmpty
+          ? null
+          : Text(body, style: const TextStyle(color: Colors.white)),
       background: Colors.black87,
-      duration: const Duration(seconds: 6),
+      duration: Duration(seconds: (data['duration'] as int?) ?? 6),
     );
   }
 
@@ -178,7 +188,7 @@ class AppFcmManager {
         'Message also contained a notification: '
         '${notification.toMap()}',
       );
-      _showNotification(notification);
+      _showNotification(message);
     }
 
     // Log data payload

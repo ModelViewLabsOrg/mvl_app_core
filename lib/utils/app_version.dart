@@ -4,9 +4,9 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mvl_app_core/app_config.dart';
+import 'package:mvl_app_core/mvl_app_core.dart';
 import 'package:mvl_app_core/push_notifications/fcm_manager.dart';
 import 'package:mvl_app_core/utils/env_enum.dart';
-import 'package:mvl_app_core/utils/json.dart';
 import 'package:mvl_app_core/utils/version_control/version_control.dart';
 import 'package:mvl_app_core/widgets/app_dimens.dart';
 import 'package:mvl_app_core/widgets/app_text.dart';
@@ -102,6 +102,9 @@ class AppVersion {
     return GestureDetector(
       onLongPress: () {
         final String? token = AppFcmManager.I().token;
+
+        appLogger.info('Token: $token');
+
         if (token == null) {
           AppToastMessages('Sem token!', isError: true).show(context);
         } else {
