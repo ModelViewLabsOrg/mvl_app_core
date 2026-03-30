@@ -18,13 +18,26 @@ import 'package:version/version.dart';
 enum AppVersionUpdate { must, should, updated }
 
 final class AppVersionArgs {
-  AppVersionArgs({required String min, required String ideal, required List<String> blacklist})
-    : min = Version.parse(min),
-      ideal = Version.parse(ideal),
-      blacklist = blacklist.map(Version.parse).toList();
+  const AppVersionArgs({
+    required this.min,
+    required this.ideal,
+    required this.blacklist,
+  });
+
+  factory AppVersionArgs.parse({
+    required String min,
+    required String ideal,
+    required List<String> blacklist,
+  }) {
+    return AppVersionArgs(
+      min: Version.parse(min),
+      ideal: Version.parse(ideal),
+      blacklist: blacklist.map(Version.parse).toList(),
+    );
+  }
 
   factory AppVersionArgs.fromJson(Json json) {
-    return AppVersionArgs(
+    return AppVersionArgs.parse(
       min: json['min'] as String,
       ideal: json['ideal'] as String,
       blacklist: ((json['blacklist'] as List<dynamic>?) ?? <dynamic>[])
