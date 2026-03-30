@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:mvl_app_core/app_config.dart';
 import 'package:mvl_app_core/app_config_values.dart';
 import 'package:mvl_app_core/app_logger.dart';
+import 'package:mvl_app_core/utils/app_version.dart';
 import 'package:mvl_app_core/utils/device_info/device_info.dart';
 import 'package:mvl_app_core/utils/launch_extension.dart';
 import 'package:mvl_app_core/utils/version_control/version_flag.dart';
@@ -16,8 +17,15 @@ abstract class VersionControl {
   final String title;
   final String message;
 
+  @Deprecated('Use versionUpdate')
   bool get isForce => this is VersionControlOutdated;
+  @Deprecated('Use versionUpdate')
   bool get isOptional => !isForce;
+
+  AppVersionUpdate get versionUpdate =>
+      this is VersionControlOutdated ? AppVersionUpdate.must : AppVersionUpdate.should;
+  bool get isMustUpdate => versionUpdate == AppVersionUpdate.must;
+  bool get isShouldUpdate => versionUpdate == AppVersionUpdate.must;
 
   Future<bool> shouldShow() => _versionAvailableFlag.shouldShow();
   Future<void> didShow() => _versionAvailableFlag.didShow();
