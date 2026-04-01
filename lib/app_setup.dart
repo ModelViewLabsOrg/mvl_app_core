@@ -82,13 +82,14 @@ abstract class AppSetupBase {
       }
 
       tz.setLocalLocation(location);
+      AppLogger.I().info('TZ Location defined: ${location.name}');
 
-      AppLogger.I().info('Location defined: ${location.name}');
+      await Jiffy.setLocale(locale);
+
+      AppLogger.I().info('Jiffy defined: $locale');
     } catch (e, s) {
       AppLogger.I().error('AppSetup InitLocale error', e, s);
     }
-
-    await Jiffy.setLocale(locale);
   }
 
   Future<void> _initFirebase() async {
