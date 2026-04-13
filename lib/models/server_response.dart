@@ -4,12 +4,13 @@ import 'package:mvl_app_core/mvl_app_core.dart';
 
 @immutable
 class ServerResponse {
-  const ServerResponse({required this.isError, required this.userMessage});
+  const ServerResponse({required this.isError, required this.userMessage, this.data});
 
   factory ServerResponse.fromJson(Json json) {
     return ServerResponse(
       isError: json['is_error'] as bool? ?? false,
       userMessage: json['user_message'] as String,
+      data: json['data'] as Json?,
     );
   }
 
@@ -41,4 +42,5 @@ class ServerResponse {
 
   final bool isError;
   final String userMessage;
+  final Json? data;
 }
