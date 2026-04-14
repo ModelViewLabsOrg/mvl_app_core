@@ -9,7 +9,7 @@ class ServerResponse {
   factory ServerResponse.fromJson(Json json) {
     return ServerResponse(
       isError: json['is_error'] as bool? ?? false,
-      userMessage: json['user_message'] as String,
+      userMessage: json['user_message'] as String? ?? '',
       data: json['data'] as Json?,
     );
   }
