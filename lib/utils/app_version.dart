@@ -175,12 +175,10 @@ class AppVersion {
   @override
   String toString() => '$appName $versionFull\n$osName $osVersion';
 
-  JsonString toHeaders() {
-    return <String, String>{
-      'app-name': appName,
-      'version': versionFull,
-      'os': osName,
-      'os-version': osVersion,
-    };
-  }
+  JsonString toHeaders() => {
+    'x-app-name': appName,
+    'x-app-version': versionFull,
+    'x-os-name': osName,
+    'x-os-version': osVersion,
+  };
 }
