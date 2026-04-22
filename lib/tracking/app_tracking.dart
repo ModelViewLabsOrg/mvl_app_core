@@ -223,6 +223,10 @@ class AppTracking {
     StackTrace? stackTrace, {
     bool fatal = false,
   }) {
+    if (!_config.trackingEnabled) {
+      return;
+    }
+
     Sentry.captureException(
       error,
       stackTrace: stackTrace,
