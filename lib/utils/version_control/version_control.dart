@@ -25,7 +25,7 @@ abstract class VersionControl {
   AppVersionUpdate get versionUpdate =>
       this is VersionControlOutdated ? AppVersionUpdate.must : AppVersionUpdate.should;
   bool get isMustUpdate => versionUpdate == AppVersionUpdate.must;
-  bool get isShouldUpdate => versionUpdate == AppVersionUpdate.must;
+  bool get isShouldUpdate => versionUpdate == AppVersionUpdate.should;
 
   Future<bool> shouldShow() => _versionAvailableFlag.shouldShow();
   Future<void> didShow() => _versionAvailableFlag.didShow();
