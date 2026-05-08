@@ -20,7 +20,7 @@ class VersionAlertDialog extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 400),
         padding: padDefault,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const Center(
