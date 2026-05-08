@@ -20,7 +20,7 @@ class VersionAlertDialog extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 400),
         padding: padDefault,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             if (versionControl.isShouldUpdate)
@@ -30,51 +30,52 @@ class VersionAlertDialog extends StatelessWidget {
                 child: GestureDetector(
                   onTap: Navigator.of(context).pop,
                   child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      // color: appcolors.?,
-                    ),
-                    child: const Icon(
-                      Icons.close,
-                      // color: appcolors.?,
-                    ),
+                    padding: padM,
+                    decoration: const BoxDecoration(shape: BoxShape.circle),
+                    child: const Icon(Icons.close),
                   ),
                 ),
               ),
-            const Padding(
-              padding: EdgeInsets.only(bottom: AppDimens.kDefaultPadding),
-              child: Icon(Icons.warning_amber_rounded),
-              // child: Assets.images.versionOutdatedLogo.image(
-              //   height: 160,
-              //   width: double.maxFinite,
-              //   fit: BoxFit.fill,
-              // ),
+
+            Row(
+              children: [
+                const Icon(Icons.warning_amber_rounded),
+                gap,
+                Expanded(child: AppText.headlineMedium(context, versionControl.title)),
+              ],
             ),
-            Center(child: AppText.headlineMedium(context, versionControl.title)),
             gapM,
             Center(child: AppText.bodyMedium(context, versionControl.message)),
             gap,
-            OutlinedButton(
-              onPressed: () {
-                unawaited(VersionControl.launchStore(writeReview: false));
-                if (versionControl.isShouldUpdate) {
-                  Navigator.of(context).pop();
-                }
-              },
-              child: const Text('Ir para a loja'),
-            ),
             if (versionControl.isShouldUpdate)
-              Padding(
-                padding: const EdgeInsets.only(top: AppDimens.kDefaultPadding),
-                child: TextButton(
-                  onPressed: Navigator.of(context).pop,
-                  child: const Text('Agora não'),
-                ),
-              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [_updateButton(context), _notNowButton(context)],
+              )
+            else
+              _notNowButton(context),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _updateButton(BuildContext context) {
+    return OutlinedButton(
+      onPressed: () {
+        unawaited(VersionControl.launchStore(writeReview: false));
+        if (versionControl.isShouldUpdate) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: const Text('Ir para a loja'),
+    );
+  }
+
+  Widget _notNowButton(BuildContext context) {
+    return TextButton(
+      onPressed: Navigator.of(context).pop,
+      child: const Text('Agora não'),
     );
   }
 }
