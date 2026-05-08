@@ -47,8 +47,9 @@ class AppFcmManager {
 
   void Function(String token)? onTokenRefresh;
 
-  Future<bool> _isAuthorizaded() async {
-    return await status() == AuthorizationStatus.authorized;
+  Future<bool> _isAuthorized() async {
+    final AuthorizationStatus s = await status();
+    return s == AuthorizationStatus.authorized || s == AuthorizationStatus.provisional;
   }
 
   Future<void> init(
@@ -71,32 +72,29 @@ class AppFcmManager {
     return settings.authorizationStatus;
   }
 
-  Future<AuthorizationStatus?> requestPermission() async {
-    if (kIsWeb) {
-      return null; // TODO: Null indeed?
+  Future<AuthorizationStatus> requestPermission() async {
+    final AuthorizationStatus authorizationStatus = await status();
+
+    if (authorizationStatus == AuthorizationStatus.notDetermined ||
+        authorizationStatus == AuthorizationStatus.denied) {
+      return (await _messaging.requestPermission()).authorizationStatus;
     }
 
-    AuthorizationStatus authorizationStatus = await status();
-    if (authorizationStatus != AuthorizationStatus.notDetermined) {
-      return authorizationStatus;
-    }
-
-    authorizationStatus = (await _messaging.requestPermission()).authorizationStatus;
-
-    if (DeviceInfo.isApple) {
+    if (!kIsWeb && DeviceInfo.isApple) {
       tracking.event('notifications_$authorizationStatus');
     }
 
-    await _setup();
+    if (authorizationStatus == AuthorizationStatus.authorized ||
+        authorizationStatus == AuthorizationStatus.provisional) {
+      await _setup();
+    }
 
     return authorizationStatus;
   }
 
   Future<void> _setup() async {
-    final bool isAuthorized = await _isAuthorizaded();
-    if (!isAuthorized) {
+    if (!await _isAuthorized()) {
       appLogger.info('>> Firebase FCM isNotAuthorized');
-
       return;
     }
 
@@ -116,7 +114,6 @@ class AppFcmManager {
 
     try {
       FirebaseMessaging.onMessage.listen(_onMessage);
-
       _messaging.onTokenRefresh.listen(_onTokenRefresh);
     } catch (e) {
       /* Dont do anything */
