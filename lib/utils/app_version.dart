@@ -143,6 +143,7 @@ class AppVersion {
       osName = 'web';
       osVersion = info.appVersion ?? '';
       deviceFull = info.browserName.name;
+      deviceId = null;
       return;
     }
 
