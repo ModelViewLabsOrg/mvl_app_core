@@ -78,7 +78,7 @@ class AppVersion {
   late final String osName;
   late final String osVersion;
   late final String deviceFull;
-  late final String? deviceId;
+  late final String deviceId;
 
   VersionControl? versionControl;
 
@@ -143,34 +143,44 @@ class AppVersion {
       osName = 'web';
       osVersion = info.appVersion ?? '';
       deviceFull = info.browserName.name;
-      deviceId = null;
+      deviceId = '$osName $osVersion $deviceFull';
       return;
     }
 
     osName = Platform.operatingSystem;
+    String? localDeviceId;
+    var isPhysicalDevice = false;
 
     if (Platform.isAndroid) {
       final AndroidDeviceInfo info = await plugin.androidInfo;
       final AndroidBuildVersion version = info.version;
       osVersion = '${version.release} (SDK ${version.sdkInt})';
       deviceFull = '${info.manufacturer} ${info.model}';
-      deviceId = null;
+      isPhysicalDevice = info.isPhysicalDevice;
     } else if (Platform.isIOS) {
       final IosDeviceInfo info = await plugin.iosInfo;
       osVersion = info.systemVersion;
       deviceFull = info.model;
-      deviceId = info.identifierForVendor;
+      isPhysicalDevice = info.isPhysicalDevice;
+
+      localDeviceId = info.identifierForVendor;
     } else if (Platform.isMacOS) {
       final MacOsDeviceInfo info = await plugin.macOsInfo;
       osVersion = info.osRelease;
       deviceFull = info.model;
-      deviceId = info.systemGUID;
+      isPhysicalDevice = true;
+
+      localDeviceId = info.systemGUID;
     } else if (Platform.isLinux) {
       final LinuxDeviceInfo info = await plugin.linuxInfo;
       osVersion = info.version ?? '?';
       deviceFull = info.prettyName;
-      deviceId = info.id;
+      localDeviceId = info.machineId ?? info.id;
+      isPhysicalDevice = info.machineId != null;
     }
+
+    final deviceCompose = '${isPhysicalDevice ? '' : 'EMULATOR '}$osName $osVersion $deviceFull';
+    deviceId = localDeviceId ?? deviceCompose;
   }
 
   @override
