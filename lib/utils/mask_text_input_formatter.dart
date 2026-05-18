@@ -11,7 +11,7 @@ class MaskTextInputFormatter implements TextInputFormatter {
   /// mask should be replaced and the values validate the entered character
   /// By default `#` match to the number and `A` to the letter
   ///
-  /// Set [type] for autocompletion behavior:
+  /// Set [_type] for autocompletion behavior:
   ///  - [MaskAutoCompletionType.lazy] (default): autocomplete
   /// unfiltered characters once the following filtered character is input.
   ///  For example, with the mask "#/#" and the sequence of characters "1" then "2", the formatter will output "1", then "1/2"
@@ -22,8 +22,8 @@ class MaskTextInputFormatter implements TextInputFormatter {
     String? mask,
     Map<String, RegExp>? filter,
     String? initialText,
-    MaskAutoCompletionType type = MaskAutoCompletionType.lazy,
-  }) : _type = type {
+    this._type = MaskAutoCompletionType.lazy,
+  }) {
     updateMask(
       mask: mask,
       filter: filter ?? <String, RegExp>{'#': RegExp('[0-9]'), 'A': RegExp('[^0-9]')},

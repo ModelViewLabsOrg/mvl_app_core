@@ -35,7 +35,7 @@ class AppTracking {
 
   FirebaseAnalytics get _analytics => FirebaseAnalytics.instance;
   Aptabase get _aptabase => Aptabase.instance;
-  Posthog? get _posthog => _config.posthogKey == null ? null : Posthog();
+  Posthog? get _posthog => (_config.posthogKey?.isEmpty ?? true) ? null : Posthog();
 
   Future<void> init(AppConfigValues config) async {
     _config = config;
@@ -233,7 +233,7 @@ class AppTracking {
       message: SentryMessage(method),
     ).ignore();
 
-    if (!kIsWeb) {
+    if (!kIsWeb && !kDebugMode) {
       FirebaseCrashlytics.instance
           .recordError(
             error,
