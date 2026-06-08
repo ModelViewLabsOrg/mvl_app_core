@@ -7,9 +7,7 @@ import 'package:mvl_app_core/extensions/date_time_ext.dart';
 
 void main() {
   group('DateTime Extension Tests', () {
-    setUpAll(() {
-      WidgetsFlutterBinding.ensureInitialized();
-    });
+    setUpAll(WidgetsFlutterBinding.ensureInitialized);
 
     group('English Locale (en)', () {
       setUpAll(() async {

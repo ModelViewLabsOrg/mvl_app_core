@@ -1,0 +1,24 @@
+include: package:mvl_lint/analysis_options.yaml
+
+plugins:
+  mvl_lint:
+    diagnostics:
+      avoid_null_assertion: true
+      avoid_final_with_getter: true
+      avoid_global_state: true
+      avoid_late_keyword: true
+      avoid_unnecessary_return_variable: true
+      avoid_unnecessary_type_assertions: true
+      avoid_unnecessary_type_casts: true
+      avoid_unrelated_type_assertions: true
+      avoid_unused_parameters: true
+      cyclomatic_complexity: true
+      function_lines_of_code: true
+      no_empty_block: true
+      no_equal_then_else: true
+      no_magic_number: true
+      number_of_parameters: true
+      prefer_early_return: true
+      prefer_first: true
+      prefer_last: true
+      prefer_match_file_name: true
