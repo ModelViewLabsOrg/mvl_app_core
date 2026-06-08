@@ -1,7 +1,19 @@
 include: package:mvl_lint/analysis_options.yaml
 
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.pb.dart"
+    - "**/generated/**"
+
+
 plugins:
   mvl_lint:
+    git:
+      url: https://github.com/ModelViewLabsOrg/mvl_lint
+      ref: main  # ou tag/commit específico, ex: v1.0.0
+
     diagnostics:
       avoid_null_assertion: true
       avoid_final_with_getter: true
