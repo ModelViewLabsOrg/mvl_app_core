@@ -7,7 +7,9 @@ AppLogger get appLogger => AppLogger.I();
 class AppLogger {
   factory AppLogger.I() => _instance;
 
-  AppLogger._internal();
+  AppLogger._internal() {
+    talker.settings.enabled = kDebugMode;
+  }
 
   bool Function(Object error) shouldLogAsError = (error) => true;
 
