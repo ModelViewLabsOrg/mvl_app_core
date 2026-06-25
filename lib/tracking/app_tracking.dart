@@ -17,9 +17,11 @@ import 'package:mvl_app_core/tracking/tracking_user.dart';
 import 'package:mvl_app_core/utils/app_version.dart';
 import 'package:mvl_app_core/utils/json.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:talker_riverpod_logger/talker_riverpod_logger.dart';
 
 AppTracking get tracking => AppTracking._instance;
 
@@ -119,6 +121,12 @@ class AppTracking {
       SentryNavigatorObserver(),
       TalkerRouteObserver(AppLogger.I().talker),
       if (_config.posthogKey != null) PosthogObserver(),
+    ];
+  }
+
+  List<ProviderObserver> observers() {
+    return [
+      TalkerRiverpodObserver(talker: AppLogger.I().talker),
     ];
   }
 
