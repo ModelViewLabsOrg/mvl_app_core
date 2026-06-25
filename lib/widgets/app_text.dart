@@ -189,6 +189,7 @@ class AppText extends Text {
     int maxLines = 999,
     bool bold = false,
     bool underline = false,
+    TextOverflow? overflow,
   }) {
     return AppText._internal(
       text,
@@ -198,6 +199,7 @@ class AppText extends Text {
       underline: underline,
       textAlign: textAlign,
       maxLines: maxLines,
+      overflow: overflow,
     );
   }
 
