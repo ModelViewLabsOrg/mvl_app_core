@@ -365,7 +365,10 @@ void main() {
 
       test('returns error when under 18 and checkIs18yrs is true', () {
         withClock(Clock.fixed(DateTime(2025)), () {
-          expect(const FormValidator('15/06/2010').birthdayFromString(checkIs18yrs: true), isNotNull);
+          expect(
+            const FormValidator('15/06/2010').birthdayFromString(checkIs18yrs: true),
+            isNotNull,
+          );
           expect(const FormValidator('15/06/2000').birthdayFromString(checkIs18yrs: true), isNull);
         });
       });
@@ -393,7 +396,9 @@ void main() {
 
       test('returns error when too long', () {
         expect(
-          const FormValidator('aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeff').validateChars(),
+          const FormValidator(
+            'aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeff',
+          ).validateChars(),
           isNotNull,
         );
       });

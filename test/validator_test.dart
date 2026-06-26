@@ -77,8 +77,9 @@ void main() {
 
       test('returns false for name that is too long (above 50 chars)', () {
         expect(
-          const Validator('aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeff')
-              .isNameValid(fullName: false),
+          const Validator(
+            'aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeeeff',
+          ).isNameValid(fullName: false),
           isFalse,
         );
       });

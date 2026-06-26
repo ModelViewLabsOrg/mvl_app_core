@@ -273,7 +273,14 @@ void main() {
       });
 
       test('removeSeconds zeroes out seconds', () {
-        final String result = DateTime.utc(2024, 3, 15, 14, 30, 45).toServerFormat(removeSeconds: true);
+        final String result = DateTime.utc(
+          2024,
+          3,
+          15,
+          14,
+          30,
+          45,
+        ).toServerFormat(removeSeconds: true);
         expect(result, '2024-03-15T14:30:00.000Z');
       });
 
