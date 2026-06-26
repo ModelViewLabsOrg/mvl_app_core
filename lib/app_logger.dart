@@ -7,13 +7,16 @@ AppLogger get appLogger => AppLogger.I();
 class AppLogger {
   factory AppLogger.I() => _instance;
 
-  AppLogger._internal() {
-    talker.settings.enabled = kDebugMode;
-  }
+  AppLogger._internal();
 
   bool Function(Object error) shouldLogAsError = (error) => true;
 
-  final Talker talker = TalkerFlutter.init();
+  final Talker talker = TalkerFlutter.init(
+    settings: TalkerSettings(
+      // ignore: avoid_redundant_argument_values
+      enabled: kDebugMode,
+    ),
+  );
 
   static final _instance = AppLogger._internal();
 

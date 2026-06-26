@@ -18,7 +18,6 @@ enum PixKeyType {
 }
 
 extension PixKeyTypeExt on PixKeyType {
-  
   bool get isCpf => this == PixKeyType.cpf;
   bool get isCnpj => this == PixKeyType.cnpj;
   bool get isTelefone => this == PixKeyType.telefone;
