@@ -32,6 +32,34 @@ void main() {
     });
   });
 
+  group('randomCustomizedId', () {
+    test('returns a string of the given size', () async {
+      final String id = await randomCustomizedId('ABCDEFabcdef123456', size: 10);
+      expect(id.length, 10);
+    });
+
+    test('only contains characters from the provided alphabet', () async {
+      const alphabet = 'ABC';
+      final String id = await randomCustomizedId(alphabet, size: 20);
+      for (final int char in id.runes) {
+        expect(alphabet.runes.contains(char), isTrue);
+      }
+    });
+  });
+
+  group('randomId', () {
+    test('returns a non-empty string of given size', () async {
+      final String id = await randomId(size: 15);
+      expect(id.length, 15);
+    });
+
+    test('generates unique values', () async {
+      final String first = await randomId();
+      final String second = await randomId();
+      expect(first, isNot(equals(second)));
+    });
+  });
+
   group('randomUlid', () {
     test('returns a non-empty ULID string', () {
       final String ulid = randomUlid();

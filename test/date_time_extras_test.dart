@@ -219,9 +219,207 @@ void main() {
         expect(utc.minute, 30);
       });
     });
+
+    group('monthYear', () {
+      test('returns month name and year', () {
+        final String result = dt.monthYear();
+        expect(result, contains('2024'));
+      });
+    });
+
+    group('toDDMM', () {
+      test('returns day and abbreviated month', () {
+        final String result = dt.toDDMM();
+        expect(result, contains('15'));
+      });
+    });
+
+    group('dateWithDayAndYear', () {
+      test('returns weekday, day, month and year', () {
+        final String result = dt.dateWithDayAndYear();
+        expect(result, contains('2024'));
+      });
+    });
+
+    group('yMMMd', () {
+      test('returns locale-formatted date', () {
+        expect(dt.yMMMd(), isNotEmpty);
+      });
+    });
+
+    group('yMd', () {
+      test('returns locale-formatted short date', () {
+        expect(dt.yMd(), isNotEmpty);
+      });
+    });
+
+    group('dateTimeShort', () {
+      test('returns date and time combined', () {
+        final String result = dt.dateTimeShort();
+        expect(result, contains('14:30'));
+      });
+    });
+
+    group('onlyTimeWithFractSeconds', () {
+      test('returns HH:mm:ss.S format', () {
+        expect(dt.onlyTimeWithFractSeconds(), startsWith('14:30:45'));
+      });
+    });
+
+    group('toServerFormat', () {
+      test('returns UTC ISO 8601 string by default', () {
+        final String result = DateTime.utc(2024, 3, 15, 14, 30, 45).toServerFormat();
+        expect(result, '2024-03-15T14:30:45.000Z');
+      });
+
+      test('removeSeconds zeroes out seconds', () {
+        final String result = DateTime.utc(2024, 3, 15, 14, 30, 45).toServerFormat(removeSeconds: true);
+        expect(result, '2024-03-15T14:30:00.000Z');
+      });
+
+      test('convertUtc false does not append Z', () {
+        final dt2 = DateTime(2024, 3, 15, 14, 30);
+        final String result = dt2.toServerFormat(convertUtc: false);
+        expect(result, isNot(endsWith('Z')));
+      });
+    });
+
+    group('previousMonth', () {
+      test('returns one month earlier', () {
+        final DateTime prev = DateTime(2024, 3, 15).previousMonth();
+        expect(prev.month, 2);
+        expect(prev.year, 2024);
+      });
+
+      test('handles January correctly', () {
+        final DateTime prev = DateTime(2024).previousMonth();
+        expect(prev.month, 12);
+        expect(prev.year, 2023);
+      });
+    });
+
+    group('nextMonth', () {
+      test('returns one month later', () {
+        final DateTime next = DateTime(2024, 3, 15).nextMonth();
+        expect(next.month, 4);
+        expect(next.year, 2024);
+      });
+
+      test('handles December correctly', () {
+        final DateTime next = DateTime(2024, 12).nextMonth();
+        expect(next.month, 1);
+        expect(next.year, 2025);
+      });
+    });
+
+    group('ago', () {
+      test('returns a non-empty string', () {
+        expect(DateTime(2020).ago(), isNotEmpty);
+      });
+    });
+
+    group('toDate', () {
+      test('formats as yyyy-MM-dd', () {
+        expect(DateTime(2024, 3, 15).toDate(), '2024-03-15');
+      });
+    });
   });
 
   group('DateTimeExtExtras functions', () {
+    group('jiffyNow', () {
+      test('returns Jiffy from current clock time', () {
+        withClock(Clock.fixed(DateTime(2024, 3, 15)), () {
+          final Jiffy j = jiffyNow;
+          expect(j.year, 2024);
+          expect(j.month, 3);
+        });
+      });
+    });
+
+    group('nowServer', () {
+      test('returns ISO string of current time', () {
+        withClock(Clock.fixed(DateTime.utc(2024, 3, 15)), () {
+          final String result = nowServer();
+          expect(result, contains('2024-03-15'));
+        });
+      });
+    });
+
+    group('freezedDateTime', () {
+      test('returns ISO string for given DateTime', () {
+        final String result = freezedDateTime(DateTime.utc(2024, 3, 15));
+        expect(result, contains('2024-03-15'));
+      });
+    });
+
+    group('freezedDateTimeNullable', () {
+      test('returns ISO string for non-null DateTime', () {
+        final String? result = freezedDateTimeNullable(DateTime.utc(2024, 3, 15));
+        expect(result, isNotNull);
+        expect(result, contains('2024-03-15'));
+      });
+
+      test('returns null for null DateTime', () {
+        expect(freezedDateTimeNullable(null), isNull);
+      });
+    });
+
+    group('dtNow', () {
+      test('returns current clock time', () {
+        withClock(Clock.fixed(DateTime(2024, 3, 15, 12)), () {
+          expect(dtNow().year, 2024);
+          expect(dtNow().hour, 12);
+        });
+      });
+    });
+
+    group('currentMonth', () {
+      test('returns the name of the current month', () {
+        withClock(Clock.fixed(DateTime(2024, 3, 15)), () {
+          expect(currentMonth(), isNotEmpty);
+        });
+      });
+    });
+
+    group('durationAgo', () {
+      test('subtracts given duration from now', () {
+        withClock(Clock.fixed(DateTime(2024, 3, 15)), () {
+          final DateTime result = durationAgo(days: 5);
+          expect(result.isBefore(DateTime(2024, 3, 15)), isTrue);
+        });
+      });
+
+      test('subtracts years', () {
+        withClock(Clock.fixed(DateTime(2024, 3, 15)), () {
+          final DateTime result = durationAgo(years: 1);
+          expect(result.year, 2023);
+        });
+      });
+    });
+
+    group('secondsEpochNow', () {
+      test('returns seconds since epoch', () {
+        withClock(Clock.fixed(DateTime.utc(2024, 3, 15)), () {
+          expect(secondsEpochNow, isA<int>());
+          expect(secondsEpochNow, greaterThan(0));
+        });
+      });
+    });
+
+    group('dayOfYear', () {
+      test('returns day number within year', () {
+        withClock(Clock.fixed(DateTime(2024)), () {
+          expect(dayOfYear, 1);
+        });
+      });
+
+      test('returns correct day for end of year', () {
+        withClock(Clock.fixed(DateTime(2024, 12, 31)), () {
+          expect(dayOfYear, greaterThan(360));
+        });
+      });
+    });
+
     group('today', () {
       test('returns current date with no time component', () {
         withClock(Clock.fixed(DateTime(2024, 3, 15, 12, 30)), () {
@@ -281,6 +479,15 @@ void main() {
       });
     });
 
+    group('fromUtcToLocalDate', () {
+      test('parses UTC ISO string to local DateTime', () {
+        final DateTime result = '2024-03-15T00:00:00.000Z'.fromUtcToLocalDate();
+        expect(result.year, 2024);
+        expect(result.month, 3);
+        expect(result.day, 15);
+      });
+    });
+
     group('parseBrFormat', () {
       test('parses Brazilian date format dd/MM/yyyy', () {
         final DateTime? date = '15/03/2024'.parseBrFormat('/');
@@ -304,6 +511,30 @@ void main() {
       test('returns null for invalid string', () {
         expect('not-a-date'.toUtcDateNullable(), isNull);
       });
+    });
+  });
+
+  group('DateExtensionNull', () {
+    test('toDate returns formatted string for non-null DateTime', () {
+      final dt = DateTime(2024, 3, 15);
+      expect(dt.toDate(), '2024-03-15');
+    });
+
+    test('toDate returns null for null DateTime', () {
+      const DateTime? dt = null;
+      expect(dt.toDate(), isNull);
+    });
+
+    test('is18yrs returns true for adult non-null DateTime', () {
+      withClock(Clock.fixed(DateTime(2024)), () {
+        final dt = DateTime(2000);
+        expect(dt.is18yrs(), isTrue);
+      });
+    });
+
+    test('is18yrs returns null for null DateTime', () {
+      const DateTime? dt = null;
+      expect(dt.is18yrs(), isNull);
     });
   });
 

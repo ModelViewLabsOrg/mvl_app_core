@@ -94,6 +94,63 @@ void main() {
       });
     });
 
+    group('removeAccentsDiacritics', () {
+      test('removes accents from characters', () {
+        expect('café'.removeAccentsDiacritics(), 'cafe');
+        expect('São Paulo'.removeAccentsDiacritics(), 'Sao Paulo');
+        expect('naïve'.removeAccentsDiacritics(), 'naive');
+      });
+
+      test('leaves plain ASCII unchanged', () {
+        expect('hello'.removeAccentsDiacritics(), 'hello');
+      });
+    });
+
+    group('removeEmoji', () {
+      test('removes emoji characters', () {
+        final String result = 'Hello 😀 World'.removeEmoji();
+        expect(result.contains('Hello'), isTrue);
+        expect(result.contains('World'), isTrue);
+      });
+
+      test('leaves plain text unchanged', () {
+        expect('hello world'.removeEmoji(), 'hello world');
+      });
+    });
+
+    group('removeAccentsAndEmojiWithTrim', () {
+      test('removes both accents and emoji', () {
+        final String result = 'café 😀'.removeAccentsAndEmojiWithTrim();
+        expect(result, 'cafe');
+      });
+    });
+
+    group('cleanLimit', () {
+      test('removes accents and limits chars', () {
+        expect('café'.cleanLimit(3), 'caf');
+        expect('hello'.cleanLimit(10), 'hello');
+      });
+    });
+
+    group('normalizeEmail', () {
+      test('lowercases and trims email', () {
+        expect(' User@Example.COM '.normalizeEmail(), 'user@example.com');
+      });
+
+      test('handles already normalized email', () {
+        expect('user@example.com'.normalizeEmail(), 'user@example.com');
+      });
+    });
+
+    group('fromTzToLocalDate', () {
+      test('parses ISO string to local DateTime', () {
+        final DateTime result = '2024-03-15T00:00:00.000'.fromTzToLocalDate();
+        expect(result.year, 2024);
+        expect(result.month, 3);
+        expect(result.day, 15);
+      });
+    });
+
     group('removeHtml', () {
       test('strips HTML tags', () {
         expect('<p>Hello</p>'.removeHtml(), 'Hello');
@@ -108,6 +165,14 @@ void main() {
 
       test('returns plain text unchanged', () {
         expect('plain text'.removeHtml(), 'plain text');
+      });
+
+      test('trims leading newline', () {
+        expect('<br>Hello'.removeHtml(), 'Hello');
+      });
+
+      test('trims trailing newline', () {
+        expect('Hello<br>'.removeHtml(), 'Hello');
       });
     });
   });

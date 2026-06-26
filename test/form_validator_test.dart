@@ -346,6 +346,31 @@ void main() {
       });
     });
 
+    group('birthdayFromString', () {
+      test('returns null for valid date string', () {
+        withClock(Clock.fixed(DateTime(2025)), () {
+          expect(const FormValidator('15/06/2000').birthdayFromString(), isNull);
+        });
+      });
+
+      test('returns error for null value', () {
+        expect(const FormValidator(null).birthdayFromString(), isNotNull);
+      });
+
+      test('returns error for unparseable date string', () {
+        withClock(Clock.fixed(DateTime(2025)), () {
+          expect(const FormValidator('not-a-date').birthdayFromString(), isNotNull);
+        });
+      });
+
+      test('returns error when under 18 and checkIs18yrs is true', () {
+        withClock(Clock.fixed(DateTime(2025)), () {
+          expect(const FormValidator('15/06/2010').birthdayFromString(checkIs18yrs: true), isNotNull);
+          expect(const FormValidator('15/06/2000').birthdayFromString(checkIs18yrs: true), isNull);
+        });
+      });
+    });
+
     group('country', () {
       test('returns null for valid 2-letter country code', () {
         expect(const FormValidator('br').country(), isNull);

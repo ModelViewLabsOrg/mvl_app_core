@@ -31,4 +31,16 @@ void main() {
       expect(EnvEnum.values.length, 3);
     });
   });
+
+  group('AppFlavor', () {
+    test('default env is prd', () {
+      expect(AppFlavor.env, EnvEnum.prd);
+    });
+
+    test('env can be changed', () {
+      AppFlavor.env = EnvEnum.dev;
+      expect(AppFlavor.env, EnvEnum.dev);
+      AppFlavor.env = EnvEnum.prd;
+    });
+  });
 }

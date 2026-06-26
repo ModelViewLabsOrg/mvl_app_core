@@ -37,7 +37,7 @@ void main() {
 
     group('fromJson', () {
       test('parses all fields from JSON', () {
-        final AppVersionArgs parsed = AppVersionArgs.fromJson(const <String, dynamic>{
+        final parsed = AppVersionArgs.fromJson(const <String, dynamic>{
           'min': '1.0.0',
           'ideal': '2.0.0',
           'blacklist': '1.5.0,1.6.0',
@@ -66,7 +66,7 @@ void main() {
 
       test('round-trips through JSON', () {
         final original = AppVersionArgs(min: '1.0.0', ideal: '3.0.0', blacklist: '2.0.0,2.1.0');
-        final json = original.toJson();
+        final Map<String, dynamic> json = original.toJson();
         final restored = AppVersionArgs.fromJson(json);
 
         expect(restored.min, original.min);

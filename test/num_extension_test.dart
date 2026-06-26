@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart' show Intl;
 import 'package:mvl_app_core/extensions/num_extension.dart';
 
 void main() {
@@ -54,6 +55,25 @@ void main() {
         expect(100.amountToDouble(), 1.0);
         expect(1050.amountToDouble(), 10.5);
         expect(0.amountToDouble(), 0.0);
+      });
+    });
+
+    group('toReais', () {
+      setUpAll(() {
+        Intl.defaultLocale = 'pt_BR';
+      });
+
+      test('returns a formatted string', () {
+        expect(1000.toReais(), isA<String>());
+        expect(1000.toReais(), isNotEmpty);
+      });
+
+      test('negative value excluded by default', () {
+        expect((-100).toReais(), isNot(contains('-')));
+      });
+
+      test('negative value allowed when allowNegative is true', () {
+        expect((-100).toReais(allowNegative: true), contains('-'));
       });
     });
   });
