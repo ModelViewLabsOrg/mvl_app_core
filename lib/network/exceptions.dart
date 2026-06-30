@@ -1,30 +1,40 @@
-class AppException implements Exception {
-  const AppException({required this.userMessage, this.shouldLogAsError = true});
-
-  final String? userMessage;
-  final bool shouldLogAsError;
-
-  @override
-  String toString() => '${super.toString()}; [$shouldLogAsError]; $userMessage';
-}
+import 'package:mvl_app_core/utils/app_exception.dart';
 
 class NetworkException extends AppException {
-  const NetworkException({
-    required super.userMessage,
+  const NetworkException(
+    super.userMessage, {
+    required super.error,
     required super.shouldLogAsError,
   });
 }
 
 class OtpValidationException extends NetworkException {
-  const OtpValidationException({required super.userMessage}) : super(shouldLogAsError: false);
+  const OtpValidationException(
+    super.userMessage, {
+    required super.error,
+    required super.shouldLogAsError,
+  });
 }
 
 class AuthOtpValidationExpiredException extends NetworkException {
   AuthOtpValidationExpiredException()
     : super(
-        userMessage:
-            'Esse código expirou, vamos te enviar um novo. '
-            'Confira seu email o novo código',
+        'Esse código expirou, vamos te enviar um novo. '
+        'Confira seu email o novo código',
+        error: Exception(
+          'Esse código expirou, vamos te enviar um novo. '
+          'Confira seu email o novo código',
+        ),
         shouldLogAsError: false,
       );
+}
+
+class AppFormError extends AppException {
+  const AppFormError(super.userMessage, {required super.error}) : super(shouldLogAsError: false);
+
+  @override
+  bool get shouldLogAsError => false;
+
+  @override
+  String toString() => 'AppFormError: $userMessage';
 }
