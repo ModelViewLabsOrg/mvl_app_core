@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:mvl_app_core/constants/account_strings.dart';
 import 'package:mvl_app_core/models/server_response.dart';
 import 'package:mvl_app_core/network/exceptions.dart';
+import 'package:mvl_app_core/utils/app_exception.dart';
 import 'package:mvl_app_core/utils/json.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -23,15 +24,15 @@ String handleErrorMessage(BuildContext context, Object? exception, {String? cust
   }
 
   if (error is AppException) {
-    final String? userMessage = error.userMessage;
-    if (userMessage != null) {
+    final String userMessage = error.userMessage;
+    if (userMessage.isNotEmpty) {
       return userMessage;
     }
   }
 
   if (error is NetworkException) {
-    final String? userMessage = error.userMessage;
-    if (userMessage != null) {
+    final String userMessage = error.userMessage;
+    if (userMessage.isNotEmpty) {
       return userMessage;
     }
   }
