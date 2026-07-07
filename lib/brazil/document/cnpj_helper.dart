@@ -5,30 +5,34 @@ import 'dart:math';
 
 import 'package:mvl_app_core/extensions/string_extension.dart';
 
+const _blockList = [
+  '00000000000000',
+  '11111111111111',
+  '22222222222222',
+  '33333333333333',
+  '44444444444444',
+  '55555555555555',
+  '66666666666666',
+  '77777777777777',
+  '88888888888888',
+  '99999999999999',
+];
+
 class CNPJHelper {
   CNPJHelper(String cnpj) : value = _strip(cnpj);
   final String value;
 
-  static const _stipRegex = r'[^\d]';
+  static const _stripRegex = '[^A-Z0-9]';
 
-  static const _blockList = <String>[
-    '00000000000000',
-    '11111111111111',
-    '22222222222222',
-    '33333333333333',
-    '44444444444444',
-    '55555555555555',
-    '66666666666666',
-    '77777777777777',
-    '88888888888888',
-    '99999999999999',
-  ];
+  int _charValue(String char) {
+    return char.codeUnitAt(0) - 48;
+  }
 
   // Compute the Verifier Digit (or 'Dígito Verificador (DV)' in PT-BR).
   // You can learn more about the algorithm on [wikipedia (pt-br)](https://pt.wikipedia.org/wiki/D%C3%ADgito_verificador)
   int _verifierDigit(String cnpj) {
     var index = 2;
-    final List<int> reverse = cnpj.split('').map(int.parse).toList().reversed.toList();
+    final List<int> reverse = cnpj.split('').map(_charValue).toList().reversed.toList();
     var sum = 0;
 
     for (final number in reverse) {
@@ -45,16 +49,19 @@ class CNPJHelper {
       return '';
     }
 
-    final regExp = RegExp(r'^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$');
+    final regExp = RegExp(r'^([A-Z0-9]{2})([A-Z0-9]{3})([A-Z0-9]{3})([A-Z0-9]{4})(\d{2})$');
 
     return _strip(value).replaceAllMapped(regExp, (m) => '${m[1]}.${m[2]}.${m[3]}/${m[4]}-${m[5]}');
   }
 
   static String _strip(String? value) {
-    final regex = RegExp(_stipRegex);
-    final String cnpj = value ?? '';
+    final regex = RegExp(_stripRegex);
 
-    return cnpj.replaceAll(regex, '');
+    if (value == null) {
+      return '';
+    }
+
+    return value.replaceAll(regex, '').toUpperCase();
   }
 
   bool isValid() {

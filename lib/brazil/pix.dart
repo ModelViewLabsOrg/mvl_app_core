@@ -1,5 +1,5 @@
-import 'package:mvl_app_core/brazil/cnpj_helper.dart';
-import 'package:mvl_app_core/brazil/cpf_helper.dart';
+import 'package:mvl_app_core/brazil/document/cnpj_helper.dart';
+import 'package:mvl_app_core/brazil/document/cpf_helper.dart';
 import 'package:mvl_app_core/brazil/formatters.dart';
 import 'package:mvl_app_core/mvl_app_core_view.dart';
 import 'package:mvl_app_core/utils/validator.dart';
@@ -18,7 +18,6 @@ enum PixKeyType {
 }
 
 extension PixKeyTypeExt on PixKeyType {
-  
   bool get isCpf => this == PixKeyType.cpf;
   bool get isCnpj => this == PixKeyType.cnpj;
   bool get isTelefone => this == PixKeyType.telefone;

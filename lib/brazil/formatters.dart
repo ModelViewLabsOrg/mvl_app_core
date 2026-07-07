@@ -1,5 +1,5 @@
-import 'package:mvl_app_core/brazil/cnpj_helper.dart';
-import 'package:mvl_app_core/brazil/cpf_helper.dart';
+import 'package:mvl_app_core/brazil/document/cnpj_helper.dart';
+import 'package:mvl_app_core/brazil/document/cpf_helper.dart';
 import 'package:mvl_app_core/brazil/util_brasil_fields.dart';
 import 'package:mvl_app_core/extensions/string_extension.dart';
 import 'package:mvl_app_core/utils/currency_helper.dart';

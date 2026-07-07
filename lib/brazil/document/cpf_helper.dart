@@ -9,7 +9,7 @@ class CPFHelper {
   CPFHelper(String cpf) : value = _strip(cpf);
   final String value;
 
-  static const _blockList = <String>[
+  static const _blockList = [
     '00000000000',
     '11111111111',
     '22222222222',
