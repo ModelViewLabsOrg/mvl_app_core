@@ -36,6 +36,11 @@ class AppDimens {
   static const double kBreakpointDesktop = 900;
   static const double kMaxWidth = kBreakpointDesktop;
 
+  //Icons size
+  static const double iconS = 16;
+  static const double iconM = 24;
+  static const double iconL = 32;
+
   // Radius and Border
   static const double defaultRadius = 16;
   static BorderRadius defaultBorder({double radius = defaultRadius}) =>
