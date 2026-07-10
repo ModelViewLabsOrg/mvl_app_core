@@ -11,10 +11,18 @@ class Validator {
   const Validator(this.value);
   final String value;
 
-  bool isPasswordValid({
+  String? isPasswordValid({
     int minLength = pswMinLength,
     int maxLength = pswMaxLength,
-  }) => value.length >= minLength && value.length < maxLength;
+  }) {
+    if (value.length < minLength) {
+      return 'Senha inválida. Pelo menos $minLength caracteres';
+      ;
+    } else if (value.length > maxLength) {
+      return 'Senha inválida. Máximo de $maxLength caracteres';
+    }
+    return null;
+  }
 
   bool isAddressValid() => value.reallyLength() > 3;
 
