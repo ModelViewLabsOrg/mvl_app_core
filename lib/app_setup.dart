@@ -96,7 +96,10 @@ abstract class AppSetupBase {
     AppLogger.I().info('Initialize Firebase ${firebase.projectId}');
 
     await Firebase.initializeApp(options: firebase);
-    await AppRemoteConfig.setup(configKeys);
+
+    if (configKeys.isNotEmpty) {
+      await AppRemoteConfig.setup(configKeys);
+    }
 
     await tracking.init(configValues);
   }
