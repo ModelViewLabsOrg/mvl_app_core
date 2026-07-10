@@ -43,31 +43,23 @@ void main() {
   });
 
   group('OtpValidationException', () {
-    test('stores userMessage', () {
+    test('stores userMessage and shouldLogAsError', () {
       const ex = OtpValidationException('Código inválido', error: 'Código inválido');
       expect(ex.userMessage, 'Código inválido');
-    });
-
-    test('shouldLogAsError is false', () {
-      const ex = OtpValidationException('Código inválido', error: 'Código inválido');
       expect(ex.shouldLogAsError, isFalse);
-    });
-
-    test('is a NetworkException', () {
-      const ex = OtpValidationException('err', error: 'err');
       expect(ex, isA<NetworkException>());
     });
   });
 
   group('AuthOtpValidationExpiredException', () {
+    final ex = AuthOtpValidationExpiredException();
+
     test('has a userMessage about expired code', () {
-      final ex = AuthOtpValidationExpiredException();
       expect(ex.userMessage, isNotNull);
       expect(ex.userMessage, isNotEmpty);
     });
 
     test('shouldLogAsError is false', () {
-      final ex = AuthOtpValidationExpiredException();
       expect(ex.shouldLogAsError, isFalse);
     });
 
