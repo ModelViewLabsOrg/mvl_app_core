@@ -12,8 +12,7 @@ class OtpValidationException extends NetworkException {
   const OtpValidationException(
     super.userMessage, {
     required super.error,
-    required super.shouldLogAsError,
-  });
+  }) : super(shouldLogAsError: false);
 }
 
 class AuthOtpValidationExpiredException extends NetworkException {

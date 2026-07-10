@@ -24,7 +24,7 @@ final class AppVersionArgs {
     required String blacklist,
   }) : min = Version.parse(min),
        ideal = Version.parse(ideal),
-       blacklist = blacklist.split(',').map(Version.parse).toList();
+       blacklist = blacklist.isEmpty ? [] : blacklist.split(',').map(Version.parse).toList();
 
   factory AppVersionArgs.fromJson(Json json) {
     return AppVersionArgs(
@@ -42,9 +42,11 @@ final class AppVersionArgs {
     if (blacklist.contains(current) || current < min) {
       return AppVersionUpdate.must;
     }
+
     if (ideal > current) {
       return AppVersionUpdate.should;
     }
+
     return AppVersionUpdate.updated;
   }
 

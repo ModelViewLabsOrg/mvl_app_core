@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mvl_app_core/brazil/document/cpf_or_cnpj_formatter.dart';
 
 void main() {
   const formatter = CpfOuCnpjInputFormatter();

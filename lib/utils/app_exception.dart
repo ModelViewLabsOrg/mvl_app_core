@@ -4,7 +4,8 @@ class AppException implements Exception {
     required this.error,
     this.stackTrace,
     this.shouldLogAsError = true,
-  });
+  }) : assert(userMessage != '', 'userMessage cannot be empty'),
+       assert(error is Exception || error is String, 'error must be an Exception or a String');
 
   final String userMessage;
   final Object error;
@@ -13,6 +14,6 @@ class AppException implements Exception {
 
   @override
   String toString() {
-    return 'AppException: $userMessage${' (Error: $error)'}';
+    return 'AppException: $userMessage${' (Error: $error)'}. shouldLogAsError: $shouldLogAsError';
   }
 }

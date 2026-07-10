@@ -1,11 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mvl_app_core/network/exceptions.dart';
 import 'package:mvl_app_core/utils/app_exception.dart';
 
 void main() {
   group('AppException', () {
     test('stores message and error', () {
       const exception = AppException('Something went wrong', error: 'raw error');
-      expect(exception.message, 'Something went wrong');
+      expect(exception.userMessage, 'Something went wrong');
       expect(exception.error, 'raw error');
     });
 
@@ -34,22 +35,22 @@ void main() {
 
   group('AppFormError', () {
     test('stores message', () {
-      const error = AppFormError('Campo obrigatório');
-      expect(error.message, 'Campo obrigatório');
+      const error = AppFormError('Campo obrigatório', error: 'Campo obrigatório');
+      expect(error.userMessage, 'Campo obrigatório');
     });
 
     test('shouldLogAsError is always false', () {
-      const error = AppFormError('some error');
+      const error = AppFormError('some error', error: 'some error');
       expect(error.shouldLogAsError, isFalse);
     });
 
     test('toString includes AppFormError prefix', () {
-      const error = AppFormError('Campo inválido');
+      const error = AppFormError('Campo inválido', error: 'Campo inválido');
       expect(error.toString(), 'AppFormError: Campo inválido');
     });
 
     test('is an AppException', () {
-      const error = AppFormError('err');
+      const error = AppFormError('err', error: 'err');
       expect(error, isA<AppException>());
     });
   });

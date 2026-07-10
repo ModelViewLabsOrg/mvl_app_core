@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mvl_app_core/brazil/cnpj_helper.dart';
+import 'package:mvl_app_core/brazil/document/cnpj_helper.dart';
 
 void main() {
   group('CNPJHelper', () {

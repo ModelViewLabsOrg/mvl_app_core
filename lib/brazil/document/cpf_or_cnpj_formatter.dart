@@ -8,7 +8,7 @@ class CpfOuCnpjInputFormatter extends TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    final String stripped = newValue.text.replaceAll(RegExp('[^A-Z0-9]'), '').toUpperCase();
+    final String stripped = newValue.text.toUpperCase().replaceAll(RegExp('[^A-Z0-9]'), '');
     if (stripped.isEmpty) {
       return TextEditingValue.empty;
     }
