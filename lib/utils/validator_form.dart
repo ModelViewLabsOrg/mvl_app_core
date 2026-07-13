@@ -20,11 +20,23 @@ class FormValidator {
 
   String? password({int minLength = pswMinLength, int maxLength = pswMaxLength}) {
     final String? value = this.value;
-    if (value == null) {
-      return 'Senha inválida. Pelo menos 8 caracteres';
+    if (value == null || value.isReallyEmpty()) {
+      return 'Senha inválida. Pelo menos $minLength caracteres';
+    } else if (value.length < minLength) {
+      return 'Senha inválida. Pelo menos $minLength caracteres';
+    } else if (value.length > maxLength) {
+      return 'Senha inválida. Máximo $maxLength caracteres';
     }
 
-    return Validator(value).isPasswordValid(minLength: minLength, maxLength: maxLength);
+    final bool isValid = Validator(
+      value,
+    ).isPasswordValid(minLength: minLength, maxLength: maxLength);
+
+    if (isValid) {
+      return null;
+    }
+
+    return 'Senha inválida. Pelo menos $minLength caracteres e no máximo $maxLength caracteres';
   }
 
   String? confirmPassword(String? confirmation) {

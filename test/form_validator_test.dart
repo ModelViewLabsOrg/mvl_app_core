@@ -25,8 +25,12 @@ void main() {
     });
 
     group('password', () {
-      test('returns null for valid password', () {
+      test('returns null for a valid password consisting only of a String', () {
         expect(const FormValidator('validpassword').password(), isNull);
+      });
+
+      test('returns null for a valid password consisting only of a Number', () {
+        expect(const FormValidator('0123456789').password(), isNull);
       });
 
       test('returns error for too short password', () {
@@ -35,6 +39,17 @@ void main() {
 
       test('returns error for null password', () {
         expect(const FormValidator(null).password(), isNotNull);
+      });
+
+      test('returns message error for too short password', () {
+        expect(const FormValidator('short').password(), 'Senha inválida. Pelo menos 8 caracteres');
+      });
+
+      test('returns message error for too long password', () {
+        expect(
+          const FormValidator('abcdefghijklmnopqrstuvwxyz12345').password(),
+          'Senha inválida. Máximo 30 caracteres',
+        );
       });
     });
 
