@@ -51,6 +51,17 @@ void main() {
           'Senha inválida. Máximo 30 caracteres',
         );
       });
+
+      test('returns null for valid password with min length', () {
+        expect(const FormValidator('short').password(minLength: 4), isNull);
+      });
+
+      test('returns null for valid password with max length', () {
+        expect(
+          const FormValidator('abcdefghijklmnopqrstuvwxyz12345').password(maxLength: 40),
+          isNull,
+        );
+      });
     });
 
     group('confirmPassword', () {
