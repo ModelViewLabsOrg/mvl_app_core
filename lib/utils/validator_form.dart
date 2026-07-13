@@ -19,17 +19,25 @@ class FormValidator {
   String? email() => EmailValidator(value).isValid() ? null : 'E-mail inválido';
 
   String? password({int minLength = pswMinLength, int maxLength = pswMaxLength}) {
-    const error = 'Senha inválida. Pelo menos 8 caracteres';
     final String? value = this.value;
+
     if (value == null) {
-      return error;
+      return 'Senha inválida. Pelo menos $minLength caracteres';
     }
 
     if (Validator(value).isPasswordValid(minLength: minLength, maxLength: maxLength)) {
       return null;
     }
 
-    return error;
+    if (value.length < minLength) {
+      return 'Senha inválida. Pelo menos $minLength caracteres';
+    }
+
+    if (value.length > maxLength) {
+      return 'Senha inválida. Máximo $maxLength caracteres';
+    }
+
+    return 'Senha inválida. Pelo menos $minLength caracteres e no máximo $maxLength caracteres';
   }
 
   String? confirmPassword(String? confirmation) {
