@@ -28,6 +28,14 @@ extension StringExt on String {
         : capitalizeFirstLetter();
   }
 
+  String pluralize(int count, {String plural = 's'}) {
+    if (count <= 1) {
+      return this;
+    }
+
+    return '$this$plural';
+  }
+
   String onlyAlphanumerics([String replaceFor = '']) {
     return removeDiacritics(this).replaceAll(RegExp('[^A-Za-z0-9]'), replaceFor);
   }
