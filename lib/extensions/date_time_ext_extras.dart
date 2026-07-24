@@ -99,6 +99,8 @@ const weekDaysAbbr = <int, String>{
 
 extension StringDateExt on String {
   DateTime fromLocalDate() => DateTime.parse(this);
+  DateTime fromTzToLocalDate() => DateTime.parse(this).toLocal();
+
   DateTime fromUtcToLocalDate() => DateTime.parse(this).toUtc().toLocal();
 
   DateTime? toUtcDateNullable() => DateTime.tryParse(this)?.toUtc().toLocal();

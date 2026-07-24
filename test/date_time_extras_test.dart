@@ -4,7 +4,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:mvl_app_core/extensions/date_time_ext.dart';
-import 'package:mvl_app_core/extensions/date_time_ext_extras.dart';
 
 void main() {
   setUpAll(() async {

@@ -4,6 +4,8 @@ import 'package:jiffy/jiffy.dart';
 import 'package:mvl_app_core/extensions/date_time_ext_extras.dart';
 import 'package:mvl_app_core/extensions/string_extension.dart';
 
+export 'package:mvl_app_core/extensions/date_time_ext_extras.dart';
+
 extension DateTimeExt on DateTime {
   /// Out
   String mmm() => DateFormat('MMM').format(this).capitalize();
