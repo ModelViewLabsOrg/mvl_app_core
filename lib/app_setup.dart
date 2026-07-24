@@ -11,10 +11,10 @@ import 'package:mvl_app_core/app_logger.dart';
 import 'package:mvl_app_core/app_remote_config.dart';
 import 'package:mvl_app_core/tracking/app_tracking.dart';
 import 'package:mvl_app_core/utils/app_version.dart';
+import 'package:mvl_app_core/utils/url_strategy/url_strategy.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:timezone/data/latest_10y.dart' as tz_latest10y;
 import 'package:timezone/standalone.dart' as tz;
-import 'package:url_strategy/url_strategy.dart';
 
 abstract class AppSetupBase {
   // AppSetupBase({
