@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mvl_app_core/extensions/flutter_ext/context_extension.dart';
 import 'package:mvl_app_core/utils/version_control/version_control.dart';
 import 'package:mvl_app_core/widgets/app_dimens.dart';
 import 'package:mvl_app_core/widgets/app_text.dart';
@@ -23,12 +24,13 @@ class VersionAlertDialog extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const Center(
+            Center(
               child: Padding(
-                padding: EdgeInsets.only(bottom: AppDimens.kDefaultPadding),
+                padding: const EdgeInsets.only(bottom: AppDimens.kDefaultPadding),
                 child: Icon(
                   Icons.warning_amber_rounded,
                   size: 48,
+                  color: context.theme.colorScheme.error,
                 ),
                 // child: Assets.images.versionOutdatedLogo.image(
                 //   height: 160,
@@ -44,6 +46,9 @@ class VersionAlertDialog extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
+            gapM,
+
+            Center(child: AppText.bodySmall(context, versionControl.newVersion.toString())),
             gapM,
             Center(child: AppText.bodyMedium(context, versionControl.message)),
             gap,
