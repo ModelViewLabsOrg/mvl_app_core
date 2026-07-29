@@ -1,5 +1,4 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -43,7 +42,7 @@ abstract class AppSetupBase {
   }
 
   Future<void> _setupFlutter() async {
-    WidgetsFlutterBinding.ensureInitialized();
+    // WidgetsFlutterBinding.ensureInitialized();
     SentryWidgetsFlutterBinding.ensureInitialized();
 
     // await SystemChrome.setEnabledSystemUIMode(

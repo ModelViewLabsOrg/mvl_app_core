@@ -5,10 +5,13 @@ import 'package:mvl_app_core/utils/env_enum.dart';
 class AppSentryConfig {
   const AppSentryConfig({
     required this.dsnDefaultValue,
-    this.dsnRemoteKey = 'sentry_dsn',
+    this.dsnRemoteKey = sentryConfigDefaultKey,
     this.rateDefaultValue = 1,
-    this.rateRemoteKey = 'sentry_rate',
+    this.rateRemoteKey = sentryConfigRateKey,
   });
+
+  static const sentryConfigDefaultKey = 'sentry_dsn';
+  static const sentryConfigRateKey = 'sentry_rate';
 
   final String dsnDefaultValue;
   final String dsnRemoteKey;
