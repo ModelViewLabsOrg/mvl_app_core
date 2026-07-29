@@ -41,6 +41,10 @@ String handleErrorMessage(BuildContext context, Object? exception, {String? cust
     return error.userMessage;
   }
 
+  if (error is ServerResponseException) {
+    return error.userMessage;
+  }
+
   if (error is FunctionException) {
     final dynamic details = error.details;
     if (details is Json) {

@@ -109,6 +109,18 @@ extension StringNullableExt on String? {
 
   String toPhoneServer() => reallyLength() == 0 ? '' : '+55${onlyNumbers()}';
 
+  String fromPhoneServerWithoutDDI() {
+    var value = this;
+    if (value == null || value.reallyLength() == 0) {
+      return '';
+    }
+
+    if (value.startsWith('+55')) {
+      value = value.substring(3);
+    }
+    return value.toPhoneFormatted();
+  }
+
   String toPhoneFormatted() {
     if (reallyLength() == 0) {
       return '';

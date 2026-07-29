@@ -44,3 +44,14 @@ class ServerResponse {
   final String userMessage;
   final Json? data;
 }
+
+class ServerResponseException implements Exception {
+  const ServerResponseException(this.response);
+
+  final ServerResponse response;
+
+  String get userMessage => response.userMessage;
+
+  @override
+  String toString() => response.userMessage;
+}
