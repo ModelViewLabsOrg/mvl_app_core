@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:mvl_app_core/constants/account_strings.dart';
 import 'package:mvl_app_core/models/server_response.dart';
 import 'package:mvl_app_core/mvl_app_core_view.dart';
@@ -28,26 +26,23 @@ double bottomPadding(BuildContext context, [double adicional = 0]) {
   return MediaQuery.of(context).viewInsets.bottom + adicional;
 }
 
-Future<void> showSnackbarServerResponse(
-  BuildContext context,
-  ServerResponse response,
-) {
+void showSnackbarServerResponse(BuildContext context, ServerResponse response) {
   return showSnackbar(context, response.userMessage, isError: response.isError);
 }
 
-Future<void> showSnackbar(
+void showSnackbar(
   BuildContext context,
   String message, {
   String? title,
   bool isError = false,
   int duration = AppToastMessages.secondsDuration,
-}) async {
+}) {
   isError
       ? AppToastMessages(message, isError: true).show(context)
       : AppToastMessages(message).show(context);
 }
 
-Future<void> showSnackbarError(
+void showSnackbarError(
   BuildContext context,
   Object? error, {
   String customError = StringsCore.genericError,
