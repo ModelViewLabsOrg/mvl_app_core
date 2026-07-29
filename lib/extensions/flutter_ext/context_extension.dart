@@ -55,13 +55,9 @@ extension ContextExtensions on BuildContext {
 
   void dismissKeyboard() => unfocus();
 
-  void showToast(String message, {String? title}) {
-    showSnackbar(this, message, title: title).ignore();
-  }
+  void showToast(String message, {String? title}) => showSnackbar(this, message, title: title);
 
-  void showError(Object error) {
-    showSnackbarError(this, error).ignore();
-  }
+  void showError(Object error) => showSnackbarError(this, error);
 
   void logAndShowException({
     required Object exception,
@@ -70,6 +66,8 @@ extension ContextExtensions on BuildContext {
     String customError = StringsCore.genericError,
   }) {
     AppLogger.I().error(method, exception, stackTrace ?? StackTrace.current);
-    showSnackbarError(this, exception, customError: customError).ignore();
+    if (mounted) {
+      showSnackbarError(this, exception, customError: customError);
+    }
   }
 }
