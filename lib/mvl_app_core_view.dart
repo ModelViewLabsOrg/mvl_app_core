@@ -7,4 +7,3 @@ export 'package:mvl_app_core/widgets/app_button.dart';
 export 'package:mvl_app_core/widgets/app_dimens.dart';
 export 'package:mvl_app_core/widgets/app_loading.dart';
 export 'package:mvl_app_core/widgets/app_toast_message.dart';
-export 'package:mvl_app_core/widgets/async_value_ui.dart';

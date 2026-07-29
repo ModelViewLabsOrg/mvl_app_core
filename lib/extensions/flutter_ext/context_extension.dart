@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mvl_app_core/app_logger.dart';
 import 'package:mvl_app_core/constants/account_strings.dart';
-import 'package:mvl_app_core/mvl_app_core.dart';
-import 'package:mvl_app_core/widgets/base_view.dart';
+import 'package:mvl_app_core/models/server_response.dart';
+import 'package:mvl_app_core/utils/show_exception_alert_dialog.dart';
+import 'package:mvl_app_core/widgets/app_toast_message.dart';
 
 extension ContextExtensions on BuildContext {
   ThemeData get theme => Theme.of(this);
@@ -55,19 +57,37 @@ extension ContextExtensions on BuildContext {
 
   void dismissKeyboard() => unfocus();
 
-  void showToast(String message, {String? title}) => showSnackbar(this, message, title: title);
+  void showToast(
+    String message, {
+    String? title,
+    bool isError = false,
+    int duration = AppToastMessages.secondsDuration,
+  }) {
+    isError
+        ? AppToastMessages(message, isError: true).show(this)
+        : AppToastMessages(message).show(this);
+  }
 
-  void showError(Object error) => showSnackbarError(this, error);
+  void showError(Object error, {String customMsg = StringsCore.genericError}) {
+    return showToast(
+      handleErrorMessage(this, error, customMessage: customMsg),
+      isError: true,
+    );
+  }
+
+  void showServerResponse(ServerResponse response) {
+    return showToast(response.userMessage, isError: response.isError);
+  }
 
   void logAndShowException({
     required Object exception,
     required String method,
-    StackTrace? stackTrace,
-    String customError = StringsCore.genericError,
+    required StackTrace stackTrace,
+    String customMsg = StringsCore.genericError,
   }) {
-    AppLogger.I().error(method, exception, stackTrace ?? StackTrace.current);
+    appLogger.error(method, exception, stackTrace); //?? StackTrace.current);
     if (mounted) {
-      showSnackbarError(this, exception, customError: customError);
+      showError(exception, customMsg: customMsg);
     }
   }
 }
