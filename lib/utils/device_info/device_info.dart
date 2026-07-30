@@ -2,13 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mvl_app_core/extensions/flutter_ext/context_extension.dart';
 import 'package:mvl_app_core/utils/device_info/device_size.dart';
 
 export 'device_size.dart';
 
 class DeviceInfo {
   DeviceInfo(BuildContext c) {
-    size = MediaQuery.of(c).size;
+    size = c.mq.size;
     ppi = kIsWeb ? 96 : 150;
 
     final double width = size.width;

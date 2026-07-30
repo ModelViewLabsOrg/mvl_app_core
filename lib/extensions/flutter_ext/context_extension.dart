@@ -3,6 +3,7 @@ import 'package:mvl_app_core/app_logger.dart';
 import 'package:mvl_app_core/constants/account_strings.dart';
 import 'package:mvl_app_core/models/server_response.dart';
 import 'package:mvl_app_core/utils/show_exception_alert_dialog.dart';
+import 'package:mvl_app_core/widgets/app_dimens.dart';
 import 'package:mvl_app_core/widgets/app_toast_message.dart';
 
 extension ContextExtensions on BuildContext {
@@ -17,6 +18,8 @@ extension ContextExtensions on BuildContext {
 
   /// Returns if Orientation is landscape
   bool get isLandscape => mq.orientation == Orientation.landscape;
+
+  bool get isLargeScreen => mq.size.width > AppDimens.kBreakpointDesktop;
 
   /// Returns same as MediaQuery.of(context).size
   Size get sizePx => mq.size;
