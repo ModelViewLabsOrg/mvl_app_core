@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mvl_app_core/extensions/flutter_ext/context_extension.dart';
+import 'package:mvl_app_core/utils/app_version.dart';
 import 'package:mvl_app_core/utils/version_control/version_control.dart';
 import 'package:mvl_app_core/widgets/app_dimens.dart';
 import 'package:mvl_app_core/widgets/app_text.dart';
@@ -47,8 +48,12 @@ class VersionAlertDialog extends StatelessWidget {
               ),
             ),
             gapM,
-
-            Center(child: AppText.bodySmall(context, versionControl.newVersion.toString())),
+            Center(
+              child: AppText.bodySmall(
+                context,
+                'Sua versão atual é: ${AppVersion.I().versionStr}',
+              ),
+            ),
             gapM,
             Center(child: AppText.bodyMedium(context, versionControl.message)),
             gap,
