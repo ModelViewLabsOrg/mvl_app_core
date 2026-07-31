@@ -131,9 +131,7 @@ class AppTextField extends StatelessWidget {
         ? null
         : GestureDetector(
             onTap: toggleVisibility,
-            child: obscureText
-                ? Icon(DeviceInfo.isApple ? CupertinoIcons.eye : Icons.visibility)
-                : Icon(DeviceInfo.isApple ? CupertinoIcons.eye_slash : Icons.visibility_off),
+            child: obscureText ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
           );
 
     final bool isMultiline = (maxLines ?? 1) > 1 || (minLines ?? 1) > 1;
