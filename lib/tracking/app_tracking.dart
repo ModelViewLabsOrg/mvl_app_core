@@ -62,17 +62,18 @@ class AppTracking {
   Future<void> _initSentry() async {
     SentryWidgetsFlutterBinding.ensureInitialized();
 
-    final double rate = _config.sentryConfig.rateRemote.getDouble();
+    final double rate = kDebugMode ? 0 : _config.sentryConfig.rateRemote.getDouble();
     AppLogger.I().info('Sentry init, rate: $rate');
 
     await SentryFlutter.init((options) {
       options
         ..debug = kDebugMode
-        ..dsn = _config.sentryConfig.dsnRemote.getString()
+        ..dsn = kDebugMode ? null : _config.sentryConfig.dsnRemote.getString()
         ..release = AppVersion.I().versionStr
         ..environment = _config.env.name
         ..sampleRate = rate
         ..tracesSampleRate = rate
+        ..enableLogs = false
         ..captureFailedRequests = true
         ..enableAutoSessionTracking = false
         ..enableWindowMetricBreadcrumbs = true;
