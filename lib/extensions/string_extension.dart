@@ -182,4 +182,13 @@ extension StringNullableExt on String? {
 
     return '${value.substring(0, 1)}*****${value.substring(value.length - 1)}';
   }
+
+  String maskCreditCard() {
+    final String cleanNumber = onlyNumbers();
+    if (cleanNumber.length < 4) {
+      return '****';
+    }
+    final String lastDigits = cleanNumber.substring(cleanNumber.length - 4);
+    return '•••• •••• •••• $lastDigits';
+  }
 }
