@@ -20,7 +20,7 @@ class Validator {
 
   bool isCountryValid() => RegExp('[a-z]{2}').hasMatch(value);
 
-  bool isPhoneValid() {
+  bool isPhoneValid({bool mustBeMobile = false}) {
     final int length = value.onlyNumbersLength();
 
     return length == 10 || length == 11;
@@ -71,4 +71,6 @@ class Validator {
   bool isUUID() => RegExp(
     r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
   ).hasMatch(value);
+
+  bool isZipcodeValid() => RegExp(r'\d{2}\.\d{3}-\d{3}').hasMatch(value);
 }

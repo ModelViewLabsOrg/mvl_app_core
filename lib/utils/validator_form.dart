@@ -1,4 +1,5 @@
 import 'package:jiffy/jiffy.dart';
+import 'package:mvl_app_core/brazil/pix.dart';
 import 'package:mvl_app_core/extensions/date_time_ext.dart';
 import 'package:mvl_app_core/extensions/string_extension.dart';
 import 'package:mvl_app_core/utils/validator.dart';
@@ -43,9 +44,19 @@ class FormValidator {
     return value == confirmation ? null : 'Senha e confirmação não estão iguais';
   }
 
-  String? phone() {
+  String? phone({bool mustBeMobile = false}) {
     final String? value = this.value;
-    if (value == null || !Validator(value).isPhoneValid()) {
+    if (value == null) {
+      return 'Telefone inválido';
+    }
+
+    if (mustBeMobile) {
+      if (!Validator(value).isMobileValid()) {
+        return 'Celular inválido';
+      }
+    }
+
+    if (!Validator(value).isPhoneValid()) {
       return 'Telefone inválido';
     }
 
@@ -305,7 +316,7 @@ class FormValidator {
       return 'Cep inválido';
     }
 
-    if (RegExp(r'\d{2}\.\d{3}-\d{3}').hasMatch(value)) {
+    if (Validator(value).isZipcodeValid()) {
       return null;
     }
 
@@ -319,6 +330,14 @@ class FormValidator {
       return 'Valor inválido';
     }
 
+    return null;
+  }
+
+  String? validatePix(PixKeyType pixKeyType) {
+    final String? value = this.value;
+    if (value == null || !Pix(value).validate(pixKeyType)) {
+      return 'Chave PIX inválida';
+    }
     return null;
   }
 }
