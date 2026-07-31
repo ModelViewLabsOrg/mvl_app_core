@@ -184,11 +184,13 @@ extension StringNullableExt on String? {
   }
 
   String maskCreditCard() {
-    final String cleanNumber = onlyNumbers();
+    String cleanNumber = onlyNumbers();
     if (cleanNumber.length < 4) {
-      return '****';
+      cleanNumber = cleanNumber.padLeft(4, '*');
+    } else if (cleanNumber.length > 4) {
+      cleanNumber = cleanNumber.substring(cleanNumber.length - 4);
     }
-    final String lastDigits = cleanNumber.substring(cleanNumber.length - 4);
-    return '•••• •••• •••• $lastDigits';
+
+    return '•••• •••• •••• $cleanNumber';
   }
 }
