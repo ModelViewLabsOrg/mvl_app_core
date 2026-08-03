@@ -68,7 +68,7 @@ class AppTracking {
     await SentryFlutter.init((options) {
       options
         ..debug = kDebugMode
-        ..dsn = kDebugMode ? null : _config.sentryConfig.dsnRemote.getString()
+        ..dsn = kDebugMode ? '' : _config.sentryConfig.dsnRemote.getString()
         ..release = AppVersion.I().versionStr
         ..environment = _config.env.name
         ..sampleRate = rate
