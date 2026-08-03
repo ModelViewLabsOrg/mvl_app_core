@@ -62,7 +62,21 @@ class AppTracking {
   Future<void> _initSentry() async {
     SentryWidgetsFlutterBinding.ensureInitialized();
 
-    final double rate = kDebugMode ? 0 : _config.sentryConfig.rateRemote.getDouble();
+    if (kDebugMode) {
+      await SentryFlutter.init((options) {
+        options
+          ..debug = kDebugMode
+          ..dsn = ''
+          ..sampleRate = 0
+          ..tracesSampleRate = 0
+          ..environment = 'debug';
+      });
+
+      AppLogger.I().debug('Sentry debug mode!');
+      return;
+    }
+
+    final double rate = _config.sentryConfig.rateRemote.getDouble();
     AppLogger.I().info('Sentry init, rate: $rate');
 
     await SentryFlutter.init((options) {
