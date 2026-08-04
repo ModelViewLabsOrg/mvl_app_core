@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:mvl_app_core/constants/account_strings.dart';
 import 'package:mvl_app_core/mvl_app_core.dart';
+import 'package:mvl_app_core/utils/app_exception.dart';
 
 @immutable
 class ServerResponse {
@@ -43,15 +44,12 @@ class ServerResponse {
   final bool isError;
   final String userMessage;
   final Json? data;
+
+  ServerResponseException asException() => ServerResponseException(this);
 }
 
-class ServerResponseException implements Exception {
-  const ServerResponseException(this.response);
-
-  final ServerResponse response;
-
-  String get userMessage => response.userMessage;
-
-  @override
-  String toString() => response.userMessage;
+class ServerResponseException extends AppException {
+  ServerResponseException(ServerResponse response)
+    : assert(response.isError, 'response must be an error'),
+      super(response.userMessage, error: Exception(response.userMessage));
 }

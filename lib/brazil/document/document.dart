@@ -17,8 +17,8 @@ enum DocType {
     }
 
     throw AppException(
-      'Documento inválido',
-      error: Exception('Documento inválido'),
+      'Documento inválido: $rawValue',
+      error: Exception('Documento inválido: $rawValue'),
     );
   }
 }
