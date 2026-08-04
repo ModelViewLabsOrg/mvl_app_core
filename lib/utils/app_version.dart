@@ -67,7 +67,7 @@ class AppVersion {
     versionStr = info.version;
     version = Version.parse(info.version);
 
-    versionFull = '$versionStr+${info.buildNumber}';
+    versionFull = versionStr + (info.buildNumber.isEmpty ? '' : '+${info.buildNumber}');
     appName = info.appName;
     await _deviceOSInfo();
   }
