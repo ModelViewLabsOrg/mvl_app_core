@@ -163,8 +163,8 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
 
   Future<void> _triggerForceUpdate(bool allowCancel) async {
     _isAlertVisible = true;
-    final BuildContext ctx = widget.navigatorKey.currentContext ?? context;
-    await _showAlert(ctx, allowCancel);
+    final BuildContext context = widget.navigatorKey.currentContext ?? this.context;
+    await _showAlert(context, allowCancel);
 
     _isAlertVisible = false;
 
