@@ -37,6 +37,8 @@ class AppTracking {
   Aptabase get _aptabase => Aptabase.instance;
   Posthog? get _posthog => (_config.posthogKey?.isEmpty ?? true) ? null : Posthog();
 
+  AppAnalyticsUser? _user;
+
   Future<void> init(AppConfigValues config) async {
     _config = config;
 
@@ -141,7 +143,8 @@ class AppTracking {
 
   void _resetDefaultEventParams() {
     _eventsParameters = <String, String>{
-      'app': AppVersion.I().appName,
+      'auth_user_id': _user?.id ?? '',
+      if (_user?.data != null) 'auth_user_data': _user?.data?.toString() ?? '',
       'app_details': AppVersion.I().toString().replaceAll('\n', ' '),
     };
   }
@@ -164,6 +167,7 @@ class AppTracking {
   }
 
   Future<void> clearUser() async {
+    _user = null;
     Sentry.configureScope((scope) => scope.clear());
 
     await _analytics.setUserId();
@@ -177,6 +181,7 @@ class AppTracking {
   }
 
   Future<void> setUser(AppAnalyticsUser user) async {
+    _user = user;
     final String? userId = user.id;
 
     Sentry.configureScope((scope) => scope.setUser(user));
@@ -213,6 +218,8 @@ class AppTracking {
     if (!kIsWeb && userId != null) {
       await FirebaseCrashlytics.instance.setUserIdentifier(userId);
     }
+
+    _resetDefaultEventParams();
   }
 
   void signUp(String signUpMethod) {
