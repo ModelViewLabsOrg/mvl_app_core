@@ -70,16 +70,25 @@ abstract class AppSetupBase {
     tz_latest10y.initializeTimeZones();
 
     try {
-      tz.Location location;
+      tz.Location? location;
 
       try {
         final TimezoneInfo localTimezone = await FlutterTimezone.getLocalTimezone();
-        location = tz.getLocation(localTimezone.identifier);
+
+        appLogger.info('Local Timezone: ${localTimezone.identifier}');
+
+        location = switch (localTimezone.identifier) {
+          // 'US/Eastern' => tz.getLocation('America/New_York'),
+          // 'US/Central' => tz.getLocation('America/Chicago'),
+          // 'US/Mountain' => tz.getLocation('America/Denver'),
+          'US/Pacific' => tz.getLocation('America/Los_Angeles'),
+          _ => tz.getLocation(localTimezone.identifier),
+        };
       } catch (e, s) {
         AppLogger.I().error('AppSetup Set Location error', e, s);
-        location = tz.getLocation('UTC');
       }
 
+      location ??= tz.getLocation('Etc/UTC');
       tz.setLocalLocation(location);
       AppLogger.I().info('TZ Location defined: ${location.name}');
 
