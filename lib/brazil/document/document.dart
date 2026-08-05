@@ -5,8 +5,7 @@ import 'package:mvl_app_core/utils/validator.dart';
 
 enum DocType {
   cpf,
-  cnpj,
-  ;
+  cnpj;
 
   static DocType parseDoc(String rawValue) {
     if (Validator(rawValue).isCNPJValid()) {
@@ -17,8 +16,9 @@ enum DocType {
     }
 
     throw AppException(
-      'Documento inválido: $rawValue',
+      'Documento inválido!',
       error: Exception('Documento inválido: $rawValue'),
+      stackTrace: StackTrace.current,
     );
   }
 }
