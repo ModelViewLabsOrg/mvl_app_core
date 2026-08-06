@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:mvl_app_core/mvl_app_core.dart';
 import 'package:mvl_app_core/widgets/app_dropdown_native.dart';
 import 'package:mvl_app_core/widgets/app_text.dart';
 import 'package:mvl_app_core/widgets/app_text_field.dart';
@@ -18,7 +19,16 @@ class AppDropdownFieldCupertino<T> extends StatelessWidget {
       child: AppTextField(
         params.label,
         params.controller,
-        validator: (value) => params.validator(value as T), //params.validator,
+        validator: (value) {
+          if (value == null) {
+            return params.validator(null);
+          }
+
+          final T? selectedValue = params.items
+              .firstWhereOrNull((e) => e.value == value || e.label == value)
+              ?.value;
+          return params.validator(selectedValue);
+        }, //params.validator,
         // enabled: params.enabled,
         hintText: params.hintText,
         // readOnly: false,
