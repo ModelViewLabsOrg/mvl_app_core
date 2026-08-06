@@ -44,27 +44,26 @@ void main() {
       expect(str, contains('raw error'));
     });
 
-   
+    group('AppFormError', () {
+      test('stores message', () {
+        final error = AppFormError();
+        expect(error.userMessage, 'Campo obrigatório');
+      });
 
-  group('AppFormError', () {
-    test('stores message', () {
-      final error = AppFormError();
-      expect(error.userMessage, 'Campo obrigatório');
-    });
+      test('shouldLogAsError is always false', () {
+        final error = AppFormError('some error');
+        expect(error.shouldLogAsError, isFalse);
+      });
 
-    test('shouldLogAsError is always false', () {
-      final error = AppFormError('some error');
-      expect(error.shouldLogAsError, isFalse);
-    });
+      test('toString includes AppFormError prefix', () {
+        final error = AppFormError('Campo inválido');
+        expect(error.toString(), 'AppFormError: Campo inválido');
+      });
 
-    test('toString includes AppFormError prefix', () {
-      final error = AppFormError('Campo inválido');
-      expect(error.toString(), 'AppFormError: Campo inválido');
-    });
-
-    test('is an AppException', () {
-      final error = AppFormError('err');
-      expect(error, isA<AppException>());
+      test('is an AppException', () {
+        final error = AppFormError('err');
+        expect(error, isA<AppException>());
+      });
     });
   });
 }
