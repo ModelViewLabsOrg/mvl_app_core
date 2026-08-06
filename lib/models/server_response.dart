@@ -51,5 +51,9 @@ class ServerResponse {
 class ServerResponseException extends AppException {
   ServerResponseException(ServerResponse response)
     : assert(response.isError, 'response must be an error'),
-      super(response.userMessage, error: Exception(response.userMessage));
+      super(
+        response.userMessage,
+        error: Exception(response.userMessage),
+        stackTrace: StackTrace.current,
+      );
 }

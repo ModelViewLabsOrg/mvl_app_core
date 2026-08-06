@@ -1,5 +1,6 @@
 import 'package:mvl_app_core/app_logger.dart';
 import 'package:mvl_app_core/extensions/string_extension.dart';
+import 'package:mvl_app_core/utils/app_exception.dart';
 import 'package:mvl_app_core/utils/device_info/device_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -32,31 +33,33 @@ extension LaunchNullExt on String? {
   Future<bool> downloadFile() => launchURL(launchMode: LaunchMode.externalApplication);
 
   Future<void> launchWhatsapp({String? msg}) async {
-    String number = onlyNumbers();
-    if (number.isReallyEmpty()) {
-      return;
-    }
-    number = number.startsWith('55') ? number : '55$number';
-    // number = number.startsWith('55') ? number.substring(2) : number;
-    final text = msg == null ? '' : 'text=${Uri.encodeFull(msg)}';
+    try {
+      String number = onlyNumbers();
+      if (number.isReallyEmpty()) {
+        throw AppException.fromStringError('Whatsapp number is empty', StackTrace.current);
+      }
 
-    final bool shouldTryAgain;
-    final String url;
+      number = number.startsWith('55') ? number : '55$number';
+      // number = number.startsWith('55') ? number.substring(2) : number;
+      final text = msg == null ? '' : 'text=${Uri.encodeFull(msg)}';
 
-    if (DeviceInfo.isApple) {
-      url = 'whatsapp://wa.me/$number/?$text';
-      shouldTryAgain = true;
-    } else if (DeviceInfo.isAndroid) {
-      url = 'whatsapp://send?phone=$number&$text';
-      shouldTryAgain = true;
-    } else {
-      url = 'https://wa.me/$number?$text';
-      shouldTryAgain = false;
-    }
+      final String url;
+      final webUrl = 'https://wa.me/$number?$text';
 
-    final bool result = await url.launchURL();
-    if (!result && shouldTryAgain) {
-      await 'https://wa.me/$number?$text'.launchURL();
+      if (DeviceInfo.isApple) {
+        url = 'whatsapp://wa.me/$number/?$text';
+      } else if (DeviceInfo.isAndroid) {
+        url = 'whatsapp://send?phone=$number&$text';
+      } else {
+        url = webUrl;
+      }
+
+      final bool result = await url.launchURL();
+      if (!result && url != webUrl) {
+        await webUrl.launchURL();
+      }
+    } catch (e, s) {
+      AppLogger.I().error('launchWhatsapp', e, s);
     }
   }
 
