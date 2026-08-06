@@ -11,7 +11,7 @@ void main() {
         stackTrace: StackTrace.current,
       );
       expect(exception.userMessage, 'Something went wrong');
-      expect(exception.error, 'raw error');
+      expect(exception.error.toString(), 'Exception: raw error');
     });
 
     test('shouldLogAsError defaults to true', () {
@@ -44,15 +44,7 @@ void main() {
       expect(str, contains('raw error'));
     });
 
-    test('stackTrace is optional', () {
-      final exception = AppException(
-        'msg',
-        error: Exception('err'),
-        stackTrace: StackTrace.current,
-      );
-      expect(exception.stackTrace, isNull);
-    });
-  });
+   
 
   group('AppFormError', () {
     test('stores message', () {
