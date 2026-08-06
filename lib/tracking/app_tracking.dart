@@ -30,6 +30,7 @@ class AppTracking {
   static final _instance = AppTracking._internal();
 
   static const kEventNameMaxLength = 40;
+  static const _kTagMaxLength = 180;
 
   late final AppConfigValues _config;
 
@@ -58,44 +59,113 @@ class AppTracking {
       );
     }
 
+    _registerCrashlyticsHandlers();
     _resetDefaultEventParams();
+  }
+
+  /// Chains onto the handlers Sentry installed instead of replacing them, so a
+  /// framework error reaches both backends exactly once.
+  ///
+  /// Runs after [_initSentry] because Sentry wraps whatever is registered at
+  /// init time; registering earlier would put Crashlytics inside Sentry's
+  /// wrapper and make ordering depend on integration internals.
+  void _registerCrashlyticsHandlers() {
+    if (kIsWeb || kDebugMode || !_config.trackingEnabled) {
+      return;
+    }
+
+    final FirebaseCrashlytics crashlytics = FirebaseCrashlytics.instance;
+
+    final FlutterExceptionHandler? previousOnError = FlutterError.onError;
+    FlutterError.onError = (details) {
+      unawaited(crashlytics.recordFlutterError(details));
+      previousOnError?.call(details);
+    };
+
+    final ErrorCallback? previousPlatformOnError = PlatformDispatcher.instance.onError;
+    PlatformDispatcher.instance.onError = (e, s) {
+      unawaited(crashlytics.recordError(e, s, fatal: true));
+      return previousPlatformOnError?.call(e, s) ?? true;
+    };
   }
 
   Future<void> _initSentry() async {
     SentryWidgetsFlutterBinding.ensureInitialized();
 
-    if (kDebugMode) {
+    // An empty DSN keeps the SDK inert, so the automatic integrations
+    // (FlutterError, PlatformDispatcher, http) stay silent too.
+    if (kDebugMode || !_config.trackingEnabled) {
       await SentryFlutter.init((options) {
         options
           ..debug = kDebugMode
           ..dsn = ''
           ..sampleRate = 0
           ..tracesSampleRate = 0
-          ..environment = 'debug';
+          ..environment = kDebugMode ? 'debug' : _config.env.name;
       });
 
-      AppLogger.I().debug('Sentry debug mode!');
+      AppLogger.I().debug('Sentry disabled (debug mode or tracking off)');
       return;
     }
 
-    final double rate = _config.sentryConfig.rateRemote.getDouble();
-    AppLogger.I().info('Sentry init, rate: $rate');
+    // Only traces follow the remote rate. Errors stay at 100% so throttling the
+    // server disk usage can never silently hide production issues.
+    final double tracesRate = _config.sentryConfig.rateRemote.getDouble();
+    AppLogger.I().info('Sentry init, traces rate: $tracesRate');
 
     await SentryFlutter.init((options) {
       options
         ..debug = kDebugMode
-        ..dsn = kDebugMode ? '' : _config.sentryConfig.dsnRemote.getString()
+        ..dsn = _config.sentryConfig.dsnRemote.getString()
         ..release = AppVersion.I().versionStr
         ..environment = _config.env.name
-        ..sampleRate = rate
-        ..tracesSampleRate = rate
+        ..sampleRate = 1
+        ..tracesSampleRate = tracesRate
         ..enableLogs = false
-        ..captureFailedRequests = true
+        // Every offline Supabase call would otherwise become an issue.
+        ..captureFailedRequests = false
         ..enableAutoSessionTracking = false
-        ..enableWindowMetricBreadcrumbs = true;
+        // Logs every resize/rotation and pushes real events out of the
+        // breadcrumb buffer.
+        ..enableWindowMetricBreadcrumbs = false
+        ..maxBreadcrumbs = 150
+        ..beforeSend = _beforeSend;
+
+      <String>{'mvl_app_core', ..._config.inAppPackages}.forEach(options.addInAppInclude);
+    });
+
+    final appVersion = AppVersion.I();
+    await Sentry.configureScope((scope) async {
+      await scope.setContexts('app_details', <String, String>{
+        'app_name': appVersion.appName,
+        'app_version': appVersion.versionFull,
+        'device': appVersion.deviceFull,
+        'os': '${appVersion.osName} ${appVersion.osVersion}',
+      });
     });
 
     AppLogger.I().debug('Sentry ok!');
+  }
+
+  SentryEvent? _beforeSend(SentryEvent event, Hint hint) {
+    final List<String> patterns = _config.ignoredErrorPatterns;
+    if (patterns.isEmpty) {
+      return event;
+    }
+
+    // The original cause is often wrapped (GoException, AsyncError), so the
+    // rendered text is matched instead of the runtime type.
+    final text = StringBuffer()
+      ..write(event.throwable ?? '')
+      ..write(event.exceptions?.map((e) => '${e.type} ${e.value}').join(' ') ?? '')
+      ..write(event.message?.formatted ?? '');
+
+    final haystack = text.toString();
+    if (patterns.any(haystack.contains)) {
+      return null;
+    }
+
+    return event;
   }
 
   Future<void> _initPosthog() async {
@@ -150,7 +220,7 @@ class AppTracking {
   }
 
   void appOpen() {
-    Sentry.addBreadcrumb(Breadcrumb(message: 'open')).ignore();
+    _breadcrumb('app_open', category: 'lifecycle');
 
     _aptabaseTrackEvent('app_open');
     _posthogTrackEvent('app_open');
@@ -168,7 +238,13 @@ class AppTracking {
 
   Future<void> clearUser() async {
     _user = null;
-    Sentry.configureScope((scope) => scope.clear());
+
+    // Only the identity is dropped: scope.clear() would also wipe tags,
+    // contexts and every breadcrumb collected so far.
+    await Sentry.configureScope((scope) async {
+      await scope.setUser(null);
+      await scope.removeTag('role');
+    });
 
     await _analytics.setUserId();
     if (!kIsWeb) {
@@ -184,7 +260,17 @@ class AppTracking {
     _user = user;
     final String? userId = user.id;
 
-    Sentry.configureScope((scope) => scope.setUser(user));
+    // `role` is duplicated as a tag because user context fields are not
+    // filterable in the issue search, tags are.
+    final role = user.data?['role']?.toString();
+
+    await Sentry.configureScope((scope) async {
+      await scope.setUser(user);
+
+      if (role != null) {
+        await scope.setTag('role', role);
+      }
+    });
 
     await _analytics.setUserId(id: userId);
     await _analytics.logLogin();
@@ -223,7 +309,7 @@ class AppTracking {
   }
 
   void signUp(String signUpMethod) {
-    Sentry.addBreadcrumb(Breadcrumb(message: 'SignUp $signUpMethod')).ignore();
+    _breadcrumb('sign_up', category: 'auth', data: {'method': signUpMethod});
 
     _analytics.logSignUp(signUpMethod: signUpMethod).ignore();
 
@@ -236,7 +322,27 @@ class AppTracking {
   }
 
   void info(String message) {
-    Sentry.addBreadcrumb(Breadcrumb(message: message, level: SentryLevel.info)).ignore();
+    _breadcrumb(message, category: 'log');
+  }
+
+  /// Breadcrumbs carry only what is specific to the event. Identity and app
+  /// details live on the scope, set once, instead of being copied into every
+  /// entry of the timeline.
+  void _breadcrumb(
+    String message, {
+    required String category,
+    Map<String, dynamic>? data,
+    SentryLevel level = SentryLevel.info,
+  }) {
+    Sentry.addBreadcrumb(
+      Breadcrumb(
+        message: message,
+        category: category,
+        type: 'user',
+        data: (data?.isEmpty ?? true) ? null : data,
+        level: level,
+      ),
+    ).ignore();
   }
 
   void recordError(
@@ -244,15 +350,32 @@ class AppTracking {
     Object error,
     StackTrace? stackTrace, {
     bool fatal = false,
+    Map<String, String>? parameters,
   }) {
     if (!_config.trackingEnabled) {
       return;
     }
 
+    final String origin = method.length > _kTagMaxLength
+        ? method.substring(0, _kTagMaxLength)
+        : method;
+
+    // The origin goes on the scope, never as `message:` — a message on a
+    // captureException overrides the title without helping the grouping.
     Sentry.captureException(
       error,
       stackTrace: stackTrace,
-      message: SentryMessage(method),
+      withScope: (scope) async {
+        scope
+          ..transaction = origin
+          ..level = fatal ? SentryLevel.fatal : SentryLevel.error;
+
+        await scope.setTag('origin', origin);
+
+        if (parameters != null && parameters.isNotEmpty) {
+          await scope.setContexts('parameters', parameters);
+        }
+      },
     ).ignore();
 
     if (!kIsWeb && !kDebugMode) {
@@ -280,13 +403,7 @@ class AppTracking {
     final AnalyticsParameters parameters = (customParams ?? AnalyticsParameters())
       ..addAll(_eventsParameters);
 
-    Sentry.addBreadcrumb(
-      Breadcrumb(
-        message: eventName,
-        data: parameters,
-        level: SentryLevel.info,
-      ),
-    ).ignore();
+    _breadcrumb(eventName, category: 'analytics', data: customParams);
 
     // final String safeEventName = eventName; //.cleanLimit(kEventNameMaxLength);
 
@@ -313,7 +430,7 @@ class AppTracking {
             <String, String>{},
       );
 
-    Sentry.addBreadcrumb(Breadcrumb(message: 'BeginCheckout', data: parameters)).ignore();
+    _breadcrumb('begin_checkout', category: 'commerce', data: {'total': total});
 
     _aptabaseTrackEvent('checkout', parameters);
     _posthogTrackEvent('checkout', parameters);
@@ -340,7 +457,11 @@ class AppTracking {
             <String, String>{},
       );
 
-    Sentry.addBreadcrumb(Breadcrumb(message: 'purchase', data: parameters)).ignore();
+    _breadcrumb(
+      'purchase',
+      category: 'commerce',
+      data: {'total': total, 'transaction_id': transactionId},
+    );
 
     _aptabaseTrackEvent('compra', parameters);
     _posthogTrackEvent('compra', parameters);
@@ -356,7 +477,11 @@ class AppTracking {
   }
 
   void selectItem(String listName, TrackingItem item) {
-    Sentry.addBreadcrumb(Breadcrumb(message: 'Select $listName -> ${item.name}')).ignore();
+    _breadcrumb(
+      'select_item',
+      category: 'ui',
+      data: {'list': listName, 'item': item.name},
+    );
 
     const eventName = 'item_selecionado';
     final props = <String, String>{'lista': listName, 'item': item.name}..addAll(_eventsParameters);
@@ -373,7 +498,11 @@ class AppTracking {
   }
 
   void share(String contentType, String id, String method) {
-    Sentry.addBreadcrumb(Breadcrumb(message: 'share $method $contentType')).ignore();
+    _breadcrumb(
+      'share',
+      category: 'ui',
+      data: {'method': method, 'id': id, 'content_type': contentType},
+    );
 
     const eventName = 'share';
     final props = <String, String>{

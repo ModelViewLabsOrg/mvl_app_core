@@ -15,6 +15,9 @@ class AppSentryConfig {
 
   final String dsnDefaultValue;
   final String dsnRemoteKey;
+
+  /// Throttles performance traces only. Errors are always sampled at 100% so
+  /// lowering this remotely can never make production issues disappear.
   final double rateDefaultValue;
   final String rateRemoteKey;
 
@@ -36,9 +39,34 @@ class AppConfigValues {
     this.posthogHost = 'https://eu.i.posthog.com',
     this.trackingEnabled = !kDebugMode,
     this.currency = 'BRL',
+    this.inAppPackages = const <String>[],
+    this.ignoredErrorPatterns = defaultIgnoredErrorPatterns,
   });
 
+  /// Connectivity failures are not defects: they say the device was offline,
+  /// they carry no actionable stack trace and they drown out real issues.
+  static const defaultIgnoredErrorPatterns = <String>[
+    'Failed host lookup',
+    'AuthRetryableFetchException',
+    'SocketException',
+    'ClientException',
+    'Connection closed',
+    'Connection reset by peer',
+    'Software caused connection abort',
+    'Network is unreachable',
+    'Connection timed out',
+    'XMLHttpRequest error',
+  ];
+
   final EnvEnum env;
+
+  /// Dart package names owned by the team. Frames from these packages are
+  /// marked in-app so the issue culprit points at our code and not at the SDK.
+  final List<String> inAppPackages;
+
+  /// Substrings matched against the exception and message of every outgoing
+  /// event. A match drops the event before it leaves the device.
+  final List<String> ignoredErrorPatterns;
 
   final AppSentryConfig sentryConfig;
   final String aptabaseKey;

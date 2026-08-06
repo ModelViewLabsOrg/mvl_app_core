@@ -34,15 +34,9 @@ class AppLogger {
       return;
     }
 
-    parameters ??= <String, String>{};
-    parameters.addAll(<String, String>{
-      'method': method,
-      'error': error.toString(),
-      'stacktrace': stackTrace.toString(),
-    });
-
-    tracking.recordError(method, error, stackTrace);
-    //  tracking.event('erro', customParams: parameters);
+    // The error and the stack trace are first-class fields on the event; adding
+    // them again as strings only inflates the payload.
+    tracking.recordError(method, error, stackTrace, parameters: parameters);
   }
 
   void info(String message) {
