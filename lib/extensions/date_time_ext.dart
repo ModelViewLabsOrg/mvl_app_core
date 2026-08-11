@@ -162,9 +162,14 @@ extension DateTimeExt on DateTime {
 
   DateTime forceToUtc() => DateTime.utc(year, month, day, hour, minute, second);
 
-  /// Exemplo: `birthDate.nextOccurrence()`
   DateTime nextOccurrence([DateTime? relativeTo]) {
-    final DateTime base = relativeTo ?? clock.now();
-    return DateTime(base.year, month, day);
+    final DateTime base = (relativeTo ?? clock.now()).onlyDate();
+    final thisYearDate = DateTime(base.year, month, day);
+
+    if (thisYearDate.isBefore(base)) {
+      return DateTime(base.year + 1, month, day);
+    }
+
+    return thisYearDate;
   }
 }
