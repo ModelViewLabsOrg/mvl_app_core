@@ -24,7 +24,9 @@ final class AppVersionArgs {
     required String blacklist,
   }) : min = Version.parse(min),
        ideal = Version.parse(ideal),
-       blacklist = blacklist.isEmpty ? [] : blacklist.split(',').map(Version.parse).toList();
+       blacklist = blacklist.isEmpty
+           ? []
+           : blacklist.replaceAll(',', ';').split(';').map(Version.parse).toList();
 
   factory AppVersionArgs.fromJson(Json json) {
     return AppVersionArgs(
@@ -53,7 +55,7 @@ final class AppVersionArgs {
   Json toJson() => <String, dynamic>{
     'min': min.toString(),
     'ideal': ideal.toString(),
-    'blacklist': blacklist.map((e) => e.toString()).join(','),
+    'blacklist': blacklist.map((e) => e.toString()).join(';'),
   };
 }
 
