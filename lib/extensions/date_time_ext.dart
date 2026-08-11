@@ -161,4 +161,10 @@ extension DateTimeExt on DateTime {
   String toDate() => DateFormat('yyyy-MM-dd').format(this);
 
   DateTime forceToUtc() => DateTime.utc(year, month, day, hour, minute, second);
+
+  /// Exemplo: `birthDate.nextOccurrence()`
+  DateTime nextOccurrence([DateTime? relativeTo]) {
+    final DateTime base = relativeTo ?? clock.now();
+    return DateTime(base.year, month, day);
+  }
 }
