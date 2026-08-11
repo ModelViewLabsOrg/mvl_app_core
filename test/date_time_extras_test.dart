@@ -329,6 +329,25 @@ void main() {
         expect(DateTime(2024, 3, 15).toDate(), '2024-03-15');
       });
     });
+
+    group('nextOccurrence', () {
+      final birthDate = DateTime(1995, 8, 20);
+
+      test('DateTimeExt nextOccurrence returns occurrence in the current year if it has not occurred yet', () {
+        final relativeTo = DateTime(2026, 5, 10);
+        expect(birthDate.nextOccurrence(relativeTo), DateTime(2026, 8, 20));
+      });
+
+      test('DateTimeExt nextOccurrence returns occurrence today if relativeTo is on the exact birthday (same day)', () {
+        final relativeTo = DateTime(2026, 8, 20, 15, 30);
+        expect(birthDate.nextOccurrence(relativeTo), DateTime(2026, 8, 20));
+      });
+
+      test('DateTimeExt nextOccurrence returns occurrence next year if birthday has already passed this year', () {
+        final relativeTo = DateTime(2026, 9);
+        expect(birthDate.nextOccurrence(relativeTo), DateTime(2027, 8, 20));
+      });
+    });
   });
 
   group('DateTimeExtExtras functions', () {
