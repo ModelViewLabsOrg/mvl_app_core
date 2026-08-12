@@ -89,6 +89,8 @@ class Dt {
     11: 'Novembro',
     12: 'Dezembro',
   };
+
+  static List<WeekDays> get weekDaysBusiness => WeekDays.values.where((w) => w.isBusiness).toList();
 }
 
 extension StringDateExt on String {

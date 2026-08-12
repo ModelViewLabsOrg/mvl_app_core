@@ -196,7 +196,7 @@ void main() {
 
   group('weekDaysBusiness', () {
     test('contains weekdays Monday through Friday', () {
-      final List<WeekDays> businessDays = WeekDays.values.where((w) => w.isBusiness).toList();
+      final List<WeekDays> businessDays = Dt.weekDaysBusiness;
       expect(businessDays.length, 5);
       expect(businessDays.contains(WeekDays.saturday), isFalse);
       expect(businessDays.contains(WeekDays.monday), isTrue);
