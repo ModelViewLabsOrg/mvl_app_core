@@ -338,7 +338,13 @@ void main() {
       });
     });
 
-    test('returns occurrence today if today is the birthday', () {
+    test('returns occurrence today at midnight when today is the birthday', () {
+      withClock(Clock.fixed(DateTime(2026, 8, 20)), () {
+        expect(birthDate.nextBirthday(), DateTime(2026, 8, 20));
+      });
+    });
+
+    test('returns occurrence today in the afternoon when today is the birthday', () {
       withClock(Clock.fixed(DateTime(2026, 8, 20, 15, 30)), () {
         expect(birthDate.nextBirthday(), DateTime(2026, 8, 20));
       });
@@ -347,6 +353,18 @@ void main() {
     test('returns next year if birthday has already passed', () {
       withClock(Clock.fixed(DateTime(2026, 9)), () {
         expect(birthDate.nextBirthday(), DateTime(2027, 8, 20));
+      });
+    });
+
+    test('returns next year when birthday is after year wrap from December', () {
+      withClock(Clock.fixed(DateTime(2026, 12, 20)), () {
+        expect(DateTime(1995, 1, 5).nextBirthday(), DateTime(2027, 1, 5));
+      });
+    });
+
+    test('returns same year when birthday is still upcoming in December', () {
+      withClock(Clock.fixed(DateTime(2026, 12, 20)), () {
+        expect(DateTime(1995, 12, 25).nextBirthday(), DateTime(2026, 12, 25));
       });
     });
   });
