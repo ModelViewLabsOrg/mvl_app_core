@@ -70,6 +70,8 @@ class Dt {
     return jiffyNow.subtract(years: years, months: months, days: days, weeks: weeks).dateTime;
   }
 
+  static DateTime dayTodayOrTomorrowBefore18h() => clock.now().hour >= 18 ? tomorrow() : today();
+
   static int get secondsEpochNow =>
       clock.now().millisecondsSinceEpoch ~/ Duration.millisecondsPerSecond;
 

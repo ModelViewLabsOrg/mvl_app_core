@@ -276,4 +276,33 @@ void main() {
       expect(dt.is18yrs(), isNull);
     });
   });
+
+  group('dayTodayOrTomorrowBefore18h', () {
+    test('returns today before 18:00, including start of day and 17:59:59', () {
+      withClock(Clock.fixed(DateTime(2024, 3, 15)), () {
+        expect(Dt.dayTodayOrTomorrowBefore18h(), DateTime(2024, 3, 15));
+      });
+      withClock(Clock.fixed(DateTime(2024, 3, 15, 17, 59, 59)), () {
+        expect(Dt.dayTodayOrTomorrowBefore18h(), DateTime(2024, 3, 15));
+      });
+    });
+
+    test('returns tomorrow from 18:00 inclusive through end of day', () {
+      withClock(Clock.fixed(DateTime(2024, 3, 15, 18)), () {
+        expect(Dt.dayTodayOrTomorrowBefore18h(), DateTime(2024, 3, 16));
+      });
+      withClock(Clock.fixed(DateTime(2024, 3, 15, 23, 59, 59)), () {
+        expect(Dt.dayTodayOrTomorrowBefore18h(), DateTime(2024, 3, 16));
+      });
+    });
+
+    test('returns date-only values', () {
+      withClock(Clock.fixed(DateTime(2024, 3, 15, 17, 30)), () {
+        final DateTime result = Dt.dayTodayOrTomorrowBefore18h();
+        expect(result.hour, 0);
+        expect(result.minute, 0);
+        expect(result.second, 0);
+      });
+    });
+  });
 }
