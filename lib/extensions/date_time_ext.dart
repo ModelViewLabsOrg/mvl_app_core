@@ -125,7 +125,7 @@ extension DateTimeExt on DateTime {
     return (difference(otherDate).inHours / 24).floor();
   }
 
-  int differenceInYearsFromToday() => today().differenceInYears(this);
+  int differenceInYearsFromToday() => Dt.today().differenceInYears(this);
 
   int differenceInYears(DateTime date) {
     final Jiffy subtract = Jiffy.parseFromDateTime(
@@ -136,13 +136,13 @@ extension DateTimeExt on DateTime {
   }
 
   bool isDateInPast() {
-    final int days = onlyDate().difference(today()).inDays;
+    final int days = onlyDate().difference(Dt.today()).inDays;
 
     return days.isNegative;
   }
 
   int age() {
-    final DateTime dtToday = today();
+    final DateTime dtToday = Dt.today();
     final int age = dtToday.year - year;
 
     if (month > dtToday.month) {
@@ -162,12 +162,12 @@ extension DateTimeExt on DateTime {
 
   DateTime forceToUtc() => DateTime.utc(year, month, day, hour, minute, second);
 
-  DateTime nextOccurrence([DateTime? relativeTo]) {
-    final DateTime base = (relativeTo ?? clock.now()).onlyDate();
-    final thisYearDate = DateTime(base.year, month, day);
+  DateTime nextBirthday() {
+    final DateTime today = Dt.today();
+    final thisYearDate = DateTime(today.year, month, day);
 
-    if (thisYearDate.isBefore(base)) {
-      return DateTime(base.year + 1, month, day);
+    if (thisYearDate.isDateInPast()) {
+      return DateTime(today.year + 1, month, day);
     }
 
     return thisYearDate;
