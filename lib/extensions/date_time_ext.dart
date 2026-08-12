@@ -116,10 +116,36 @@ extension DateTimeExt on DateTime {
   );
 
   /// 2022-10-01 -> 2022-09-01
-  DateTime previousMonth() => Jiffy.parseFromDateTime(this).subtract(months: 1).dateTime;
+  DateTime previousDay([int days = 1]) => minus(days: days);
 
   /// 2022-10-01 -> 2022-11-01
-  DateTime nextMonth() => Jiffy.parseFromDateTime(this).add(months: 1).dateTime;
+  DateTime nextDay([int days = 1]) => plus(days: days);
+
+  /// 2022-10-01 -> 2022-09-01
+  DateTime previousMonth([int months = 1]) => minus(months: months);
+
+  /// 2022-10-01 -> 2022-11-01
+  DateTime nextMonth([int months = 1]) => plus(months: months);
+
+  /// 2022-10-01 -> 2023-10-01
+  DateTime nextYear([int years = 1]) => plus(years: years);
+
+  /// 2022-10-01 -> 2021-10-01
+  DateTime previousYear([int years = 1]) => minus(years: years);
+
+  /// Calendar-aware subtraction (years/months/days/weeks). Prefer over [Duration] math.
+  DateTime minus({int years = 0, int months = 0, int days = 0, int weeks = 0}) {
+    return Jiffy.parseFromDateTime(
+      this,
+    ).subtract(years: years, months: months, days: days, weeks: weeks).dateTime;
+  }
+
+  /// Calendar-aware addition (years/months/days/weeks). Prefer over [Duration] math.
+  DateTime plus({int years = 0, int months = 0, int days = 0, int weeks = 0}) {
+    return Jiffy.parseFromDateTime(
+      this,
+    ).add(years: years, months: months, days: days, weeks: weeks).dateTime;
+  }
 
   int daysBetween(DateTime otherDate) {
     return (difference(otherDate).inHours / 24).floor();

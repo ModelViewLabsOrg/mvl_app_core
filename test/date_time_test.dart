@@ -290,30 +290,47 @@ void main() {
   });
 
   group('previousMonth', () {
-    test('returns one month earlier', () {
-      final DateTime prev = DateTime(2024, 3, 15).previousMonth();
-      expect(prev.month, 2);
-      expect(prev.year, 2024);
-    });
-
-    test('handles January correctly', () {
-      final DateTime prev = DateTime(2024).previousMonth();
-      expect(prev.month, 12);
-      expect(prev.year, 2023);
+    test('returns one month earlier by default', () {
+      expect(DateTime(2024, 3, 15).previousMonth(), DateTime(2024, 2, 15));
     });
   });
 
   group('nextMonth', () {
-    test('returns one month later', () {
-      final DateTime next = DateTime(2024, 3, 15).nextMonth();
-      expect(next.month, 4);
-      expect(next.year, 2024);
+    test('returns one month later by default', () {
+      expect(DateTime(2024, 3, 15).nextMonth(), DateTime(2024, 4, 15));
+    });
+  });
+
+  group('nextYear', () {
+    test('returns one year later by default', () {
+      expect(DateTime(2022, 10).nextYear(), DateTime(2023, 10));
     });
 
-    test('handles December correctly', () {
-      final DateTime next = DateTime(2024, 12).nextMonth();
-      expect(next.month, 1);
-      expect(next.year, 2025);
+    test('accepts custom years', () {
+      expect(DateTime(2024, 3, 15).nextYear(18), DateTime(2042, 3, 15));
+    });
+  });
+
+  group('previousYear', () {
+    test('returns one year earlier by default', () {
+      expect(DateTime(2022, 10).previousYear(), DateTime(2021, 10));
+    });
+
+    test('accepts custom years', () {
+      expect(DateTime(2024, 3, 15).previousYear(110), DateTime(1914, 3, 15));
+    });
+  });
+
+  group('plus / minus', () {
+    test('combine calendar units without Duration day math', () {
+      expect(
+        DateTime(2024, 1, 31).plus(months: 1, days: 1),
+        DateTime(2024, 3),
+      );
+      expect(
+        DateTime(2024, 3, 15).minus(years: 1, months: 2),
+        DateTime(2023, 1, 15),
+      );
     });
   });
 

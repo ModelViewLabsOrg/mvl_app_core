@@ -38,6 +38,8 @@ class Dt {
 
   static DateTime dtNow() => clock.now();
 
+  static DateTime firstDateBirthday() => jiffyNow.subtract(years: 110).dateTime;
+
   static String currentMonth() => today().mmmm();
 
   static DateTime? cvvToDate(String cvv) {
@@ -64,10 +66,6 @@ class Dt {
     } catch (_) {
       return null;
     }
-  }
-
-  static DateTime durationAgo({int years = 0, int months = 0, int days = 0, int weeks = 0}) {
-    return jiffyNow.subtract(years: years, months: months, days: days, weeks: weeks).dateTime;
   }
 
   static DateTime dayTodayOrTomorrowBefore18h() => clock.now().hour >= 18 ? tomorrow() : today();

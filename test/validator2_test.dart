@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mvl_app_core/brazil/document/document.dart';
 import 'package:mvl_app_core/brazil/pix.dart';
+import 'package:mvl_app_core/extensions/date_time_ext.dart';
 import 'package:mvl_app_core/utils/app_exception.dart';
 import 'package:mvl_app_core/utils/validator.dart';
 
@@ -45,7 +46,7 @@ void main() {
 
     test('isBirthdayValid requires age greater than 1', () {
       final DateTime recent = DateTime.now().subtract(const Duration(days: 30));
-      final DateTime oldEnough = DateTime.now().subtract(const Duration(days: 365 * 5));
+      final DateTime oldEnough = DateTime.now().minus(years: 5);
 
       expect(const Validator('').isBirthdayValid(recent), isFalse);
       expect(const Validator('').isBirthdayValid(oldEnough), isTrue);

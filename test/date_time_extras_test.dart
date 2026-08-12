@@ -70,15 +70,15 @@ void main() {
   group('durationAgo', () {
     test('subtracts given duration from now', () {
       withClock(Clock.fixed(DateTime(2024, 3, 15)), () {
-        final DateTime result = Dt.durationAgo(days: 5);
+        final DateTime result = Dt.jiffyNow.subtract(days: 5).dateTime;
         expect(result.isBefore(DateTime(2024, 3, 15)), isTrue);
       });
     });
 
     test('subtracts years', () {
       withClock(Clock.fixed(DateTime(2024, 3, 15)), () {
-        final DateTime result = Dt.durationAgo(years: 1);
-        expect(result.year, 2023);
+        final DateTime result = Dt.jiffyNow.subtract(years: 1).dateTime;
+        expect(result, DateTime(2023, 3, 15));
       });
     });
   });

@@ -1,5 +1,6 @@
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
+import 'package:mvl_app_core/extensions/date_time_ext.dart';
 
 export 'package:date_field/date_field.dart';
 
@@ -20,8 +21,8 @@ class AppBirthdayField extends StatelessWidget {
     return DateTimeFormField(
       decoration: InputDecoration(labelText: label),
       firstDate: DateTime(1900),
-      lastDate: DateTime.now().add(Duration(days: -365 * minAge)),
-      initialPickerDateTime: DateTime.now(),
+      lastDate: Dt.today().previousYear(minAge),
+      initialPickerDateTime: Dt.dtNow(),
       onChanged: (value) {
         if (value != null) {
           onChanged(value);
