@@ -138,8 +138,8 @@ void main() {
     test('parses valid MM/YY card expiry', () {
       final DateTime? date = Dt.cvvToDate('12/25');
       expect(date, isNotNull);
-      expect(date!.month, 12);
-      expect(date.year, 2025);
+      expect(date?.month, 12);
+      expect(date?.year, 2025);
     });
 
     test('returns null when no slash present', () {
@@ -229,9 +229,9 @@ void main() {
       test('parses Brazilian date format dd/MM/yyyy', () {
         final DateTime? date = '15/03/2024'.parseBrFormat('/');
         expect(date, isNotNull);
-        expect(date!.day, 15);
-        expect(date.month, 3);
-        expect(date.year, 2024);
+        expect(date?.day, 15);
+        expect(date?.month, 3);
+        expect(date?.year, 2024);
       });
 
       test('returns null for invalid date string', () {

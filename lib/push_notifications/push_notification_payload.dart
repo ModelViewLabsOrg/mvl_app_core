@@ -50,13 +50,13 @@ class PushNotificationPayload {
   final Json? data;
 
   /// Check if payload contains a deep link route
-  bool get hasRoute => route != null && route!.isNotEmpty;
+  bool get hasRoute => route?.isNotEmpty ?? false;
 
   /// Check if payload contains a user message
-  bool get hasUserMessage => userMessage != null && userMessage!.isNotEmpty;
+  bool get hasUserMessage => userMessage?.isNotEmpty ?? false;
 
   /// Check if payload contains a type
-  bool get hasType => type != null && type!.isNotEmpty;
+  bool get hasType => type?.isNotEmpty ?? false;
 
   /// Get a specific value from the data map
   T? getDataValue<T>(String key) {

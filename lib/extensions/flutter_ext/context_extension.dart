@@ -51,7 +51,9 @@ extension ContextExtensions on BuildContext {
       if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
         FocusManager.instance.primaryFocus?.unfocus();
       }
-    } catch (_) {}
+    } catch (e, s) {
+      appLogger.error('unfocus error $e', e, s);
+    }
   }
 
   void requestFocus(FocusNode node) {

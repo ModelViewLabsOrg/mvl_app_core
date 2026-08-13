@@ -59,7 +59,7 @@ extension ColorExt on Color {
   /// and 1 means the color will be black.
   Color shade([double amount = 0.1]) {
     assert(amount >= 0 && amount <= 1, 'amount must be between 0 and 1');
-    return Color.lerp(this, Colors.black, amount)!; // Use non-null assertion
+    return Color.lerp(this, Colors.black, amount) ?? Colors.black;
   }
 
   /// Creates a tint of the color by mixing it with white.
@@ -68,7 +68,7 @@ extension ColorExt on Color {
   /// and 1 means the color will be white.
   Color tint([double amount = 0.1]) {
     assert(amount >= 0 && amount <= 1, 'amount must be between 0 and 1');
-    return Color.lerp(this, Colors.white, amount)!; // Use non-null assertion
+    return Color.lerp(this, Colors.white, amount) ?? Colors.white;
   }
 
   /// Calculates the contrast ratio between this color and another [otherColor].
@@ -99,7 +99,7 @@ extension ColorExt on Color {
   /// and 1 means fully blended with the [otherColor].
   Color blend(Color otherColor, [double amount = 0.5]) {
     assert(amount >= 0 && amount <= 1, 'amount must be between 0 and 1');
-    return Color.lerp(this, otherColor, amount)!;
+    return Color.lerp(this, otherColor, amount) ?? otherColor;
   }
 
   /// Converts this color to grayscale.

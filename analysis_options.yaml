@@ -1,36 +1,74 @@
 include: package:mvl_lint/analysis_options.yaml
 
 analyzer:
-  exclude:
-    - "**/*.g.dart"
-    - "**/*.freezed.dart"
-    - "**/*.pb.dart"
-    - "**/generated/**"
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  errors:
+    always_use_package_imports: error
+    library_private_types_in_public_api: ignore
+    invalid_annotation_target: ignore
+    missing_required_param: error
+    missing_return: error
+    record_literal_one_positional_no_trailing_comma: error
+    unused_catch_clause: error
+    unused_catch_stack: error
+    unused_local_variable: error
 
+    inference_failure_on_function_invocation: warning
+    avoid_dynamic_calls: error
+    close_sinks: error
+    deprecated_member_use_from_same_package: error
+    public_member_api_docs: ignore
+    use_null_aware_elements: error
+
+  exclude:
+    - "**.mocks.dart"
+    - "**/*.freezed.dart"
+    - "**/*.g.dart"
+    - "bin/cache/**"
+    - assets/**
+    - build/**
+    - lib/generated_plugin_registrant.dart
+    - mason_bricks/**
+    - packages/shared/test/full_coverage_test.dart
+    - test/.test_coverage.dart
+    - test/full_coverage_test.dart
+    - "dev/conductor/lib/proto/*"
+    - "engine/**"
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 plugins:
+  # riverpod_lint: any
+  # dart_code_linter: any
   mvl_lint:
     git:
       url: https://github.com/ModelViewLabsOrg/mvl_lint
-      ref: main  # ou tag/commit específico, ex: v1.0.0
+      ref: main
 
-    diagnostics:
-      avoid_null_assertion: true
-      avoid_final_with_getter: true
-      avoid_global_state: true
-      avoid_late_keyword: true
-      avoid_unnecessary_return_variable: true
-      avoid_unnecessary_type_assertions: true
-      avoid_unnecessary_type_casts: true
-      avoid_unrelated_type_assertions: true
-      avoid_unused_parameters: true
-      cyclomatic_complexity: true
-      function_lines_of_code: true
-      no_empty_block: true
-      no_equal_then_else: true
-      no_magic_number: true
-      number_of_parameters: true
-      prefer_early_return: true
-      prefer_first: true
-      prefer_last: true
-      prefer_match_file_name: true
+    # diagnostics:
+      # avoid_null_assertion: error
+      # avoid_final_with_getter: error
+      # avoid_global_state: true
+      # avoid_late_keyword: true
+      # avoid_unnecessary_return_variable: true
+      # avoid_unnecessary_type_assertions: true
+      # avoid_unnecessary_type_casts: true
+      # avoid_unrelated_type_assertions: true
+      # avoid_unused_parameters: true
+      # cyclomatic_complexity: true
+      # function_lines_of_code: true
+      # no_empty_block: true
+      # no_equal_then_else: true
+      # no_magic_number: true
+      # number_of_parameters: true
+      # prefer_early_return: true
+      # prefer_first: true
+      # prefer_last: true
+      # prefer_match_file_name: true

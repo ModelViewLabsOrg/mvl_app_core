@@ -14,7 +14,7 @@ class DeepLinkHelper {
   DeepLinkHelper._internal();
 
   factory DeepLinkHelper.I() => _instance;
-  static DeepLinkHelper get instance => _instance;
+  // static DeepLinkHelper get instance => _instance;
   static final _instance = DeepLinkHelper._internal();
 
   /// Navigation callback function
@@ -77,7 +77,7 @@ class DeepLinkHelper {
 
     if (isContextAvailable || _contextGetter == null) {
       try {
-        _navigationCallback!(normalizedRoute);
+        _navigationCallback?.call(normalizedRoute);
         AppLogger.I().info('DeepLinkHelper: Navigated to $normalizedRoute');
         return true;
       } catch (e, stackTrace) {
@@ -151,7 +151,7 @@ class DeepLinkHelper {
     var successCount = 0;
     for (final route in routesToProcess) {
       try {
-        _navigationCallback!(route);
+        _navigationCallback?.call(route);
         successCount++;
         AppLogger.I().info('DeepLinkHelper: Processed pending route $route');
       } catch (e, stackTrace) {

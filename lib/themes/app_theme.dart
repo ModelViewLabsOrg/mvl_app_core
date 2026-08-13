@@ -7,13 +7,21 @@ class AppTheme {
         (lightColor == null && lightScheme != null) || (lightColor != null && lightScheme == null),
         'Either light color or light scheme must be provided',
       ),
-      _lightScheme = lightScheme ?? ColorScheme.fromSeed(seedColor: lightColor!),
+      _lightScheme =
+          lightScheme ??
+          ColorScheme.fromSeed(
+            seedColor: lightColor ?? Colors.white,
+          ),
       assert(
         (darkColor == null && darkScheme != null) || (darkColor != null && darkScheme == null),
         'Either dark color or dark scheme must be provided',
       ),
       _darkScheme =
-          darkScheme ?? ColorScheme.fromSeed(seedColor: darkColor!, brightness: Brightness.dark);
+          darkScheme ??
+          ColorScheme.fromSeed(
+            seedColor: darkColor ?? Colors.black,
+            brightness: Brightness.dark,
+          );
 
   final ColorScheme _lightScheme;
   final ColorScheme _darkScheme;

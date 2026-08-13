@@ -141,7 +141,11 @@ mixin UtilBrasilFields {
     final String fixed = value.toStringAsFixed(decimal);
     final List<String> separatedValues = fixed.split('.');
 
-    separatedValues[0] = addSeparator(separatedValues[0]);
+    if (separatedValues.isEmpty) {
+      return '';
+    }
+
+    separatedValues.first = addSeparator(separatedValues.first);
     String formatted = separatedValues.join(',');
 
     if (isNegative) {

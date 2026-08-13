@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:mvl_app_core/app_config.dart';
-import 'package:mvl_app_core/app_config_values.dart';
 import 'package:mvl_app_core/app_logger.dart';
+import 'package:mvl_app_core/app_sentry_config.dart';
 import 'package:mvl_app_core/utils/app_version.dart';
 import 'package:mvl_app_core/utils/device_info/device_info.dart';
 import 'package:mvl_app_core/utils/launch_extension.dart';

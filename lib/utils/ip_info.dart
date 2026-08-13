@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:mvl_app_core/utils/json.dart';
 import 'package:universal_io/io.dart';
 
+const kHttpSuccess = 200;
+
 final HttpClient _http = newUniversalHttpClient();
 
 Future<IpInfo> fetchIpInfo() async {
@@ -16,7 +18,7 @@ Future<IpInfo> fetchIpInfo() async {
 
   final String bodyResponse = await httpResponse.transform(utf8.decoder).join();
 
-  if (httpResponse.statusCode == 200) {
+  if (httpResponse.statusCode == kHttpSuccess) {
     return IpInfo.fromJson(jsonDecode(bodyResponse) as Json);
   }
 
@@ -30,7 +32,7 @@ Future<IpInfo> fetchIpInfo() async {
 Future<IpInfo?> fetchIpInfoSafe() async {
   try {
     return await fetchIpInfo();
-  } catch (e, _) {
+  } catch (e) {
     return null;
   }
 }

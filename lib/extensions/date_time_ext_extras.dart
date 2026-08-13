@@ -53,11 +53,11 @@ class Dt {
         return null;
       }
 
-      final int month = int.parse(split[0]);
+      final int month = int.parse(split.first);
       if (month < 1 || month > 12) {
         return null;
       }
-      final int year = 2000 + int.parse(split[1]);
+      final int year = 2000 + int.parse(split.last);
       if (year < 2000) {
         return null;
       }

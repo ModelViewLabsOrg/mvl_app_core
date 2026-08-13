@@ -1,5 +1,5 @@
-import 'package:mvl_app_core/app_config_values.dart';
 import 'package:mvl_app_core/app_logger.dart';
+import 'package:mvl_app_core/app_sentry_config.dart';
 import 'package:mvl_app_core/utils/env_enum.dart';
 
 class AppConfig {
