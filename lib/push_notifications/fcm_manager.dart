@@ -72,24 +72,81 @@ class AppFcmManager {
     return settings.authorizationStatus;
   }
 
+  Future<bool> isSupported() => _messaging.isSupported();
+
+  Map<String, String> _fcmDebugContext({
+    required String step,
+    AuthorizationStatus? statusBefore,
+    bool? messagingSupported,
+  }) {
+    final String? vapid = _fcmWebToken;
+    return <String, String>{
+      'step': step,
+      'status_before': statusBefore?.name ?? 'unknown',
+      'messaging_supported': '${messagingSupported ?? 'unknown'}',
+      'is_web': '$kIsWeb',
+      'platform': defaultTargetPlatform.name,
+      'has_vapid_key': '${vapid != null && vapid.isNotEmpty}',
+      'has_token': '${_token != null}',
+    };
+  }
+
   Future<AuthorizationStatus> requestPermission() async {
-    final AuthorizationStatus authorizationStatus = await status();
+    var step = 'begin';
+    AuthorizationStatus? statusBefore;
+    bool? messagingSupported;
 
-    if (authorizationStatus == AuthorizationStatus.notDetermined ||
-        authorizationStatus == AuthorizationStatus.denied) {
-      return (await _messaging.requestPermission()).authorizationStatus;
+    try {
+      step = 'is_supported';
+      messagingSupported = await isSupported();
+      appLogger.info(
+        '>> Firebase FCM requestPermission: '
+        'supported=$messagingSupported web=$kIsWeb '
+        'platform=${defaultTargetPlatform.name}',
+      );
+
+      if (!messagingSupported) {
+        appLogger.info('>> Firebase FCM not supported on this browser/platform');
+        return AuthorizationStatus.denied;
+      }
+
+      step = 'status';
+      statusBefore = await status();
+      appLogger.info('>> Firebase FCM permission status before: $statusBefore');
+
+      if (statusBefore == AuthorizationStatus.notDetermined ||
+          statusBefore == AuthorizationStatus.denied) {
+        step = 'request_permission';
+        final AuthorizationStatus requested =
+            (await _messaging.requestPermission()).authorizationStatus;
+        appLogger.info('>> Firebase FCM permission after request: $requested');
+        return requested;
+      }
+
+      if (!kIsWeb && DeviceInfo.isApple) {
+        tracking.event('notifications_$statusBefore');
+      }
+
+      if (statusBefore == AuthorizationStatus.authorized ||
+          statusBefore == AuthorizationStatus.provisional) {
+        step = 'setup';
+        await _setup();
+      }
+
+      return statusBefore;
+    } catch (e, s) {
+      appLogger.error(
+        'fcm_request_permission',
+        e,
+        s,
+        _fcmDebugContext(
+          step: step,
+          statusBefore: statusBefore,
+          messagingSupported: messagingSupported,
+        ),
+      );
+      rethrow;
     }
-
-    if (!kIsWeb && DeviceInfo.isApple) {
-      tracking.event('notifications_$authorizationStatus');
-    }
-
-    if (authorizationStatus == AuthorizationStatus.authorized ||
-        authorizationStatus == AuthorizationStatus.provisional) {
-      await _setup();
-    }
-
-    return authorizationStatus;
   }
 
   Future<void> _setup() async {
@@ -102,8 +159,12 @@ class AppFcmManager {
       _token = await _messaging.getToken(
         vapidKey: kIsWeb ? _fcmWebToken : null,
       );
-    } catch (e) {
-      appLogger.info('>> Firebase FCM Could not get token: $e');
+    } catch (e, s) {
+      // Common on unsupported/partial web push browsers; keep as breadcrumb.
+      appLogger.info(
+        '>> Firebase FCM Could not get token '
+        '(${_fcmDebugContext(step: 'get_token')}): $e !! $s',
+      );
     }
 
     final String? token = _token;
@@ -115,8 +176,8 @@ class AppFcmManager {
     try {
       FirebaseMessaging.onMessage.listen(_onMessage);
       _messaging.onTokenRefresh.listen(_onTokenRefresh);
-    } catch (e) {
-      /* Dont do anything */
+    } catch (e, s) {
+      appLogger.info('>> Firebase FCM listen onMessage failed: $e !! $s');
     }
 
     try {
@@ -124,14 +185,14 @@ class AppFcmManager {
         _onMessageOpenedApp,
         onError: _onError,
       );
-    } catch (e) {
-      /* Dont do anything */
+    } catch (e, s) {
+      appLogger.info('>> Firebase FCM listen onMessageOpenedApp failed: $e !! $s');
     }
 
     try {
       FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
-    } catch (e) {
-      /* Dont do anything */
+    } catch (e, s) {
+      appLogger.info('>> Firebase FCM background handler failed: $e !! $s');
     }
   }
 
