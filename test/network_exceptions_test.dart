@@ -15,10 +15,9 @@ void main() {
       expect(ex.shouldLogAsError, isTrue);
     });
 
-    test('toString includes shouldLogAsError and userMessage', () {
+    test('toString carries the message and the wrapped cause', () {
       final ex = AppException.fromStringError('test error', StackTrace.current);
-      expect(ex.toString(), contains('test error'));
-      expect(ex.toString(), contains('true'));
+      expect(ex.toString(), 'test error (Error: Exception: test error)');
     });
 
     test('throws AssertionError when userMessage is empty', () {

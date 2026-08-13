@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:mvl_app_core/app_remote_config.dart';
+import 'package:mvl_app_core/tracking/app_tracking.dart';
 import 'package:mvl_app_core/utils/env_enum.dart';
 
 class AppSentryConfig {
@@ -41,6 +42,7 @@ class AppConfigValues {
     this.currency = 'BRL',
     this.inAppPackages = const <String>[],
     this.ignoredErrorPatterns = defaultIgnoredErrorPatterns,
+    this.exceptionTypeResolvers = const <ExceptionTypeResolver>[],
   });
 
   /// Connectivity failures are not defects: they say the device was offline,
@@ -67,6 +69,11 @@ class AppConfigValues {
   /// Substrings matched against the exception and message of every outgoing
   /// event. A match drops the event before it leaves the device.
   final List<String> ignoredErrorPatterns;
+
+  /// Recovers class names for third-party exceptions, which release builds
+  /// obfuscate into symbols like `kxb`. Exceptions owned by the app describe
+  /// themselves through `ReportableException` and need no resolver.
+  final List<ExceptionTypeResolver> exceptionTypeResolvers;
 
   final AppSentryConfig sentryConfig;
   final String aptabaseKey;

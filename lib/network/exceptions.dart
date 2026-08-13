@@ -10,12 +10,18 @@ class NetworkException extends AppException {
   factory NetworkException.fromStringError(String error, {bool shouldLogAsError = true}) {
     return NetworkException(error, error: Exception(error), shouldLogAsError: shouldLogAsError);
   }
+
+  @override
+  String get reportType => 'NetworkException';
 }
 
 class OtpValidationException extends NetworkException {
   OtpValidationException([
     super.userMessage = 'Confira o código de confirmação enviado para sua conta',
   ]) : super(error: Exception(userMessage), shouldLogAsError: false);
+
+  @override
+  String get reportType => 'OtpValidationException';
 }
 
 class AuthOtpValidationExpiredException extends NetworkException {
@@ -29,6 +35,9 @@ class AuthOtpValidationExpiredException extends NetworkException {
         ),
         shouldLogAsError: false,
       );
+
+  @override
+  String get reportType => 'AuthOtpValidationExpiredException';
 }
 
 class AppFormError extends AppException {
@@ -39,5 +48,8 @@ class AppFormError extends AppException {
   bool get shouldLogAsError => false;
 
   @override
-  String toString() => 'AppFormError: $userMessage';
+  String get reportType => 'AppFormError';
+
+  @override
+  String toString() => userMessage;
 }

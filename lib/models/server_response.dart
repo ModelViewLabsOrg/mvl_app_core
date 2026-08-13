@@ -56,4 +56,12 @@ class ServerResponseException extends AppException {
         error: Exception(response.userMessage),
         stackTrace: StackTrace.current,
       );
+
+  @override
+  String get reportType => 'ServerResponseException';
+
+  /// The server already decided this is a business rule the user can act on,
+  /// so the message it chose is what separates one defect from another.
+  @override
+  List<String> get reportGrouping => <String>[ErrorGrouping.normalizeMessage(userMessage)];
 }

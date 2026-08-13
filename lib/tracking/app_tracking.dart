@@ -12,6 +12,7 @@ import 'package:mvl_app_core/app_config_values.dart';
 import 'package:mvl_app_core/app_logger.dart';
 import 'package:mvl_app_core/app_remote_config.dart';
 import 'package:mvl_app_core/extensions/num_extension.dart';
+import 'package:mvl_app_core/tracking/error_report.dart';
 import 'package:mvl_app_core/tracking/tracking_item.dart';
 import 'package:mvl_app_core/tracking/tracking_user.dart';
 import 'package:mvl_app_core/utils/app_version.dart';
@@ -25,14 +26,51 @@ AppTracking get tracking => AppTracking._instance;
 
 typedef AnalyticsParameters = Map<String, Object>;
 
+/// Restores a readable class name for an exception the app does not own.
+///
+/// Returning `null` lets the next resolver — and ultimately the obfuscated
+/// `runtimeType` — decide.
+typedef ExceptionTypeResolver = String? Function(Object error);
+
+class _AppExceptionTypeIdentifier implements ExceptionTypeIdentifier {
+  const _AppExceptionTypeIdentifier(this._resolvers);
+
+  final List<ExceptionTypeResolver> _resolvers;
+
+  @override
+  String? identifyType(dynamic throwable) {
+    if (throwable is ReportableException) {
+      return throwable.report.type;
+    }
+
+    if (throwable is! Object) {
+      return null;
+    }
+
+    for (final ExceptionTypeResolver resolve in _resolvers) {
+      final String? type = resolve(throwable);
+      if (type != null) {
+        return type;
+      }
+    }
+
+    return null;
+  }
+}
+
 class AppTracking {
   AppTracking._internal();
   static final _instance = AppTracking._internal();
 
   static const kEventNameMaxLength = 40;
-  static const _kTagMaxLength = 180;
+  static const int _kTagMaxLength = ErrorGrouping.originMaxLength;
 
   late final AppConfigValues _config;
+
+  /// Errors raised before [init] finishes have no destination yet. Reading
+  /// `_config` then would throw a LateInitializationError from inside the
+  /// error handler and hide the original failure.
+  var _initialized = false;
 
   FirebaseAnalytics get _analytics => FirebaseAnalytics.instance;
   Aptabase get _aptabase => Aptabase.instance;
@@ -42,6 +80,7 @@ class AppTracking {
 
   Future<void> init(AppConfigValues config) async {
     _config = config;
+    _initialized = true;
 
     await Future.wait(<Future<void>>[
       _analytics.setAnalyticsCollectionEnabled(config.trackingEnabled),
@@ -129,7 +168,12 @@ class AppTracking {
         // breadcrumb buffer.
         ..enableWindowMetricBreadcrumbs = false
         ..maxBreadcrumbs = 150
-        ..beforeSend = _beforeSend;
+        ..beforeSend = _beforeSend
+        // Recovers readable class names from `--obfuscate`d builds, where
+        // `runtimeType` is a two-letter symbol such as `kxb`.
+        ..prependExceptionTypeIdentifier(
+          _AppExceptionTypeIdentifier(_config.exceptionTypeResolvers),
+        );
 
       <String>{'mvl_app_core', ..._config.inAppPackages}.forEach(options.addInAppInclude);
     });
@@ -149,9 +193,6 @@ class AppTracking {
 
   SentryEvent? _beforeSend(SentryEvent event, Hint hint) {
     final List<String> patterns = _config.ignoredErrorPatterns;
-    if (patterns.isEmpty) {
-      return event;
-    }
 
     // The original cause is often wrapped (GoException, AsyncError), so the
     // rendered text is matched instead of the runtime type.
@@ -165,7 +206,27 @@ class AppTracking {
       return null;
     }
 
+    _dropRedundantTypePrefix(event);
+
     return event;
+  }
+
+  /// Dart exceptions repeat their class name inside `toString()`, so the issue
+  /// title arrives as `AppException: AppException: …`. The type is already a
+  /// separate field on the event.
+  void _dropRedundantTypePrefix(SentryEvent event) {
+    for (final SentryException exception in event.exceptions ?? const <SentryException>[]) {
+      final String? type = exception.type;
+      final String? value = exception.value;
+      if (type == null || value == null) {
+        continue;
+      }
+
+      final prefix = '$type: ';
+      if (value.startsWith(prefix) && value.length > prefix.length) {
+        exception.value = value.substring(prefix.length);
+      }
+    }
   }
 
   Future<void> _initPosthog() async {
@@ -345,6 +406,11 @@ class AppTracking {
     ).ignore();
   }
 
+  /// [method] identifies *where* the failure happened and must be written as a
+  /// short literal (`team-withdraw`, `finances_send_amount`). It becomes the
+  /// `origin` tag and the first segment of the fingerprint, so interpolating
+  /// the error, an id or an email into it splits one defect into one issue per
+  /// occurrence. [ErrorGrouping.origin] scrubs what slips through.
   void recordError(
     String method,
     Object error,
@@ -352,13 +418,17 @@ class AppTracking {
     bool fatal = false,
     Map<String, String>? parameters,
   }) {
-    if (!_config.trackingEnabled) {
+    if (!_initialized || !_config.trackingEnabled) {
       return;
     }
 
-    final String origin = method.length > _kTagMaxLength
-        ? method.substring(0, _kTagMaxLength)
-        : method;
+    assert(
+      method.length <= _kTagMaxLength,
+      'origin "$method" is too long: pass a short literal, not the error text',
+    );
+
+    final String origin = ErrorGrouping.origin(method);
+    final ErrorReport? report = error is ReportableException ? error.report : null;
 
     // The origin goes on the scope, never as `message:` — a message on a
     // captureException overrides the title without helping the grouping.
@@ -368,9 +438,20 @@ class AppTracking {
       withScope: (scope) async {
         scope
           ..transaction = origin
-          ..level = fatal ? SentryLevel.fatal : SentryLevel.error;
+          ..level = fatal ? SentryLevel.fatal : SentryLevel.error
+          ..fingerprint = _fingerprint(origin, error, report);
 
         await scope.setTag('origin', origin);
+
+        for (final MapEntry<String, String> tag
+            in report?.tags.entries ?? const <MapEntry<String, String>>[]) {
+          await scope.setTag(tag.key, tag.value);
+        }
+
+        final Json? details = report?.extra;
+        if (details != null && details.isNotEmpty) {
+          await scope.setContexts('error_details', details);
+        }
 
         if (parameters != null && parameters.isNotEmpty) {
           await scope.setContexts('parameters', parameters);
@@ -388,6 +469,20 @@ class AppTracking {
           )
           .ignore();
     }
+  }
+
+  /// Sentry's default grouping relies on the stack trace, and release builds
+  /// only ship native instruction addresses that change with every build. An
+  /// explicit fingerprint is what keeps one defect as one issue across
+  /// releases.
+  List<String> _fingerprint(String origin, Object error, ErrorReport? report) {
+    if (report != null) {
+      return <String>[origin, report.type, ...report.grouping];
+    }
+
+    // The class name is obfuscated and its symbol changes between builds, so
+    // the scrubbed message is the only discriminator that survives.
+    return <String>[origin, ErrorGrouping.normalizeMessage(error.toString())];
   }
 
   void event(

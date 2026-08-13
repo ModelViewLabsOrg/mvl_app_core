@@ -55,9 +55,10 @@ void main() {
         expect(error.shouldLogAsError, isFalse);
       });
 
-      test('toString includes AppFormError prefix', () {
+      test('toString omits the class name, already sent as the report type', () {
         final error = AppFormError('Campo inválido');
-        expect(error.toString(), 'AppFormError: Campo inválido');
+        expect(error.toString(), 'Campo inválido');
+        expect(error.report.type, 'AppFormError');
       });
 
       test('is an AppException', () {
