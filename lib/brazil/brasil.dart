@@ -1,73 +1,71 @@
+import 'package:collection/collection.dart';
+import 'package:mvl_app_core/utils/app_exception.dart';
+
+enum BrasilRegion {
+  centroOeste('Centro-Oeste'),
+  nordeste('Nordeste'),
+  norte('Norte'),
+  sudeste('Sudeste'),
+  sul('Sul'),
+  ;
+
+  const BrasilRegion(this.label);
+  final String label;
+}
+
 enum BrasilState {
-  ac,
-  al,
-  ap,
-  am,
-  ba,
-  ce,
-  df,
-  es,
-  go,
-  ma,
-  mt,
-  ms,
-  mg,
-  pa,
-  pb,
-  pr,
-  pe,
-  pi,
-  rj,
-  rn,
-  rs,
-  ro,
-  rr,
-  sc,
-  sp,
-  se,
-  to,
-}
+  ac('Acre', BrasilRegion.norte),
+  al('Alagoas', BrasilRegion.nordeste),
+  ap('Amapá', BrasilRegion.norte),
+  am('Amazonas', BrasilRegion.norte),
+  ba('Bahia', BrasilRegion.nordeste),
+  ce('Ceará', BrasilRegion.nordeste),
+  df('Distrito Federal', BrasilRegion.centroOeste),
+  es('Espírito Santo', BrasilRegion.sudeste),
+  go('Goiás', BrasilRegion.centroOeste),
+  ma('Maranhão', BrasilRegion.nordeste),
+  mt('Mato Grosso', BrasilRegion.centroOeste),
+  ms('Mato Grosso do Sul', BrasilRegion.centroOeste),
+  mg('Minas Gerais', BrasilRegion.sudeste),
+  pa('Pará', BrasilRegion.norte),
+  pb('Paraíba', BrasilRegion.nordeste),
+  pr('Paraná', BrasilRegion.sul),
+  pe('Pernambuco', BrasilRegion.nordeste),
+  pi('Piauí', BrasilRegion.nordeste),
+  rj('Rio de Janeiro', BrasilRegion.sudeste),
+  rn('Rio Grande do Norte', BrasilRegion.nordeste),
+  rs('Rio Grande do Sul', BrasilRegion.sul),
+  ro('Rondônia', BrasilRegion.norte),
+  rr('Roraima', BrasilRegion.norte),
+  sc('Santa Catarina', BrasilRegion.sul),
+  sp('São Paulo', BrasilRegion.sudeste),
+  se('Sergipe', BrasilRegion.nordeste),
+  to('Tocantins', BrasilRegion.norte),
+  ;
 
-BrasilState stateFromJson(String value) => BrasilState.values.byName(value);
+  const BrasilState(this.label, this.region);
+  final String label;
+  final BrasilRegion region;
 
-extension BrasilStateExt on BrasilState {
-  String get state => Brasil.listStates[this] ?? '';
-}
+  static BrasilState parse(String raw) {
+    final BrasilState? state = tryParse(raw);
+    if (state == null) {
+      throw AppException.fromStringError(
+        'Invalid Brasil state: $raw',
+        StackTrace.current,
+      );
+    }
+    return state;
+  }
 
-mixin Brasil {
-  static const country = 'br';
+  static BrasilState? tryParse(String raw) {
+    final String value = raw.toLowerCase().trim();
+    if (value.isEmpty) {
+      return null;
+    }
 
-  static const listStates = <BrasilState, String>{
-    BrasilState.ac: 'Acre',
-    BrasilState.al: 'Alagoas',
-    BrasilState.ap: 'Amapá',
-    BrasilState.am: 'Amazonas',
-    BrasilState.ba: 'Bahia',
-    BrasilState.ce: 'Ceará',
-    BrasilState.df: 'Distrito Federal',
-    BrasilState.es: 'Espírito Santo',
-    BrasilState.go: 'Goiás',
-    BrasilState.ma: 'Maranhão',
-    BrasilState.mt: 'Mato Grosso',
-    BrasilState.ms: 'Mato Grosso do Sul',
-    BrasilState.mg: 'Minas Gerais',
-    BrasilState.pa: 'Pará',
-    BrasilState.pb: 'Paraíba',
-    BrasilState.pr: 'Paraná',
-    BrasilState.pe: 'Pernambuco',
-    BrasilState.pi: 'Piauí',
-    BrasilState.rj: 'Rio de Janeiro',
-    BrasilState.rn: 'Rio Grande do Norte',
-    BrasilState.rs: 'Rio Grande do Sul',
-    BrasilState.ro: 'Rondônia',
-    BrasilState.rr: 'Roraima',
-    BrasilState.sc: 'Santa Catarina',
-    BrasilState.sp: 'São Paulo',
-    BrasilState.se: 'Sergipe',
-    BrasilState.to: 'Tocantins',
-  };
-
-  static List<String> get statesFullNames => listStates.values.toList();
-
-  static const listaRegioes = <String>['Centro-Oeste', 'Nordeste', 'Norte', 'Sudeste', 'Sul'];
+    return BrasilState.values.firstWhereOrNull(
+      (e) => e.name == value || e.label.toLowerCase() == value,
+    );
+  }
 }
