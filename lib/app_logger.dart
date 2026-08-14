@@ -21,12 +21,6 @@ class AppLogger {
 
   static final _instance = AppLogger._internal();
 
-  /// A thrown object usually crosses several `catch` blocks — repository,
-  /// provider, then the widget showing the dialog — and each one logs it. Only
-  /// the innermost knows what the call was about, so the outer ones are
-  /// downgraded to breadcrumbs instead of becoming duplicate issues.
-  static final _alreadyReported = Expando<bool>('reported to the crash reporter');
-
   /// [method] is the origin: a short literal describing the operation, such as
   /// `team-withdraw` or `finances_send_amount`. Never interpolate the error,
   /// an id or an email into it — that is what turns one defect into hundreds
@@ -39,6 +33,7 @@ class AppLogger {
   ]) {
     if (kDebugMode) {
       _instance.talker.handle(error, stackTrace, 'Error $method $parameters. $error');
+      return;
     }
 
     if (!shouldLogAsError(error)) {
@@ -50,29 +45,9 @@ class AppLogger {
       return;
     }
 
-    if (_isDuplicate(error)) {
-      tracking.info('rethrown at $method');
-      return;
-    }
-
     // The error and the stack trace are first-class fields on the event; adding
     // them again as strings only inflates the payload.
     tracking.recordError(method, error, stackTrace, parameters: parameters);
-  }
-
-  bool _isDuplicate(Object error) {
-    // Expando rejects strings, numbers and booleans as keys, and those carry no
-    // identity worth tracking anyway.
-    if (error is String || error is num || error is bool) {
-      return false;
-    }
-
-    if (_alreadyReported[error] ?? false) {
-      return true;
-    }
-
-    _alreadyReported[error] = true;
-    return false;
   }
 
   void info(String message) {
