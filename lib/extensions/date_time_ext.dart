@@ -94,16 +94,22 @@ extension DateTimeExt on DateTime {
 
   /// 2022-10-31T14:58:09.123 or 2022-10-31T14:58:00
   String toServerFormat({bool removeSeconds = false, bool convertUtc = true}) {
-    final DateTime date = removeSeconds ? this.removeSeconds() : this;
+    var date = this;
+    if (removeSeconds) {
+      date = date.removeSeconds();
+    }
+    if (convertUtc) {
+      date = date.toUtc();
+    }
 
-    return (convertUtc ? date.toUtc() : date).toIso8601String();
+    return date.toIso8601String();
   }
 
   // String toServerDTWithTz({bool removeSeconds = true}) {
   //   final date = removeSeconds ? this.removeSeconds() : this;
   //   // final dateTz = tz.TZDateTime.from(date, tz.local).toLocal();
 
-  //   return date.toLocal().toIso8601String();
+  //   return date.toLocal().toServerFormat();
   // }
 
   /// 2022-10-31 14:58:09.123 -> 2022-10-31 14:58:00
