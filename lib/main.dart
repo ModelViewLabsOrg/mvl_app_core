@@ -17,7 +17,7 @@
 //       run.call();
 //     },
 //     (error, stackTrace) {
-//       AppLogger.I().error('main error', error, stackTrace);
+//       appLogger.error('main error', error, stackTrace);
 //     },
 //   );
 // }

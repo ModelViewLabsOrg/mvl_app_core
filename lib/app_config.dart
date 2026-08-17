@@ -7,19 +7,20 @@ class AppConfig {
     return _instance ?? (throw UnimplementedError('Must call setup() before use it'));
   }
 
+  factory AppConfig.setup(AppConfigValues values) {
+    final config = AppConfig._internal()..configValues = values;
+    appLogger.debug('Env: ${env.name}');
+
+    return _instance = config;
+  }
+
   AppConfig._internal();
+
   static late final AppConfig? _instance;
 
   static EnvEnum env = EnvEnum.prd;
 
   late final AppConfigValues configValues;
-
-  static AppConfig setup(AppConfigValues values) {
-    final config = AppConfig._internal()..configValues = values;
-    AppLogger.I().debug('Env: ${env.name}');
-
-    return _instance = config;
-  }
 
   // static Future<EnvEnum> _env() async {
   //   String? flavor;
@@ -30,7 +31,7 @@ class AppConfig {
   //     // ignore: do_not_use_environment
   //     flavor = const String.fromEnvironment('flavor', defaultValue: 'uat');
   //   } finally {
-  //     AppLogger.I().debug('Flavor: $flavor');
+  //     appLogger.debug('Flavor: $flavor');
   //   }
 
   //   if (flavor == null) return EnvEnum.prd;

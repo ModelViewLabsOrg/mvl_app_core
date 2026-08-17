@@ -41,7 +41,7 @@ class DeepLinkHelper {
   }) {
     _navigationCallback = navigationCallback;
     _contextGetter = contextGetter;
-    AppLogger.I().info('DeepLinkHelper: Initialized');
+    appLogger.info('DeepLinkHelper: Initialized');
   }
 
   /// Navigate to a route immediately if context is available,
@@ -50,7 +50,7 @@ class DeepLinkHelper {
   /// Returns `true` if navigation was successful, `false` if queued.
   bool navigate(String route, {bool replace = false}) {
     if (route.isEmpty) {
-      AppLogger.I().error(
+      appLogger.error(
         'deep_link_navigate',
         StateError('Empty route provided'),
         StackTrace.current,
@@ -59,7 +59,7 @@ class DeepLinkHelper {
     }
 
     if (_navigationCallback == null) {
-      AppLogger.I().error(
+      appLogger.error(
         'deep_link_navigate',
         StateError('Not initialized. Call initialize() first.'),
         StackTrace.current,
@@ -78,10 +78,10 @@ class DeepLinkHelper {
     if (isContextAvailable || _contextGetter == null) {
       try {
         _navigationCallback?.call(normalizedRoute);
-        AppLogger.I().info('DeepLinkHelper: Navigated to $normalizedRoute');
+        appLogger.info('DeepLinkHelper: Navigated to $normalizedRoute');
         return true;
       } catch (e, stackTrace) {
-        AppLogger.I().error(
+        appLogger.error(
           'deep_link_navigate',
           e,
           stackTrace,
@@ -94,7 +94,7 @@ class DeepLinkHelper {
     } else {
       // Context not available, queue the route
       _queueRoute(normalizedRoute);
-      AppLogger.I().info('DeepLinkHelper: queued $normalizedRoute, context not available');
+      appLogger.info('DeepLinkHelper: queued $normalizedRoute, context not available');
       return false;
     }
   }
@@ -125,7 +125,7 @@ class DeepLinkHelper {
     }
 
     if (_navigationCallback == null) {
-      AppLogger.I().error(
+      appLogger.error(
         'deep_link_pending_route',
         StateError('Cannot process pending routes, not initialized'),
         StackTrace.current,
@@ -136,7 +136,7 @@ class DeepLinkHelper {
     // Check if context is available (if contextGetter is provided)
     final BuildContext? context = _contextGetter?.call();
     if (_contextGetter != null && (context == null || !context.mounted)) {
-      AppLogger.I().info('DeepLinkHelper: cannot process pending routes, context not available');
+      appLogger.info('DeepLinkHelper: cannot process pending routes, context not available');
       return 0;
     }
 
@@ -153,9 +153,9 @@ class DeepLinkHelper {
       try {
         _navigationCallback?.call(route);
         successCount++;
-        AppLogger.I().info('DeepLinkHelper: Processed pending route $route');
+        appLogger.info('DeepLinkHelper: Processed pending route $route');
       } catch (e, stackTrace) {
-        AppLogger.I().error(
+        appLogger.error(
           'deep_link_pending_route',
           e,
           stackTrace,
@@ -170,7 +170,7 @@ class DeepLinkHelper {
   /// Clear all pending routes
   void clearPendingRoutes() {
     _pendingRoutes.clear();
-    AppLogger.I().info('DeepLinkHelper: Cleared all pending routes');
+    appLogger.info('DeepLinkHelper: Cleared all pending routes');
   }
 
   /// Get the list of pending routes (for debugging)

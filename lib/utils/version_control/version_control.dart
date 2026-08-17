@@ -44,7 +44,7 @@ abstract class VersionControl {
             'https://apps.apple.com/app/id'
             '${config.appStoreId}$suffix';
 
-        AppLogger.I().info('LaunchUrl: $appStoreLink');
+        appLogger.info('LaunchUrl: $appStoreLink');
 
         await appStoreLink.launchURL();
         return;
@@ -53,17 +53,17 @@ abstract class VersionControl {
       if (DeviceInfo.isAndroid) {
         final String id = config.playStoreId;
         final market = 'market://details?id=$id';
-        AppLogger.I().info('LaunchUrl: $market');
+        appLogger.info('LaunchUrl: $market');
 
         if (!(await market.launchURL())) {
           final play = 'https://play.google.com/store/apps/details?id=$id';
-          AppLogger.I().info('couldnt launch market, trying : $play');
+          appLogger.info('couldnt launch market, trying : $play');
 
           await play.launchURL();
         }
       }
     } catch (e, s) {
-      AppLogger.I().error('LaunchStore', e, s);
+      appLogger.error('LaunchStore', e, s);
     }
   }
 }

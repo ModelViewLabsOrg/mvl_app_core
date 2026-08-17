@@ -38,7 +38,7 @@ abstract class AppSetupBase {
     await _initFirebase();
     await customSetup();
 
-    AppLogger.I().info('init');
+    appLogger.info('init');
   }
 
   Future<void> _setupFlutter() async {
@@ -68,6 +68,7 @@ abstract class AppSetupBase {
     Intl.defaultLocale = locale;
 
     tz_latest10y.initializeTimeZones();
+    await tz.initializeTimeZone();
 
     try {
       tz.Location? location;
@@ -82,26 +83,27 @@ abstract class AppSetupBase {
           // 'US/Central' => tz.getLocation('America/Chicago'),
           // 'US/Mountain' => tz.getLocation('America/Denver'),
           'US/Pacific' => tz.getLocation('America/Los_Angeles'),
+          'Etc/Unknown' || 'UTC' || 'Etc' || 'ETC' => tz.getLocation('Etc/UTC'),
           _ => tz.getLocation(localTimezone.identifier),
         };
       } catch (e, s) {
-        AppLogger.I().error('AppSetup Set Location error', e, s);
+        appLogger.error('AppSetup Set Location error', e, s);
       }
 
       location ??= tz.getLocation('Etc/UTC');
       tz.setLocalLocation(location);
-      AppLogger.I().info('TZ Location defined: ${location.name}');
+      appLogger.info('TZ Location defined: ${location.name}');
 
       await Jiffy.setLocale(locale);
 
-      AppLogger.I().info('Jiffy defined: $locale');
+      appLogger.info('Jiffy defined: $locale');
     } catch (e, s) {
-      AppLogger.I().error('AppSetup InitLocale error', e, s);
+      appLogger.error('AppSetup InitLocale error', e, s);
     }
   }
 
   Future<void> _initFirebase() async {
-    AppLogger.I().info('Initialize Firebase ${firebase.projectId}');
+    appLogger.info('Initialize Firebase ${firebase.projectId}');
 
     await Firebase.initializeApp(options: firebase);
 

@@ -22,7 +22,7 @@ class AppRemoteConfig {
   static FirebaseRemoteConfig get _remoteConfig => FirebaseRemoteConfig.instance;
 
   static Future<void> setup(List<AppRemoteConfigKeys> keys) async {
-    AppLogger.I().info('RemoteConfig init');
+    appLogger.info('RemoteConfig init');
 
     await _remoteConfig.setConfigSettings(
       RemoteConfigSettings(
@@ -43,19 +43,19 @@ class AppRemoteConfig {
       if (!kIsWeb) {
         _remoteConfig.onConfigUpdated.listen(
           (data) {
-            AppLogger.I().info('AppRemoteConfig onConfigUpdated: ${data.updatedKeys}');
+            appLogger.info('AppRemoteConfig onConfigUpdated: ${data.updatedKeys}');
           },
           onError: (Object e) {
-            AppLogger.I().error('AppRemoteConfig onConfigUpdated error', e, StackTrace.current);
+            appLogger.error('AppRemoteConfig onConfigUpdated error', e, StackTrace.current);
           },
-          onDone: () => AppLogger.I().info('AppRemoteConfig onConfigUpdated done'),
+          onDone: () => appLogger.info('AppRemoteConfig onConfigUpdated done'),
         );
       }
 
       final bool result = await _remoteConfig.fetchAndActivate();
-      AppLogger.I().debug('AppRemoteConfig result: $result');
+      appLogger.debug('AppRemoteConfig result: $result');
     } catch (e) {
-      AppLogger.I().debug('AppRemoteConfig setup error: $e');
+      appLogger.debug('AppRemoteConfig setup error: $e');
     }
   }
 

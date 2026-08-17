@@ -15,7 +15,7 @@ extension LaunchExt on String {
       // }
       // return false;
     } catch (e, s) {
-      AppLogger.I().error('launchURL', e, s);
+      appLogger.error('launchURL', e, s);
       return false;
     }
   }
@@ -59,7 +59,7 @@ extension LaunchNullExt on String? {
         await webUrl.launchURL();
       }
     } catch (e, s) {
-      AppLogger.I().error('launchWhatsapp', e, s);
+      appLogger.error('launchWhatsapp', e, s);
     }
   }
 

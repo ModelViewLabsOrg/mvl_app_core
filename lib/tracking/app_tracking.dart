@@ -143,14 +143,14 @@ class AppTracking {
           ..environment = kDebugMode ? 'debug' : _config.env.name;
       });
 
-      AppLogger.I().debug('Sentry disabled (debug mode or tracking off)');
+      appLogger.debug('Sentry disabled (debug mode or tracking off)');
       return;
     }
 
     // Only traces follow the remote rate. Errors stay at 100% so throttling the
     // server disk usage can never silently hide production issues.
     final double tracesRate = _config.sentryConfig.rateRemote.getDouble();
-    AppLogger.I().info('Sentry init, traces rate: $tracesRate');
+    appLogger.info('Sentry init, traces rate: $tracesRate');
 
     await SentryFlutter.init((options) {
       options
@@ -188,7 +188,7 @@ class AppTracking {
       });
     });
 
-    AppLogger.I().debug('Sentry ok!');
+    appLogger.debug('Sentry ok!');
   }
 
   SentryEvent? _beforeSend(SentryEvent event, Hint hint) {
@@ -243,7 +243,7 @@ class AppTracking {
       );
     }
 
-    AppLogger.I().debug(
+    appLogger.debug(
       'Posthog ${posthogKey == null ? 'not configured' : 'ok'}',
     );
   }
@@ -265,7 +265,7 @@ class AppTracking {
     return <NavigatorObserver>[
       FirebaseAnalyticsObserver(analytics: _analytics),
       SentryNavigatorObserver(),
-      TalkerRouteObserver(AppLogger.I().talker),
+      TalkerRouteObserver(appLogger.talker),
       if (_config.posthogKey != null) PosthogObserver(),
     ];
   }
@@ -625,7 +625,7 @@ class AppTracking {
   /// Returns the download URL for each store depending on the platform
   Future<String?> _storeUrl() async {
     if (kIsWeb) {
-      AppLogger.I().info('Web has no store');
+      appLogger.info('Web has no store');
       return null;
     }
 
@@ -638,7 +638,7 @@ class AppTracking {
           final store =
               'https://play.google.com/store/apps/details?id='
               '${packageInfo.packageName}';
-          AppLogger.I().info('Store for Android: $store');
+          appLogger.info('Store for Android: $store');
           return store;
         }
 
@@ -648,7 +648,7 @@ class AppTracking {
           final store =
               'https://apps.apple.com/app/id'
               '${_config.appStoreId}';
-          AppLogger.I().info('Store for iOS: $store');
+          appLogger.info('Store for iOS: $store');
           return store;
         }
 
@@ -657,7 +657,7 @@ class AppTracking {
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
         {
-          AppLogger.I().info(
+          appLogger.info(
             'No store URL for platform: '
             '${defaultTargetPlatform.name}',
           );
@@ -670,7 +670,7 @@ class AppTracking {
     event('open_store');
 
     final String? store = await _storeUrl();
-    AppLogger.I().debug('store: $store');
+    appLogger.debug('store: $store');
 
     final InAppReview review = InAppReview.instance;
 

@@ -13,14 +13,14 @@ import 'package:mvl_app_core/app_logger.dart';
 class AppErrorHandler {
   static void registerErrorHandler() {
     FlutterError.onError = (details) {
-      AppLogger.I().debug('FlutterError: ${details.exceptionAsString()}');
+      appLogger.debug('FlutterError: ${details.exceptionAsString()}');
 
       FlutterError.presentError(details);
     };
 
     // * Handle errors from the underlying platform/OS
     PlatformDispatcher.instance.onError = (e, s) {
-      AppLogger.I().debug('PlatformDispatcher error: $e');
+      appLogger.debug('PlatformDispatcher error: $e');
 
       return true;
     };

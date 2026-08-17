@@ -64,19 +64,19 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
   Future<void> _checkIfAppUpdateIsNeeded() async {
     if (_isAlertVisible) {
       tracking.event('atualizar_alerta_visivel');
-      AppLogger.I().info('Update alert still visible');
+      appLogger.info('Update alert still visible');
       return;
     }
 
     if (_checkCacheIsValid()) {
-      AppLogger.I().info('Update alert still has valid cache');
+      appLogger.info('Update alert still has valid cache');
       return;
     }
 
     try {
       final ForceUpdateStatus updateResult = await widget.forceUpdateClient.checkUpdate();
       _lastCheck = DateTime.now();
-      AppLogger.I().info(
+      appLogger.info(
         'Check Update result: '
         '${updateResult.name.toUpperCase()}',
       );
@@ -99,7 +99,7 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
           break;
       }
     } catch (e, s) {
-      AppLogger.I().error('Update version error', e, s);
+      appLogger.error('Update version error', e, s);
     }
   }
 
@@ -131,7 +131,7 @@ class _VersionForceUpdateWidgetState extends State<VersionForceUpdateWidget>
 
       final int diff = DateTime.now().difference(lastTime).inDays;
       if (diff < widget.repeatRecommendedAlertDays) {
-        AppLogger.I().info(
+        appLogger.info(
           'Last alert showed in $diff days, '
           'ignoring this alert.',
         );

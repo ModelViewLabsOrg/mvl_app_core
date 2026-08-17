@@ -73,7 +73,7 @@ class ForceUpdateClient {
     // * Parse versions in semver format
     final Version currentVersion = Version.parse(currentVersionStr);
 
-    AppLogger.I().info(
+    appLogger.info(
       'Current version: $currentVersion, '
       'required version: $requiredVersion, '
       'recommended version: $recommendedVersion',
@@ -108,7 +108,7 @@ class ForceUpdateClient {
       final Version version = Version.parse(versionStr);
       return version;
     } catch (e, s) {
-      AppLogger.I().error('Error on fetch version', e, s);
+      appLogger.error('Error on fetch version', e, s);
       return null;
     }
   }
