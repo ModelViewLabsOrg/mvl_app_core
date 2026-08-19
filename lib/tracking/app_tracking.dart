@@ -645,9 +645,7 @@ class AppTracking {
       case TargetPlatform.iOS:
         {
           // * On iOS, use the given app ID
-          final store =
-              'https://apps.apple.com/app/id'
-              '${_config.appStoreId}';
+          final store = 'https://apps.apple.com/br/app/id${_config.appStoreId}';
           appLogger.info('Store for iOS: $store');
           return store;
         }

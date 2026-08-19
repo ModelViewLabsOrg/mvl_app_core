@@ -41,8 +41,8 @@ abstract class VersionControl {
       if (DeviceInfo.isApple) {
         final suffix = writeReview ? '?action=write-review' : '';
         final appStoreLink =
-            'https://apps.apple.com/app/id'
-            '${config.appStoreId}$suffix';
+            'https://apps.apple.com/br/app/id${config.appStoreId}'
+            '$suffix';
 
         appLogger.info('LaunchUrl: $appStoreLink');
 
