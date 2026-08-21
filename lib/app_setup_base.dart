@@ -13,7 +13,7 @@ import 'package:mvl_app_core/utils/app_version.dart';
 import 'package:mvl_app_core/utils/url_strategy/url_strategy.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:timezone/data/latest_10y.dart' as tz_latest10y;
-import 'package:timezone/standalone.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 abstract class AppSetupBase {
   // AppSetupBase({
@@ -68,7 +68,6 @@ abstract class AppSetupBase {
     Intl.defaultLocale = locale;
 
     tz_latest10y.initializeTimeZones();
-    await tz.initializeTimeZone();
 
     try {
       tz.Location? location;

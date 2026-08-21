@@ -122,17 +122,22 @@ extension StringNullableExt on String? {
   }
 
   String toPhoneFormatted() {
-    if (reallyLength() == 0) {
+    var value = this;
+    if (value == null || value.reallyLength() == 0) {
       return '';
     }
 
-    final String numbers = onlyNumbers();
-    if (numbers.length < 11) {
-      return numbers;
+    if (value.startsWith('+55')) {
+      value = value.substring(3);
     }
 
-    final String ddd = numbers.substring(0, 2);
-    final String phone = numbers.substring(2);
+    value = value.onlyNumbers();
+    if (value.length < 11) {
+      return value;
+    }
+
+    final String ddd = value.substring(0, 2);
+    final String phone = value.substring(2);
 
     final parseIndex = phone.length == 9 ? 5 : 4;
 

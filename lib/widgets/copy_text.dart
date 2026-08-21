@@ -5,7 +5,7 @@ import 'package:mvl_app_core/widgets/app_toast_message.dart';
 class CopyAndShowMessage extends StatelessWidget {
   const CopyAndShowMessage({
     required this.textToCopy,
-    this.messageFeedback,
+    this.messageFeedback = 'Copiado para a área de transferência',
     this.buttonLabel = 'Copiar',
     super.key,
   });
