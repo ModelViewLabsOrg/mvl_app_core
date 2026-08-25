@@ -191,16 +191,10 @@ class AppVersion {
   String toString() => '$appName $versionFull\n$osName $osVersion';
 
   JsonString toHeaders() => {
-    'x_app_name': appName,
     'x-app-name': appName,
-
-    'x_app_version': versionFull,
     'x-app-version': versionFull,
-
-    'x_os_name': osName,
     'x-os-name': osName,
-
-    'x_os_version': osVersion,
     'x-os-version': osVersion,
+    if (kDebugMode) 'x-debug': 'true',
   };
 }
