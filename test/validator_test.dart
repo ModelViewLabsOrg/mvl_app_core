@@ -117,6 +117,7 @@ void main() {
       test('returns true for valid CNPJ', () {
         expect(const Validator('11222333000181').isCNPJValid(), isTrue);
         expect(const Validator('11.222.333/0001-81').isCNPJValid(), isTrue);
+        expect(const Validator('12ABC34501DE35').isCNPJValid(), isTrue);
       });
 
       test('returns false for invalid CNPJ', () {

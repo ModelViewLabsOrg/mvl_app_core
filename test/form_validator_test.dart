@@ -121,6 +121,7 @@ void main() {
     group('cnpj', () {
       test('returns null for valid CNPJ', () {
         expect(const FormValidator('11222333000181').cnpj(), isNull);
+        expect(const FormValidator('12ABC34501DE35').cnpj(), isNull);
       });
 
       test('returns error for invalid CNPJ', () {
@@ -134,8 +135,17 @@ void main() {
         expect(const FormValidator('529.982.247-25').cpfOrCnpj(), isNull);
       });
 
+      test('validates unformatted CPF', () {
+        expect(const FormValidator('52998224725').cpfOrCnpj(), isNull);
+      });
+
       test('validates CNPJ when value has more than 14 chars (formatted)', () {
         expect(const FormValidator('11.222.333/0001-81').cpfOrCnpj(), isNull);
+      });
+
+      test('validates alphanumeric CNPJ', () {
+        expect(const FormValidator('12ABC34501DE35').cpfOrCnpj(), isNull);
+        expect(const FormValidator('12.ABC.345/01DE-35').cpfOrCnpj(), isNull);
       });
 
       test('returns error when null or too short', () {

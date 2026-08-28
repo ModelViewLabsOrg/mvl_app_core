@@ -3,6 +3,7 @@ import 'package:mvl_app_core/brazil/pix.dart';
 
 const _validCpf = '52998224725';
 const _validCnpj = '11222333000181';
+const _validAlphanumericCnpj = '12ABC34501DE35';
 const _validPhone = '11912345678';
 const _validEmail = 'user@example.com';
 const _validUuid = '550e8400-e29b-41d4-a716-446655440000';
@@ -62,6 +63,7 @@ void main() {
 
       test('validates CNPJ pix key', () {
         expect(const Pix(_validCnpj).validate(PixKeyType.cnpj), isTrue);
+        expect(const Pix(_validAlphanumericCnpj).validate(PixKeyType.cnpj), isTrue);
         expect(const Pix('00000000000000').validate(PixKeyType.cnpj), isFalse);
       });
 
@@ -88,6 +90,7 @@ void main() {
 
       test('detects CNPJ', () {
         expect(const Pix(_validCnpj).pixKeyType, PixKeyType.cnpj);
+        expect(const Pix(_validAlphanumericCnpj).pixKeyType, PixKeyType.cnpj);
       });
 
       test('detects phone', () {
@@ -169,6 +172,11 @@ void main() {
         expect(const Pix('11.222.333/0001-81').sanitizedValue, '11222333000181');
       });
 
+      test('keeps letters when sanitizing alphanumeric CNPJ', () {
+        expect(const Pix('12.ABC.345/01DE-35').sanitizedValue, _validAlphanumericCnpj);
+        expect(const Pix('12.abc.345/01de-35').sanitizedValue, _validAlphanumericCnpj);
+      });
+
       test('returns only digits for phone', () {
         expect(const Pix('(11) 91234-5678').sanitizedValue, '11912345678');
       });
@@ -193,6 +201,7 @@ void main() {
 
       test('formats CNPJ', () {
         expect(const Pix(_validCnpj).formattedValue, '11.222.333/0001-81');
+        expect(const Pix(_validAlphanumericCnpj).formattedValue, '12.ABC.345/01DE-35');
       });
 
       test('formats phone', () {

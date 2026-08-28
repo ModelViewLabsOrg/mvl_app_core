@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:mvl_app_core/brazil/document/cnpj_helper.dart';
 import 'package:mvl_app_core/brazil/document/cnpj_mask_formatter.dart';
 import 'package:mvl_app_core/brazil/document/cpf_mask_formatter.dart';
 
@@ -8,7 +9,7 @@ class CpfOuCnpjInputFormatter extends TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    final String stripped = newValue.text.toUpperCase().replaceAll(RegExp('[^A-Z0-9]'), '');
+    final String stripped = CNPJHelper.strip(newValue.text);
     if (stripped.isEmpty) {
       return TextEditingValue.empty;
     }

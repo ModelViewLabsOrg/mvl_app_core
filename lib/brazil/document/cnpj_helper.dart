@@ -3,6 +3,7 @@
 
 import 'dart:math';
 
+import 'package:mvl_app_core/brazil/document/document.dart';
 import 'package:mvl_app_core/extensions/string_extension.dart';
 
 const _blockList = [
@@ -18,9 +19,8 @@ const _blockList = [
   '99999999999999',
 ];
 
-class CNPJHelper {
-  CNPJHelper(String cnpj) : value = _strip(cnpj);
-  final String value;
+class CNPJHelper extends DocHelper {
+  CNPJHelper(String value) : super(strip(value));
 
   static const _stripRegex = '[^A-Z0-9]';
 
@@ -44,6 +44,7 @@ class CNPJHelper {
     return mod < 2 ? 0 : 11 - mod;
   }
 
+  @override
   String format() {
     if (!isValid()) {
       return '';
@@ -51,28 +52,22 @@ class CNPJHelper {
 
     final regExp = RegExp(r'^([A-Z0-9]{2})([A-Z0-9]{3})([A-Z0-9]{3})([A-Z0-9]{4})(\d{2})$');
 
-    return _strip(value).replaceAllMapped(regExp, (m) => '${m[1]}.${m[2]}.${m[3]}/${m[4]}-${m[5]}');
+    return strip(value).replaceAllMapped(regExp, (m) => '${m[1]}.${m[2]}.${m[3]}/${m[4]}-${m[5]}');
   }
 
-  static String _strip(String? value) {
-    final regex = RegExp(_stripRegex);
-
-    if (value == null) {
-      return '';
-    }
-
-    return value.replaceAll(regex, '').toUpperCase();
+  static String strip(String value) {
+    return value.toUpperCase().replaceAll(RegExp(_stripRegex), '').trim();
   }
 
+  @override
   bool isValid() {
-    final String cnpj = _strip(value);
+    final String cnpj = strip(value);
 
-    // cnpj must have 14 chars
-    if (cnpj.length != 14) {
+    // 12 alphanumeric chars + 2 numeric check digits
+    if (cnpj.length != 14 || !RegExp(r'^\d{2}$').hasMatch(cnpj.substring(12))) {
       return false;
     }
 
-    // cnpj can't be blacklisted
     if (_blockList.contains(cnpj)) {
       return false;
     }
@@ -84,20 +79,29 @@ class CNPJHelper {
     return numbers.substring(numbers.length - 2) == cnpj.substring(cnpj.length - 2);
   }
 
-  static String generateRandom({bool useFormat = false}) {
+  static String generateRandom({bool useFormat = false, bool alphanumeric = false}) {
     final helper = CNPJHelper('');
-    final numbers = StringBuffer();
+    final random = Random();
+    final body = StringBuffer();
+    const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
     for (var i = 0; i < 12; i += 1) {
-      numbers.write(Random().nextInt(9).toString());
+      if (alphanumeric) {
+        body.write(alphabet[random.nextInt(alphabet.length)]);
+      } else {
+        body.write(random.nextInt(9).toString());
+      }
     }
 
-    numbers
-      ..write(helper._verifierDigit(numbers.toString()).toString())
-      ..write(helper._verifierDigit(numbers.toString()).toString());
+    body
+      ..write(helper._verifierDigit(body.toString()).toString())
+      ..write(helper._verifierDigit(body.toString()).toString());
 
-    final value = numbers.toString();
+    final value = body.toString();
 
     return useFormat ? CNPJHelper(value).format() : value;
   }
+
+  @override
+  DocType get docType => DocType.cnpj;
 }

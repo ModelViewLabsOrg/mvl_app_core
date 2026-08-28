@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:mvl_app_core/extensions/string_extension.dart';
+import 'package:mvl_app_core/brazil/document/cpf_helper.dart';
 
 class CpfMaskFormatter extends TextInputFormatter {
   const CpfMaskFormatter();
@@ -8,7 +8,7 @@ class CpfMaskFormatter extends TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    final String digits = newValue.text.onlyNumbers();
+    final String digits = CPFHelper.strip(newValue.text);
     if (digits.isEmpty) {
       return TextEditingValue.empty;
     }

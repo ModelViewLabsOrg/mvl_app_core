@@ -1,5 +1,6 @@
 import 'package:mvl_app_core/brazil/document/cnpj_helper.dart';
 import 'package:mvl_app_core/brazil/document/cpf_helper.dart';
+import 'package:mvl_app_core/brazil/document/document.dart';
 import 'package:mvl_app_core/brazil/formatters.dart';
 import 'package:mvl_app_core/mvl_app_core_view.dart';
 import 'package:mvl_app_core/utils/validator.dart';
@@ -47,12 +48,15 @@ class Pix {
       return null;
     }
 
-    if (Validator(value).isCPFValid()) {
-      return PixKeyType.cpf;
+    switch (DocType.tryParseDoc(value)) {
+      case DocType.cnpj:
+        return PixKeyType.cnpj;
+      case DocType.cpf:
+        return PixKeyType.cpf;
+      case null:
+        break;
     }
-    if (Validator(value).isCNPJValid()) {
-      return PixKeyType.cnpj;
-    }
+
     if (Validator(value).isPhoneValid()) {
       return PixKeyType.telefone;
     }
@@ -84,7 +88,9 @@ class Pix {
     }
 
     return switch (pixKeyType) {
-      PixKeyType.cpf || PixKeyType.cnpj || PixKeyType.telefone => value.onlyNumbers(),
+      PixKeyType.cpf => CPFHelper(value).value,
+      PixKeyType.cnpj => CNPJHelper(value).value,
+      PixKeyType.telefone => value.onlyNumbers(),
       PixKeyType.email => EmailValidator.normalize(value),
       PixKeyType.aleatorio => value.trim(),
       null => value,

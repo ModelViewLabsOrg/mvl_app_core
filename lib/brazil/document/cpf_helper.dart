@@ -3,11 +3,14 @@
 
 import 'dart:math';
 
+import 'package:mvl_app_core/brazil/document/document.dart';
 import 'package:mvl_app_core/extensions/string_extension.dart';
 
-class CPFHelper {
-  CPFHelper(String cpf) : value = _strip(cpf);
-  final String value;
+class CPFHelper extends DocHelper {
+  CPFHelper(String value) : super(strip(value));
+
+  @override
+  DocType get docType => DocType.cpf;
 
   static const _blockList = [
     '00000000000',
@@ -22,8 +25,6 @@ class CPFHelper {
     '99999999999',
     '12345678909',
   ];
-
-  static const _stipRegex = r'[^\d]';
 
   // Compute the Verifier Digit (or 'Dígito Verificador (DV)' in PT-BR).
   // You can learn more about the algorithm on [wikipedia (pt-br)](https://pt.wikipedia.org/wiki/D%C3%ADgito_verificador)
@@ -43,24 +44,21 @@ class CPFHelper {
     return mod < 2 ? 0 : 11 - mod;
   }
 
+  @override
   String format() {
     if (!isValid()) {
       return '';
     }
     final regExp = RegExp(r'^(\d{3})(\d{3})(\d{3})(\d{2})$');
 
-    return _strip(value).replaceAllMapped(regExp, (m) => '${m[1]}.${m[2]}.${m[3]}-${m[4]}');
+    return strip(value).replaceAllMapped(regExp, (m) => '${m[1]}.${m[2]}.${m[3]}-${m[4]}');
   }
 
-  static String _strip(String? value) {
-    final regExp = RegExp(_stipRegex);
-    final String cpf = value ?? '';
+  static String strip(String value) => value.onlyNumbers();
 
-    return cpf.replaceAll(regExp, '');
-  }
-
+  @override
   bool isValid() {
-    final String cpf = _strip(value);
+    final String cpf = strip(value);
 
     // CPF must have 11 chars
     if (cpf.length != 11) {

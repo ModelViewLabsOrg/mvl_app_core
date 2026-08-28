@@ -1,4 +1,7 @@
 import 'package:jiffy/jiffy.dart';
+import 'package:mvl_app_core/brazil/document/cnpj_helper.dart';
+import 'package:mvl_app_core/brazil/document/cpf_helper.dart';
+import 'package:mvl_app_core/brazil/document/document.dart';
 import 'package:mvl_app_core/brazil/pix.dart';
 import 'package:mvl_app_core/extensions/date_time_ext.dart';
 import 'package:mvl_app_core/extensions/string_extension.dart';
@@ -234,22 +237,25 @@ class FormValidator {
 
   String? cpfOrCnpj() {
     final String? value = this.value;
-    if (value == null || value.length < 14) {
+    if (value == null || DocType.tryParseDoc(value) == null) {
       return 'Documento inválido';
     }
 
-    return value.length == 14 ? cpf() : cnpj();
+    return null;
   }
 
   String? cpf() {
-    final String value = this.value.onlyNumbers();
+    final String? value = this.value;
+    if (value == null || !CPFHelper(value).isValid()) {
+      return 'CPF inválido';
+    }
 
-    return Validator(value).isCPFValid() ? null : 'CPF inválido';
+    return null;
   }
 
   String? cnpj() {
     final String? value = this.value;
-    if (value == null || !Validator(value).isCNPJValid()) {
+    if (value == null || !CNPJHelper(value).isValid()) {
       return 'CNPJ inválido';
     }
 

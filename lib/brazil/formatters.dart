@@ -1,5 +1,6 @@
 import 'package:mvl_app_core/brazil/document/cnpj_helper.dart';
 import 'package:mvl_app_core/brazil/document/cpf_helper.dart';
+import 'package:mvl_app_core/brazil/document/document.dart';
 import 'package:mvl_app_core/brazil/util_brasil_fields.dart';
 import 'package:mvl_app_core/extensions/string_extension.dart';
 import 'package:mvl_app_core/utils/currency_helper.dart';
@@ -17,35 +18,15 @@ class Formatters {
 
   String toReaisFormatted() => CurrencyHelper.toCurrency(value.toAmount());
 
-  String toDocumentFormatted() {
-    final int length = value.onlyNumbersLength();
-    if (length == 11) {
-      return toCpfFormatted();
-    }
-    if (length == 14) {
-      return toCnpjFormatted();
-    }
+  String toDocumentFormatted() => switch (DocType.tryParseDoc(value)) {
+    DocType.cpf => toCpfFormatted(),
+    DocType.cnpj => toCnpjFormatted(),
+    null => '',
+  };
 
-    return '';
-  }
+  String toCpfFormatted() => CPFHelper(value).format();
 
-  String toCpfFormatted() {
-    final helper = CPFHelper(value.trim());
-    if (!helper.isValid()) {
-      return '';
-    }
-
-    return helper.format();
-  }
-
-  String toCnpjFormatted() {
-    final helper = CNPJHelper(value);
-    if (!helper.isValid()) {
-      return '';
-    }
-
-    return helper.format();
-  }
+  String toCnpjFormatted() => CNPJHelper(value).format();
 
   String toZipCodeFormatted() {
     final String numbers = value.onlyNumbers();

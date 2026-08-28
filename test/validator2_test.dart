@@ -1,8 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mvl_app_core/brazil/document/document.dart';
 import 'package:mvl_app_core/brazil/pix.dart';
 import 'package:mvl_app_core/extensions/date_time_ext.dart';
-import 'package:mvl_app_core/utils/app_exception.dart';
 import 'package:mvl_app_core/utils/validator.dart';
 
 void main() {
@@ -57,18 +55,7 @@ void main() {
       expect(const Validator('12345678901').isCPFValid(), isFalse);
       expect(const Validator('11222333000181').isCNPJValid(), isTrue);
       expect(const Validator('12345678901234').isCNPJValid(), isFalse);
-    });
-
-    test('docType returns correct document type', () {
-      expect(DocType.parseDoc('52998224725'), DocType.cpf);
-      expect(DocType.parseDoc('11222333000181'), DocType.cnpj);
-    });
-
-    test('docType throws for invalid document', () {
-      expect(
-        () => DocType.parseDoc('invalid'),
-        throwsA(isA<AppException>()),
-      );
+      expect(const Validator('12ABC34501DE35').isCNPJValid(), isTrue);
     });
   });
 }

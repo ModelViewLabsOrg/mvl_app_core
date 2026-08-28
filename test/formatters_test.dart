@@ -30,6 +30,11 @@ void main() {
         expect(Formatters('11222333000181').toDocumentFormatted(), '11.222.333/0001-81');
       });
 
+      test('formats alphanumeric CNPJ', () {
+        expect(Formatters('12ABC34501DE35').toDocumentFormatted(), '12.ABC.345/01DE-35');
+        expect(Formatters('12.abc.345/01de-35').toDocumentFormatted(), '12.ABC.345/01DE-35');
+      });
+
       test('returns empty for wrong length', () {
         expect(Formatters('12345').toDocumentFormatted(), '');
       });
@@ -54,6 +59,10 @@ void main() {
       test('returns empty string for invalid CNPJ', () {
         expect(Formatters('00000000000000').toCnpjFormatted(), '');
         expect(Formatters('123').toCnpjFormatted(), '');
+      });
+
+      test('returns formatted alphanumeric CNPJ', () {
+        expect(Formatters('12ABC34501DE35').toCnpjFormatted(), '12.ABC.345/01DE-35');
       });
     });
 
