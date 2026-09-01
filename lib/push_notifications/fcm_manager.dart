@@ -34,6 +34,7 @@ class AppFcmManager {
 
   String? _fcmWebToken;
   String? _token;
+  Future<AuthorizationStatus>? _permissionRequestInFlight;
   String? get token => _token;
 
   /// Callback for handling messages (called for background messages and foreground data-only messages)
@@ -92,6 +93,24 @@ class AppFcmManager {
   }
 
   Future<AuthorizationStatus> requestPermission() async {
+    final Future<AuthorizationStatus>? inFlight = _permissionRequestInFlight;
+    if (inFlight != null) {
+      appLogger.info('>> Firebase FCM requestPermission: awaiting in-flight request');
+      return inFlight;
+    }
+
+    final Future<AuthorizationStatus> request = _requestPermission();
+    _permissionRequestInFlight = request;
+    try {
+      return await request;
+    } finally {
+      if (identical(_permissionRequestInFlight, request)) {
+        _permissionRequestInFlight = null;
+      }
+    }
+  }
+
+  Future<AuthorizationStatus> _requestPermission() async {
     var step = 'begin';
     AuthorizationStatus? statusBefore;
     bool? messagingSupported;
