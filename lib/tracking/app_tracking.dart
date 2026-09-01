@@ -417,6 +417,7 @@ class AppTracking {
     StackTrace? stackTrace, {
     bool fatal = false,
     Map<String, String>? parameters,
+    Map<String, String>? tags,
   }) {
     if (!_initialized || !_config.trackingEnabled) {
       return;
@@ -445,6 +446,11 @@ class AppTracking {
 
         for (final MapEntry<String, String> tag
             in report?.tags.entries ?? const <MapEntry<String, String>>[]) {
+          await scope.setTag(tag.key, tag.value);
+        }
+
+        for (final MapEntry<String, String> tag
+            in tags?.entries ?? const <MapEntry<String, String>>[]) {
           await scope.setTag(tag.key, tag.value);
         }
 
