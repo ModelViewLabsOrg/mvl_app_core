@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:mvl_app_core/app_config.dart';
 import 'package:mvl_app_core/app_logger.dart';
 import 'package:mvl_app_core/app_sentry_config.dart';
@@ -6,6 +7,7 @@ import 'package:mvl_app_core/utils/app_version.dart';
 import 'package:mvl_app_core/utils/device_info/device_info.dart';
 import 'package:mvl_app_core/utils/launch_extension.dart';
 import 'package:mvl_app_core/utils/version_control/version_flag.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:version/version.dart';
 
 abstract class VersionControl {
@@ -37,29 +39,47 @@ abstract class VersionControl {
       }
 
       final AppConfigValues config = AppConfig.I().configValues;
+      final InAppReview review = InAppReview.instance;
 
       if (DeviceInfo.isApple) {
+        if (writeReview && await review.isAvailable()) {
+          appLogger.info('LaunchStore: openStoreListing ${config.appStoreId}');
+          await review.openStoreListing(appStoreId: config.appStoreId);
+          return;
+        }
+
         final suffix = writeReview ? '?action=write-review' : '';
-        final appStoreLink =
-            'https://apps.apple.com/br/app/id${config.appStoreId}'
-            '$suffix';
+        final links = <String>[
+          'itms-apps://apps.apple.com/app/id${config.appStoreId}$suffix',
+          'https://apps.apple.com/app/id${config.appStoreId}$suffix',
+        ];
 
-        appLogger.info('LaunchUrl: $appStoreLink');
-
-        await appStoreLink.launchURL();
+        for (final link in links) {
+          appLogger.info('LaunchUrl: $link');
+          final bool launched = await link.launchURL(launchMode: LaunchMode.externalApplication);
+          if (launched) {
+            return;
+          }
+        }
         return;
       }
 
       if (DeviceInfo.isAndroid) {
+        if (writeReview && await review.isAvailable()) {
+          appLogger.info('LaunchStore: requestReview');
+          await review.requestReview();
+          return;
+        }
+
         final String id = config.playStoreId;
         final market = 'market://details?id=$id';
         appLogger.info('LaunchUrl: $market');
 
-        if (!(await market.launchURL())) {
+        if (!(await market.launchURL(launchMode: LaunchMode.externalApplication))) {
           final play = 'https://play.google.com/store/apps/details?id=$id';
           appLogger.info('couldnt launch market, trying : $play');
 
-          await play.launchURL();
+          await play.launchURL(launchMode: LaunchMode.externalApplication);
         }
       }
     } catch (e, s) {
