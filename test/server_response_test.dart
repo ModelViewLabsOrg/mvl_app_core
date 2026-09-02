@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mvl_app_core/app_logger.dart';
 import 'package:mvl_app_core/constants/account_strings.dart';
 import 'package:mvl_app_core/models/server_response.dart';
 
@@ -80,6 +81,18 @@ void main() {
         expect(response.isError, isTrue);
         expect(response.userMessage, StringsCore.genericError);
       });
+    });
+  });
+
+  group('ServerResponseException', () {
+    test('is user-facing validation and must not open a crash-reporter issue', () {
+      final exception = ServerResponseException(
+        ServerResponse.customError('Código de validação inválido.'),
+      );
+
+      expect(exception.shouldLogAsError, isFalse);
+      expect(exception.userMessage, 'Código de validação inválido.');
+      expect(AppLogger.defaultShouldLogAsError(exception), isFalse);
     });
   });
 }

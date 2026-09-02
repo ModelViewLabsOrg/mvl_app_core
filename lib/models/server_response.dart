@@ -55,8 +55,11 @@ class ServerResponseException extends AppException {
         response.userMessage,
         error: Exception(response.userMessage),
         stackTrace: StackTrace.current,
+        shouldLogAsError: false,
       );
 
+  /// User-facing business rule from `server_response`. Shown on screen;
+  /// must not open a crash-reporter issue.
   @override
   String get reportType => 'ServerResponseException';
 

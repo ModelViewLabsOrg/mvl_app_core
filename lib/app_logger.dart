@@ -10,7 +10,11 @@ class AppLogger {
 
   AppLogger._internal();
 
-  bool Function(Object error) shouldLogAsError = (_) => true;
+  bool Function(Object error) shouldLogAsError = defaultShouldLogAsError;
+
+  static bool defaultShouldLogAsError(Object error) {
+    return error is! AppException || error.shouldLogAsError;
+  }
 
   final Talker talker = TalkerFlutter.init(
     settings: TalkerSettings(
