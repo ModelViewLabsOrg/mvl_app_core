@@ -34,6 +34,7 @@ class AppDimens {
 
   static const double kBreakpointTablet = 650;
   static const double kBreakpointDesktop = 900;
+  static const double kBreakpointDesktopIntermediate = 1100;
   static const double kQuickActionsMaxWidth = 400;
   static const double kMaxWidth = kBreakpointDesktop;
 
