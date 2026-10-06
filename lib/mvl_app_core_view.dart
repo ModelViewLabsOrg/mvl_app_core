@@ -9,3 +9,4 @@ export 'package:mvl_app_core/widgets/app_dimens.dart';
 export 'package:mvl_app_core/widgets/app_loading.dart';
 export 'package:mvl_app_core/widgets/app_text_field.dart';
 export 'package:mvl_app_core/widgets/app_toast_message.dart';
+export 'package:mvl_app_core/widgets/screen_type.dart';
