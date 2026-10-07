@@ -18,6 +18,8 @@ class FormValidator {
   static const nameEventMaxChars = 30;
   static const nameChargeMaxChars = 30;
   static const nicknameMaxChars = 20;
+  static const userObsMaxChars = 500;
+  static const teamObsMaxChars = 500;
 
   String? email() => EmailValidator(value).isValid() ? null : 'E-mail inválido';
 
