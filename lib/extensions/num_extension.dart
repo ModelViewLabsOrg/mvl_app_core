@@ -27,4 +27,14 @@ extension NumExt on num {
 
     return this >= lower && this <= upper;
   }
+
+  String pluralize(String word, {String plural = 's'}) {
+    final value = '$this $word';
+
+    if (this <= 1) {
+      return value;
+    }
+
+    return '$value$plural';
+  }
 }

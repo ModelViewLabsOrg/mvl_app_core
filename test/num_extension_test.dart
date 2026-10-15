@@ -47,6 +47,27 @@ void main() {
         expect(11.isBetween(1, 10), isFalse);
       });
     });
+
+    group('pluralize', () {
+      test('keeps the word singular when value is 1 or less', () {
+        expect(0.pluralize('atleta'), '0 atleta');
+        expect(1.pluralize('atleta'), '1 atleta');
+        expect((-2).pluralize('atleta'), '-2 atleta');
+        expect(0.5.pluralize('atleta'), '0.5 atleta');
+        expect(1.0.pluralize('atleta'), '1.0 atleta');
+      });
+
+      test('appends default plural suffix when value is greater than 1', () {
+        expect(2.pluralize('atleta'), '2 atletas');
+        expect(10.pluralize('item'), '10 items');
+        expect(1.5.pluralize('ponto'), '1.5 pontos');
+      });
+
+      test('uses the custom plural suffix', () {
+        expect(2.pluralize('child', plural: 'ren'), '2 children');
+        expect(1.pluralize('child', plural: 'ren'), '1 child');
+      });
+    });
   });
 
   group('IntExt', () {
