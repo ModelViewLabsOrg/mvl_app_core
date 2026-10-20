@@ -113,11 +113,13 @@ class AppText extends Text {
     Color? color,
     TextAlign textAlign = TextAlign.left,
     int maxLines = 999,
+    TextOverflow? overflow,
   }) => AppText._(
     text,
     style: context.textTheme.titleMedium?.copyWith(color: color),
     textAlign: textAlign,
     maxLines: maxLines,
+    overflow: overflow,
   );
 
   factory AppText.titleSmall(
