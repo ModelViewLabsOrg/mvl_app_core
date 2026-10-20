@@ -12,7 +12,7 @@ import 'package:mvl_app_core/tracking/app_tracking.dart';
 import 'package:mvl_app_core/utils/app_version.dart';
 import 'package:mvl_app_core/utils/url_strategy/url_strategy.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:timezone/data/latest_10y.dart' as tz_latest10y;
+import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
 abstract class AppSetupBase {
@@ -67,7 +67,7 @@ abstract class AppSetupBase {
     await initializeDateFormatting(locale);
     Intl.defaultLocale = locale;
 
-    tz_latest10y.initializeTimeZones();
+    tz_data.initializeTimeZones();
 
     try {
       tz.Location? location;
@@ -78,10 +78,6 @@ abstract class AppSetupBase {
         appLogger.info('Local Timezone: ${localTimezone.identifier}');
 
         location = switch (localTimezone.identifier) {
-          // 'US/Eastern' => tz.getLocation('America/New_York'),
-          // 'US/Central' => tz.getLocation('America/Chicago'),
-          // 'US/Mountain' => tz.getLocation('America/Denver'),
-          'US/Pacific' => tz.getLocation('America/Los_Angeles'),
           'Etc/Unknown' || 'UTC' || 'Etc' || 'ETC' => tz.getLocation('Etc/UTC'),
           _ => tz.getLocation(localTimezone.identifier),
         };

@@ -23,6 +23,15 @@ class AppException with ReportableException {
     );
   }
 
+  factory AppException.notMounted() {
+    return AppException(
+      'Provider not mounted',
+      error: StateError('Provider not mounted'),
+      stackTrace: StackTrace.empty,
+      shouldLogAsError: false,
+    );
+  }
+
   final String userMessage;
   final Object error;
   final StackTrace stackTrace;
