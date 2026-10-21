@@ -32,7 +32,7 @@ abstract class VersionControl {
   Future<bool> shouldShow() => _versionAvailableFlag.shouldShow();
   Future<void> didShow() => _versionAvailableFlag.didShow();
 
-  static Future<void> launchStore({required bool writeReview}) async {
+  static Future<void> launchStore({required bool writeReview, bool useInAppReview = false}) async {
     try {
       if (kIsWeb) {
         return;
@@ -65,7 +65,7 @@ abstract class VersionControl {
       }
 
       if (DeviceInfo.isAndroid) {
-        if (writeReview && await review.isAvailable()) {
+        if (writeReview && useInAppReview && await review.isAvailable()) {
           appLogger.info('LaunchStore: requestReview');
           await review.requestReview();
           return;
