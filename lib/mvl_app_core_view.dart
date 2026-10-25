@@ -2,6 +2,7 @@ export 'package:flutter/material.dart';
 export 'package:mvl_app_core/extensions/flutter_ext/context_extension.dart';
 export 'package:mvl_app_core/extensions/string_extension.dart';
 export 'package:mvl_app_core/utils/device_info/device_info.dart';
+export 'package:mvl_app_core/utils/name_validator.dart';
 export 'package:mvl_app_core/utils/validator_email.dart';
 export 'package:mvl_app_core/utils/validator_form.dart';
 export 'package:mvl_app_core/widgets/app_button.dart';

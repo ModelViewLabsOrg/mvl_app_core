@@ -1,4 +1,4 @@
-﻿import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mvl_app_core/widgets/app_dimens.dart';
 
 /// Enum representando os 3 tipos de layout baseados nos breakpoints padrão do MVL:
@@ -32,8 +32,7 @@ enum ScreenType {
   }
 
   /// Converte um [BoxConstraints] em [ScreenType] baseado na largura máxima (maxWidth).
-  static ScreenType fromConstraints(BoxConstraints constraints) =>
-      fromWidth(constraints.maxWidth);
+  static ScreenType fromConstraints(BoxConstraints constraints) => fromWidth(constraints.maxWidth);
 
   /// Converte um [BuildContext] em [ScreenType] baseado no MediaQuery (size.width).
   static ScreenType fromContext(BuildContext context) =>
