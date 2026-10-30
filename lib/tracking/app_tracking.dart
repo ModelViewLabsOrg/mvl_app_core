@@ -231,7 +231,7 @@ class AppTracking {
 
   Future<void> _initPosthog() async {
     final String? posthogKey = _config.posthogKey;
-    if (posthogKey != null) {
+    if (posthogKey != null && posthogKey.isNotEmpty) {
       await Posthog().setup(
         PostHogConfig(posthogKey)
           ..host = _config.posthogHost
