@@ -496,6 +496,10 @@ class AppTracking {
     AnalyticsParameters? customParams,
     bool triggerInApp = false,
   }) {
+    if (!_initialized) {
+      return;
+    }
+
     assert(
       eventName.length >= 3,
       'Event name must be at least 3 characters long',

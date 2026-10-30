@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/foundation.dart';
 import 'package:mvl_app_core/tracking/app_tracking.dart';
 import 'package:mvl_app_core/utils/app_exception.dart';
@@ -16,14 +18,32 @@ class AppLogger {
     return error is! AppException || error.shouldLogAsError;
   }
 
+  /// Flutter sets `FLUTTER_TEST` while running `flutter test`. Console Talker
+  /// output only clutters CI / local suite runs, so it stays off there.
+  static bool get _isFlutterTest {
+    if (kIsWeb) {
+      return false;
+    }
+    return Platform.environment.containsKey('FLUTTER_TEST');
+  }
+
   final Talker talker = TalkerFlutter.init(
     settings: TalkerSettings(
-      // ignore: avoid_redundant_argument_values
-      enabled: kDebugMode,
+      enabled: kDebugMode && !_isFlutterTest,
     ),
   );
 
   static final _instance = AppLogger._internal();
+
+  /// Turns console logging off (e.g. from `test/flutter_test_config.dart`).
+  void disable() => talker.disable();
+
+  /// Turns console logging back on after [disable].
+  void enable() {
+    if (kDebugMode && !_isFlutterTest) {
+      talker.enable();
+    }
+  }
 
   /// [method] is the origin: a short literal describing the operation, such as
   /// `team-withdraw` or `finances_send_amount`. Never interpolate the error,
