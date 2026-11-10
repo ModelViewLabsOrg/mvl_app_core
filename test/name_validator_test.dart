@@ -399,20 +399,5 @@ void main() {
         );
       });
     });
-
-    group('TeamNameValidator alias', () {
-      test('TeamNameValidator works identically as an alias', () {
-        expect(TeamNameValidator.validate('Real Madrid 10'), isNull);
-        expect(
-          TeamNameValidator.validate("Real'Madrid"),
-          equals('Name cannot contain special characters'),
-        );
-        expect(
-          TeamNameValidator.validate('Real Madrid ⚽'),
-          equals('Name cannot contain emojis'),
-        );
-        expect(TeamNameValidator.sanitize('Team% #1 😀'), equals('Team 1 '));
-      });
-    });
   });
 }

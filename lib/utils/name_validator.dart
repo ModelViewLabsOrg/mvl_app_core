@@ -237,6 +237,3 @@ class NameValidator {
     );
   }
 }
-
-/// Backward-compatible alias for projects referencing [TeamNameValidator].
-typedef TeamNameValidator = NameValidator;
