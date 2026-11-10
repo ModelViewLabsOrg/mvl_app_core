@@ -76,7 +76,10 @@ class AppTextField extends StatelessWidget {
       textInputAction: textInputAction,
       focusNode: focusNode,
       onChanged: onChanged,
-      onFieldSubmitted: onFieldSubmitted,
+      onFieldSubmitted: (value) {
+        context.unfocus();
+        onFieldSubmitted?.call(value);
+      },
       autovalidateMode: autoValidateMode,
       obscureText: obscureText,
       inputFormatters: _effectiveInputFormatters,
@@ -88,7 +91,12 @@ class AppTextField extends StatelessWidget {
       style: style,
       autofillHints: autofillHints,
       readOnly: readOnly,
-      onTapOutside: onTapOutside == null ? null : (e) => onTapOutside?.call(),
+      onTapOutside: onTapOutside == null
+          ? null
+          : (e) {
+              context.unfocus();
+              onTapOutside?.call();
+            },
     );
     return field;
 
