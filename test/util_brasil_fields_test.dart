@@ -18,6 +18,7 @@ void main() {
     group('removeCurrencySymbol', () {
       test(r'removes R$ prefix', () {
         expect(UtilBrasilFields.removeCurrencySymbol(r'R$ 1.000,00'), '1.000,00');
+        expect(UtilBrasilFields.removeCurrencySymbol('R\$\u00A01.000,00'), '1.000,00');
       });
 
       test(r'leaves string unchanged if no R$ present', () {
@@ -29,6 +30,7 @@ void main() {
       test(r'parses R$ currency string', () {
         expect(UtilBrasilFields.currencyToDouble(r'R$ 1.000,50'), 1000.5);
         expect(UtilBrasilFields.currencyToDouble(r'R$ 1,00'), 1.0);
+        expect(UtilBrasilFields.currencyToDouble('R\$\u00A01.000,50'), 1000.5);
       });
 
       test('parses plain decimal string', () {

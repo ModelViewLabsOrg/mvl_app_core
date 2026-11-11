@@ -9,22 +9,20 @@ class CpfOuCnpjInputFormatter extends TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    if (!newValue.composing.isCollapsed) {
+      return newValue;
+    }
+
     final String stripped = CNPJHelper.strip(newValue.text);
     if (stripped.isEmpty) {
       return TextEditingValue.empty;
     }
 
     if (_isCpfInput(stripped)) {
-      return const CpfMaskFormatter().formatEditUpdate(
-        oldValue,
-        TextEditingValue(text: stripped),
-      );
+      return const CpfMaskFormatter().formatEditUpdate(oldValue, newValue);
     }
 
-    return const CnpjMaskFormatter().formatEditUpdate(
-      oldValue,
-      TextEditingValue(text: stripped),
-    );
+    return const CnpjMaskFormatter().formatEditUpdate(oldValue, newValue);
   }
 
   static bool _isCpfInput(String raw) {

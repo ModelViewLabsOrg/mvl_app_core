@@ -2,6 +2,8 @@ import 'package:mvl_app_core/brazil/document/cnpj_helper.dart';
 import 'package:mvl_app_core/brazil/document/cpf_helper.dart';
 
 mixin UtilBrasilFields {
+  static final _currencySymbol = RegExp(r'R\$[ \u00A0]?');
+
   static String removeCaracteres(String value) {
     assert(value.isNotEmpty, '');
 
@@ -11,13 +13,13 @@ mixin UtilBrasilFields {
   static String removeCurrencySymbol(String value) {
     assert(value.isNotEmpty, '');
 
-    return value.replaceAll(r'R$ ', '');
+    return value.replaceAll(_currencySymbol, '');
   }
 
   static double currencyToDouble(String value) {
     assert(value.isNotEmpty, '');
     final double? doubleValue = double.tryParse(
-      value.replaceAll(r'R$ ', '').replaceAll('.', '').replaceAll(',', '.'),
+      value.replaceAll(_currencySymbol, '').replaceAll('.', '').replaceAll(',', '.'),
     );
 
     return doubleValue ?? 0;
