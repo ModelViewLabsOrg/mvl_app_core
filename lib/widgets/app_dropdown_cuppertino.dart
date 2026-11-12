@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:mvl_app_core/mvl_app_core.dart';
 import 'package:mvl_app_core/widgets/app_dropdown_native.dart';

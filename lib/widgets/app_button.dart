@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mvl_app_core/widgets/app_loading.dart';
 
 enum AppButtonType { filled, elevated, outlined, text }

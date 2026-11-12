@@ -1,4 +1,4 @@
-export 'package:flutter/material.dart';
+export 'package:material_ui/material_ui.dart';
 export 'package:mvl_app_core/extensions/flutter_ext/context_extension.dart';
 export 'package:mvl_app_core/extensions/string_extension.dart';
 export 'package:mvl_app_core/utils/device_info/device_info.dart';

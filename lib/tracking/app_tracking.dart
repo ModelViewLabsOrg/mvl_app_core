@@ -160,7 +160,9 @@ class AppTracking {
         ..environment = _config.env.name
         ..sampleRate = 1
         ..tracesSampleRate = tracesRate
-        ..enableLogs = false
+        ..beforeSendLog = (_, _) {
+          return null;
+        }
         // Every offline Supabase call would otherwise become an issue.
         ..captureFailedRequests = false
         ..enableAutoSessionTracking = false

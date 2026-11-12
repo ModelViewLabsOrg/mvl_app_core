@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mvl_app_core/extensions/bool_ext.dart';
 import 'package:mvl_app_core/tracking/app_tracking.dart';
 import 'package:mvl_app_core/utils/device_info/device_info.dart';

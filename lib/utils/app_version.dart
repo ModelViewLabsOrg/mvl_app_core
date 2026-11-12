@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mvl_app_core/app_config.dart';
 import 'package:mvl_app_core/mvl_app_core.dart';
 import 'package:mvl_app_core/push_notifications/fcm_manager.dart';

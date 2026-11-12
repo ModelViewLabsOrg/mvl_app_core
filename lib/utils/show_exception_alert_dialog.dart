@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mvl_app_core/constants/account_strings.dart';
 import 'package:mvl_app_core/models/server_response.dart';
 import 'package:mvl_app_core/network/exceptions.dart';
 import 'package:mvl_app_core/utils/app_exception.dart';
 import 'package:mvl_app_core/utils/json.dart';
-
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 String? Function(BuildContext context, Object? exception) handleException = (_, _) => null;

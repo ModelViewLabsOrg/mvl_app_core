@@ -1,5 +1,5 @@
 import 'package:date_field/date_field.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mvl_app_core/extensions/date_time_ext.dart';
 
 export 'package:date_field/date_field.dart';

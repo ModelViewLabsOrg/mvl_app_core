@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mvl_app_core/app_logger.dart';
 import 'package:mvl_app_core/tracking/app_tracking.dart';
 import 'package:mvl_app_core/utils/device_info/device_info.dart';
@@ -175,9 +175,7 @@ class AppFcmManager {
     }
 
     try {
-      _token = await _messaging.getToken(
-        vapidKey: kIsWeb ? _fcmWebToken : null,
-      );
+      await _messaging.register(vapidKey: kIsWeb ? _fcmWebToken : null);
     } catch (e, s) {
       // Common on unsupported/partial web push browsers; keep as breadcrumb.
       appLogger.info(
@@ -186,15 +184,15 @@ class AppFcmManager {
       );
     }
 
-    final String? token = _token;
-    appLogger.info('>> Firebase FCM instance token id: $token');
-    if (token != null) {
-      onTokenRefresh?.call(token);
-    }
-
     try {
       FirebaseMessaging.onMessage.listen(_onMessage);
-      _messaging.onTokenRefresh.listen(_onTokenRefresh);
+      _messaging.onRegistered.listen(_onTokenRefresh);
+
+      final String? token = _token;
+      appLogger.info('>> Firebase FCM instance token id: $token');
+      if (token != null) {
+        onTokenRefresh?.call(token);
+      }
     } catch (e, s) {
       appLogger.info('>> Firebase FCM listen onMessage failed: $e !! $s');
     }

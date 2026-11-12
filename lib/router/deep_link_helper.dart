@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mvl_app_core/app_logger.dart';
 
 /// Generic helper class for handling deep links from push notifications and other sources.

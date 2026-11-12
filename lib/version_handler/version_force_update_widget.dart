@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mvl_app_core/mvl_app_core.dart';
 import 'package:mvl_app_core/version_handler/version_alert_localization.dart';
 import 'package:mvl_app_core/version_handler/version_alert_widget.dart';
