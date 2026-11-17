@@ -234,7 +234,6 @@ class AppNavigationObserver extends NavigatorObserver {
 
       try {
         // Fallback para wrappers de pacotes externos (Provider, BlocProvider, etc.)
-        // ignore: avoid_dynamic_calls
         final dynamic child = (current as dynamic).child;
         if (child is Widget) {
           current = child;
