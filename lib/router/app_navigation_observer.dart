@@ -96,66 +96,35 @@ class AppNavigationObserver extends NavigatorObserver {
 
   String? _extractScreenName(Route<dynamic> route) {
     final RouteSettings settings = route.settings;
-    Widget? widget;
-
-    // 1. Acessa o .child com tipo forte para MaterialPage/CupertinoPage (Object? aceita <void>, <dynamic>, etc.)
-    // e fallback dinâmico para páginas de pacotes externos (ex: CustomTransitionPage / NoTransitionPage do go_router)
-    if (settings is MaterialPage<Object?>) {
-      widget = settings.child;
-    } else if (settings is CupertinoPage<Object?>) {
-      widget = settings.child;
-    } else if (settings is Page<Object?>) {
-      try {
-        final dynamic dynamicPage = settings;
-        // ignore: avoid_dynamic_calls
-        final dynamic child = dynamicPage.child;
-        if (child is Widget) {
-          widget = child;
-        }
-      } catch (_) {}
-    }
-
-    // 2. Se for um PageRoute customizado que exponha .child diretamente
-    if (widget == null && route is PageRoute<Object?>) {
-      try {
-        final dynamic dynamicRoute = route;
-        // ignore: avoid_dynamic_calls
-        final dynamic child = dynamicRoute.child;
-        if (child is Widget) {
-          widget = child;
-        }
-      } catch (_) {}
-    }
-
-    // 3. Fallback via builder da rota se tiver context
     final BuildContext? context = route.navigator?.context;
-    if (widget == null && context != null) {
-      try {
-        if (route is MaterialPageRoute<Object?>) {
-          widget = route.builder(context);
-        } else if (route is CupertinoPageRoute<Object?>) {
-          widget = route.builder(context);
-        }
-      } catch (_) {}
-    }
 
-    // 4. Se encontrou o widget, desembala os wrappers (incluindo o Builder interno do GoRouter)
+    Widget? widget = switch (settings) {
+      MaterialPage<Object?>(:final child) || CupertinoPage<Object?>(:final child) => child,
+      Page<Object?>() => _extractDynamicChild(settings),
+      _ => null,
+    };
+
+    widget ??= switch ((route, context)) {
+      (MaterialPageRoute<Object?>(:final builder), final BuildContext ctx) ||
+      (
+        CupertinoPageRoute<Object?>(:final builder),
+        final BuildContext ctx,
+      ) => _tryBuild(builder, ctx),
+      (final PageRoute<Object?> pageRoute, _) => _extractDynamicChild(pageRoute),
+      _ => null,
+    };
+
     if (widget != null) {
       final Widget unwrapped = _unwrapWidget(widget, context);
       if (unwrapped is Builder) {
-        final String? closureType = _extractClosureReturnType(unwrapped.builder);
-        if (closureType != null) {
-          return closureType;
-        }
-      } else {
-        final name = unwrapped.runtimeType.toString();
-        if (name != 'Builder') {
-          return name;
-        }
+        return _extractClosureReturnType(unwrapped.builder);
+      }
+      final name = unwrapped.runtimeType.toString();
+      if (name != 'Builder') {
+        return name;
       }
     }
 
-    // 5. Se não conseguiu o child mas a Page tem um nome customizado
     if (settings is Page<Object?>) {
       final pageType = settings.runtimeType.toString();
       if (!pageType.startsWith('MaterialPage') &&
@@ -173,76 +142,55 @@ class AppNavigationObserver extends NavigatorObserver {
   Widget _unwrapWidget(Widget widget, BuildContext? context) {
     var current = widget;
     for (var i = 0; i < 10; i++) {
-      final String typeName = current.runtimeType.toString().split('<').first;
-      if (!_wrapperTypes.contains(typeName) && current is! ProxyWidget) {
+      final Widget? next = _nextChild(current, context);
+      if (next == null) {
         break;
       }
-
-      if (current is Builder) {
-        if (context != null) {
-          try {
-            current = current.builder(context);
-            continue;
-          } catch (_) {}
-        }
-        break;
-      }
-      if (current is StatefulBuilder) {
-        if (context != null) {
-          try {
-            current = current.builder(context, (_) {});
-            continue;
-          } catch (_) {}
-        }
-        break;
-      }
-      if (current is ProxyWidget) {
-        current = current.child;
-        continue;
-      }
-      if (current is SingleChildRenderObjectWidget) {
-        final Widget? child = current.child;
-        if (child != null) {
-          current = child;
-          continue;
-        }
-      }
-      if (current is KeyedSubtree) {
-        current = current.child;
-        continue;
-      }
-      if (current is SafeArea) {
-        current = current.child;
-        continue;
-      }
-      if (current is PopScope<Object?>) {
-        current = current.child;
-        continue;
-      }
-      if (current is HeroControllerScope) {
-        current = current.child;
-        continue;
-      }
-      if (current is NotificationListener<Notification>) {
-        current = current.child;
-        continue;
-      }
-      if (current is Focus) {
-        current = current.child;
-        continue;
-      }
-
-      try {
-        // Fallback para wrappers de pacotes externos (Provider, BlocProvider, etc.)
-        final dynamic child = (current as dynamic).child;
-        if (child is Widget) {
-          current = child;
-          continue;
-        }
-      } catch (_) {}
-      break;
+      current = next;
     }
     return current;
+  }
+
+  Widget? _nextChild(Widget current, BuildContext? context) {
+    final String typeName = current.runtimeType.toString().split('<').first;
+    if (!_wrapperTypes.contains(typeName) && current is! ProxyWidget) {
+      return null;
+    }
+
+    try {
+      return switch (current) {
+        Builder(:final builder) when context != null => builder(context),
+        StatefulBuilder(:final builder) when context != null => builder(context, (_) {}),
+        ProxyWidget(:final child) ||
+        KeyedSubtree(:final child) ||
+        SafeArea(:final child) ||
+        PopScope<Object?>(:final child) ||
+        HeroControllerScope(:final child) ||
+        NotificationListener<Notification>(:final child) ||
+        Focus(:final child) => child,
+        SingleChildRenderObjectWidget(:final child?) => child,
+        _ => _extractDynamicChild(current),
+      };
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Widget? _tryBuild(WidgetBuilder builder, BuildContext context) {
+    try {
+      return builder(context);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Widget? _extractDynamicChild(Object target) {
+    try {
+      final dynamic child = (target as dynamic).child;
+      return child is Widget ? child : null;
+    } catch (_) {
+      return null;
+    }
   }
 
   String? _extractClosureReturnType(Object fn) {
