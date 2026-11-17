@@ -6,6 +6,8 @@ class AppNavigationObserver extends NavigatorObserver {
   AppNavigationObserver();
 
   static const _wrapperTypes = <String>{
+    'Builder',
+    'StatefulBuilder',
     'KeyedSubtree',
     'Semantics',
     'SafeArea',
@@ -126,25 +128,30 @@ class AppNavigationObserver extends NavigatorObserver {
     }
 
     // 3. Fallback via builder da rota se tiver context
-    if (widget == null) {
-      final BuildContext? context = route.navigator?.context;
-      if (context != null) {
-        try {
-          if (route is MaterialPageRoute<Object?>) {
-            widget = route.builder(context);
-          } else if (route is CupertinoPageRoute<Object?>) {
-            widget = route.builder(context);
-          }
-        } catch (_) {}
-      }
+    final BuildContext? context = route.navigator?.context;
+    if (widget == null && context != null) {
+      try {
+        if (route is MaterialPageRoute<Object?>) {
+          widget = route.builder(context);
+        } else if (route is CupertinoPageRoute<Object?>) {
+          widget = route.builder(context);
+        }
+      } catch (_) {}
     }
 
-    // 4. Se encontrou o widget, desembala os wrappers
+    // 4. Se encontrou o widget, desembala os wrappers (incluindo o Builder interno do GoRouter)
     if (widget != null) {
-      final Widget unwrapped = _unwrapWidget(widget);
-      final name = unwrapped.runtimeType.toString();
-      if (name != 'Builder') {
-        return name;
+      final Widget unwrapped = _unwrapWidget(widget, context);
+      if (unwrapped is Builder) {
+        final String? closureType = _extractClosureReturnType(unwrapped.builder);
+        if (closureType != null) {
+          return closureType;
+        }
+      } else {
+        final name = unwrapped.runtimeType.toString();
+        if (name != 'Builder') {
+          return name;
+        }
       }
     }
 
@@ -163,7 +170,7 @@ class AppNavigationObserver extends NavigatorObserver {
     return null;
   }
 
-  Widget _unwrapWidget(Widget widget) {
+  Widget _unwrapWidget(Widget widget, BuildContext? context) {
     var current = widget;
     for (var i = 0; i < 10; i++) {
       final String typeName = current.runtimeType.toString().split('<').first;
@@ -171,6 +178,24 @@ class AppNavigationObserver extends NavigatorObserver {
         break;
       }
 
+      if (current is Builder) {
+        if (context != null) {
+          try {
+            current = current.builder(context);
+            continue;
+          } catch (_) {}
+        }
+        break;
+      }
+      if (current is StatefulBuilder) {
+        if (context != null) {
+          try {
+            current = current.builder(context, (_) {});
+            continue;
+          } catch (_) {}
+        }
+        break;
+      }
       if (current is ProxyWidget) {
         current = current.child;
         continue;
@@ -219,5 +244,22 @@ class AppNavigationObserver extends NavigatorObserver {
       break;
     }
     return current;
+  }
+
+  String? _extractClosureReturnType(Object fn) {
+    final fnType = fn.runtimeType.toString();
+    final int arrowIndex = fnType.lastIndexOf('=> ');
+    if (arrowIndex != -1) {
+      final String returnType = fnType.substring(arrowIndex + 3).trim();
+      if (returnType.isNotEmpty &&
+          returnType != 'Widget' &&
+          returnType != 'Widget?' &&
+          returnType != 'dynamic' &&
+          returnType != 'Object' &&
+          returnType != 'Object?') {
+        return returnType;
+      }
+    }
+    return null;
   }
 }
