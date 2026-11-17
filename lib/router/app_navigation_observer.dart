@@ -96,42 +96,66 @@ class AppNavigationObserver extends NavigatorObserver {
     final RouteSettings settings = route.settings;
     Widget? widget;
 
-    if (settings is MaterialPage<dynamic>) {
+    // 1. Acessa o .child com tipo forte para MaterialPage/CupertinoPage (Object? aceita <void>, <dynamic>, etc.)
+    // e fallback dinâmico para páginas de pacotes externos (ex: CustomTransitionPage / NoTransitionPage do go_router)
+    if (settings is MaterialPage<Object?>) {
       widget = settings.child;
-    } else if (settings is CupertinoPage<dynamic>) {
+    } else if (settings is CupertinoPage<Object?>) {
       widget = settings.child;
-    } else if (settings is Page<dynamic>) {
+    } else if (settings is Page<Object?>) {
       try {
-        // Suporta páginas customizadas como CustomTransitionPage / NoTransitionPage do go_router
-        final dynamic child = (settings as dynamic).child;
+        final dynamic dynamicPage = settings;
+        // ignore: avoid_dynamic_calls
+        final dynamic child = dynamicPage.child;
         if (child is Widget) {
           widget = child;
         }
       } catch (_) {}
-    } else {
+    }
+
+    // 2. Se for um PageRoute customizado que exponha .child diretamente
+    if (widget == null && route is PageRoute<Object?>) {
+      try {
+        final dynamic dynamicRoute = route;
+        // ignore: avoid_dynamic_calls
+        final dynamic child = dynamicRoute.child;
+        if (child is Widget) {
+          widget = child;
+        }
+      } catch (_) {}
+    }
+
+    // 3. Fallback via builder da rota se tiver context
+    if (widget == null) {
       final BuildContext? context = route.navigator?.context;
       if (context != null) {
         try {
-          if (route is MaterialPageRoute<dynamic>) {
+          if (route is MaterialPageRoute<Object?>) {
             widget = route.builder(context);
-          } else if (route is CupertinoPageRoute<dynamic>) {
+          } else if (route is CupertinoPageRoute<Object?>) {
             widget = route.builder(context);
           }
         } catch (_) {}
       }
     }
 
+    // 4. Se encontrou o widget, desembala os wrappers
     if (widget != null) {
       final Widget unwrapped = _unwrapWidget(widget);
-      return unwrapped.runtimeType.toString();
+      final name = unwrapped.runtimeType.toString();
+      if (name != 'Builder') {
+        return name;
+      }
     }
 
-    if (settings is Page<dynamic>) {
+    // 5. Se não conseguiu o child mas a Page tem um nome customizado
+    if (settings is Page<Object?>) {
       final pageType = settings.runtimeType.toString();
       if (!pageType.startsWith('MaterialPage') &&
           !pageType.startsWith('CupertinoPage') &&
           !pageType.startsWith('CustomTransitionPage') &&
-          !pageType.startsWith('NoTransitionPage')) {
+          !pageType.startsWith('NoTransitionPage') &&
+          !pageType.startsWith('_')) {
         return pageType;
       }
     }
@@ -151,8 +175,41 @@ class AppNavigationObserver extends NavigatorObserver {
         current = current.child;
         continue;
       }
+      if (current is SingleChildRenderObjectWidget) {
+        final Widget? child = current.child;
+        if (child != null) {
+          current = child;
+          continue;
+        }
+      }
+      if (current is KeyedSubtree) {
+        current = current.child;
+        continue;
+      }
+      if (current is SafeArea) {
+        current = current.child;
+        continue;
+      }
+      if (current is PopScope<Object?>) {
+        current = current.child;
+        continue;
+      }
+      if (current is HeroControllerScope) {
+        current = current.child;
+        continue;
+      }
+      if (current is NotificationListener<Notification>) {
+        current = current.child;
+        continue;
+      }
+      if (current is Focus) {
+        current = current.child;
+        continue;
+      }
 
       try {
+        // Fallback para wrappers de pacotes externos (Provider, BlocProvider, etc.)
+        // ignore: avoid_dynamic_calls
         final dynamic child = (current as dynamic).child;
         if (child is Widget) {
           current = child;
